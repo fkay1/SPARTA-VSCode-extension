@@ -1,0 +1,8 @@
+[
+  {
+    "code": "sparta/parse/unknown-command",
+    "line": 0,
+    "severity": "error",
+    "messageContains": "Unknown command"
+  }
+]

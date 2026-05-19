@@ -51,7 +51,7 @@ function normalizeStyle(name: string): string {
   return name.replace(/\s*\([a-z]\)\s*$/i, '').trim();
 }
 
-function readSectionCommands(docDir: string): {
+export function readSectionCommands(docDir: string): {
   commands: string[];
   styleSections: Record<string, string[]>;
 } {

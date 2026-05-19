@@ -1,0 +1,8 @@
+[
+  {
+    "code": "sparta/ref/undefined-variable",
+    "line": 1,
+    "severity": "warning",
+    "messageContains": "Undefined variable"
+  }
+]

@@ -7,14 +7,18 @@ import {
   InitializeParams,
   DidChangeConfigurationNotification,
   CompletionItem,
+  CompletionItemKind,
   TextDocumentPositionParams,
   Hover,
   TextDocumentSyncKind,
   InitializeResult,
   CompletionParams,
+  DocumentSymbolParams,
+  SemanticTokensParams,
 } from 'vscode-languageserver/node';
 import { TextDocument } from 'vscode-languageserver-textdocument';
 
+import { getArgContext } from './file-args';
 import { lexDocument } from './lexer';
 import { parseDocument } from './parser';
 import {
@@ -23,6 +27,12 @@ import {
   provideCompletions,
   provideHover,
 } from './providers/completion';
+import { provideDocumentSymbols } from './providers/documentSymbols';
+import {
+  documentDirFromUri,
+  providePathCompletions,
+} from './providers/pathCompletion';
+import { provideSemanticTokens, SEMANTIC_LEGEND } from './providers/semanticTokens';
 
 const connection = createConnection(ProposedFeatures.all);
 
@@ -30,22 +40,48 @@ const documents = new TextDocuments(TextDocument);
 
 let validateOrdering = true;
 let docBaseUrl = 'https://sparta.github.io';
+let workspaceRoots: string[] = [];
 
-connection.onInitialize((_params: InitializeParams): InitializeResult => {
+connection.onInitialize((params: InitializeParams): InitializeResult => {
+  workspaceRoots =
+    params.workspaceFolders?.map((f) => f.uri).map(documentDirFromUri).filter(Boolean) as string[] ??
+    (params.rootUri ? [documentDirFromUri(params.rootUri)].filter(Boolean) as string[] : []);
+
   return {
     capabilities: {
       textDocumentSync: TextDocumentSyncKind.Incremental,
       completionProvider: {
         resolveProvider: false,
-        triggerCharacters: [' '],
+        triggerCharacters: [' ', '.', '/'],
       },
       hoverProvider: true,
+      documentSymbolProvider: true,
+      semanticTokensProvider: {
+        legend: SEMANTIC_LEGEND,
+        full: true,
+        range: false,
+      },
     },
   };
 });
 
 connection.onInitialized(() => {
   connection.client.register(DidChangeConfigurationNotification.type, undefined);
+});
+
+connection.workspace.onDidChangeWorkspaceFolders((event) => {
+  for (const folder of event.removed) {
+    const dir = documentDirFromUri(folder.uri);
+    if (dir) {
+      workspaceRoots = workspaceRoots.filter((r) => r !== dir);
+    }
+  }
+  for (const folder of event.added) {
+    const dir = documentDirFromUri(folder.uri);
+    if (dir && !workspaceRoots.includes(dir)) {
+      workspaceRoots.push(dir);
+    }
+  }
 });
 
 connection.onDidChangeConfiguration((change) => {
@@ -113,6 +149,13 @@ connection.onCompletion((params: CompletionParams): CompletionItem[] => {
     character: params.position.character,
   });
 
+  const argCtx = getArgContext(line);
+  if (argCtx) {
+    const docDir = documentDirFromUri(params.textDocument.uri);
+    const pathItems = providePathCompletions(argCtx, workspaceRoots, docDir);
+    items.push(...pathItems);
+  }
+
   // LSP ranges must use absolute document positions
   return items.map((item) => {
     if (item.textEdit && 'range' in item.textEdit) {
@@ -133,8 +176,37 @@ connection.onCompletion((params: CompletionParams): CompletionItem[] => {
         },
       };
     }
+    if (item.kind === CompletionItemKind.File && !item.textEdit) {
+      // CompletionItemKind.File — apply text edit for partial path
+      return {
+        ...item,
+        textEdit: {
+          range: {
+            start: { line: params.position.line, character: prefixStart },
+            end: { line: params.position.line, character: params.position.character },
+          },
+          newText: item.insertText ?? item.label,
+        },
+      };
+    }
     return item;
   });
+});
+
+connection.onDocumentSymbol((params: DocumentSymbolParams) => {
+  const document = documents.get(params.textDocument.uri);
+  if (!document) {
+    return [];
+  }
+  return provideDocumentSymbols(document);
+});
+
+connection.languages.semanticTokens.on((params: SemanticTokensParams) => {
+  const document = documents.get(params.textDocument.uri);
+  if (!document) {
+    return { data: [] };
+  }
+  return provideSemanticTokens(document);
 });
 
 connection.onHover((params: TextDocumentPositionParams): Hover | null => {

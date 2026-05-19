@@ -4,12 +4,15 @@ Language support for [SPARTA](https://sparta.github.io) (Stochastic PArallel Rar
 
 ## Features
 
-- **Syntax highlighting** for SPARTA input scripts (`in.*`, `.sparta`)
+- **Syntax highlighting** (TextMate + semantic tokens)
 - **Language Server** with:
-  - Command and style autocompletion (`fix`, `compute`, `collide`, …)
-  - Snippet-style completions for common commands
+  - Command and style autocompletion
+  - Snippet completions with argument placeholders
+  - **Path completion** for `.species`, `.vss`, `.surf`, `read_surf`, `include`, etc.
   - Hover tooltips with links to the SPARTA manual
   - Diagnostics: unknown commands, ordering errors, undefined variables, duplicate IDs
+  - **Document outline** grouped by simulation section
+  - **Semantic highlighting** for commands, keywords, variables, numbers, comments
 
 ## File associations
 

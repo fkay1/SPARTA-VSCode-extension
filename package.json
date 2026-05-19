@@ -40,8 +40,19 @@
       "files.associations": {
         "in.*": "sparta",
         "**/in.*": "sparta"
+      },
+      "[sparta]": {
+        "editor.semanticHighlighting.enabled": true
       }
     },
+    "semanticTokenTypes": [
+      { "id": "command", "description": "SPARTA command name" },
+      { "id": "keyword", "description": "Command keyword or option" },
+      { "id": "variable", "description": "Variable reference" },
+      { "id": "string", "description": "Quoted string" },
+      { "id": "number", "description": "Numeric literal" },
+      { "id": "comment", "description": "Comment" }
+    ],
     "grammars": [
       {
         "language": "sparta",

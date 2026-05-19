@@ -1,0 +1,8 @@
+[
+  {
+    "code": "sparta/order/grid-required",
+    "line": 1,
+    "severity": "error",
+    "messageContains": "read_surf before grid"
+  }
+]

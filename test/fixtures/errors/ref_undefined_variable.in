@@ -1,0 +1,2 @@
+variable x equal 1.0
+timestep ${missing}
