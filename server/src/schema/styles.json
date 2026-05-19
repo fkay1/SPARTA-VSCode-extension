@@ -23,12 +23,12 @@
     "surf/temp",
     "temp/global/rescale",
     "temp/rescale",
-    "vib/mode"
+    "vibmode"
   ],
   "compute": [
     "boundary",
     "count",
-    "dist/surf/grid",
+    "distsurf/grid",
     "dt/grid",
     "eflux/grid",
     "fft/grid",
@@ -44,8 +44,8 @@
     "property/grid",
     "property/surf",
     "react/boundary",
-    "react/isurf/grid",
     "react/surf",
+    "react/isurf/grid",
     "reduce",
     "sonine/grid",
     "surf",
@@ -55,9 +55,9 @@
     "thermal/grid",
     "tvib/grid"
   ],
-  "collide": ["vss"],
-  "react": ["tce", "tce/qk"],
-  "region": ["block", "cylinder", "plane", "sphere", "union", "intersect"],
+  "collide": [
+    "vss"
+  ],
   "surf_collide": [
     "adiabatic",
     "cll",
@@ -69,6 +69,25 @@
     "transparent",
     "vanish"
   ],
-  "surf_react": ["global", "prob", "adsorb"],
-  "dump": ["image", "movie"]
+  "surf_react": [
+    "adsorb",
+    "global",
+    "prob"
+  ],
+  "region": [
+    "block",
+    "cylinder",
+    "plane",
+    "sphere",
+    "union",
+    "intersect"
+  ],
+  "react": [
+    "tce",
+    "tce/qk"
+  ],
+  "dump": [
+    "image",
+    "movie"
+  ]
 }

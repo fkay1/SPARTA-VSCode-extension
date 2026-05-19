@@ -45,7 +45,7 @@ export function mergeLogicalLines(source: string): { lines: LogicalLine[]; diagn
       const trimmed = stripComment(text);
       const tripleCount = countTripleQuotes(trimmed);
       const needsMoreTriple = tripleCount % 2 === 1;
-      const continues = !needsMoreTriple && hasLineContinuation(trimmed);
+      const continues = !needsMoreTriple && hasLineContinuation(text);
 
       if (!continues && !needsMoreTriple) {
         break;
@@ -111,11 +111,24 @@ export function stripComment(line: string): string {
 }
 
 export function hasLineContinuation(line: string): boolean {
-  const trimmed = stripComment(line).trimEnd();
+  const trimmed = line.trimEnd();
   if (!trimmed.endsWith('&')) {
     return false;
   }
-  return !isAmpersandInsideQuotes(trimmed);
+  if (isAmpersandInsideQuotes(trimmed)) {
+    return false;
+  }
+  // SPARTA: a # comment after trailing & prevents continuation
+  const ampIdx = trimmed.lastIndexOf('&');
+  const beforeComment = stripComment(trimmed);
+  if (beforeComment.lastIndexOf('&') !== ampIdx) {
+    return false;
+  }
+  const afterAmp = trimmed.slice(ampIdx + 1).trimStart();
+  if (afterAmp.startsWith('#')) {
+    return false;
+  }
+  return true;
 }
 
 function removeContinuation(line: string): string {

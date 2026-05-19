@@ -1,0 +1,8 @@
+[
+  {
+    "code": "sparta/order/box-required",
+    "line": 0,
+    "severity": "error",
+    "messageContains": "create grid before simulation box"
+  }
+]

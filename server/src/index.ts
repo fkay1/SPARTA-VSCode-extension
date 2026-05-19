@@ -18,11 +18,10 @@ import { TextDocument } from 'vscode-languageserver-textdocument';
 import { lexDocument } from './lexer';
 import { parseDocument } from './parser';
 import {
-  getLineWords,
+  getPrefixStart,
   getWordAtPosition,
-  provideCommandCompletions,
+  provideCompletions,
   provideHover,
-  provideSnippetCompletions,
 } from './providers/completion';
 
 const connection = createConnection(ProposedFeatures.all);
@@ -38,7 +37,7 @@ connection.onInitialize((_params: InitializeParams): InitializeResult => {
       textDocumentSync: TextDocumentSyncKind.Incremental,
       completionProvider: {
         resolveProvider: false,
-        triggerCharacters: [' ', '.', '/'],
+        triggerCharacters: [' '],
       },
       hoverProvider: true,
     },
@@ -50,7 +49,9 @@ connection.onInitialized(() => {
 });
 
 connection.onDidChangeConfiguration((change) => {
-  const settings = change.settings as { sparta?: { validateOrdering?: boolean; docBaseUrl?: string } };
+  const settings = change.settings as {
+    sparta?: { validateOrdering?: boolean; docBaseUrl?: string };
+  };
   validateOrdering = settings?.sparta?.validateOrdering ?? true;
   docBaseUrl = settings?.sparta?.docBaseUrl ?? 'https://sparta.github.io';
 });
@@ -62,12 +63,22 @@ function validateTextDocument(textDocument: TextDocument): void {
 
   const allDiags = [...lexDiags, ...parseDiags];
   const diagnostics: Diagnostic[] = allDiags.map((d) => ({
-    severity: d.severity === 'error' ? DiagnosticSeverity.Error : DiagnosticSeverity.Warning,
+    severity:
+      d.severity === 'error' ? DiagnosticSeverity.Error : DiagnosticSeverity.Warning,
     range: {
       start: { line: d.line, character: 0 },
-      end: { line: d.line, character: Math.max(0, textDocument.lineCount > d.line
-        ? textDocument.getText({ start: { line: d.line, character: 0 }, end: { line: d.line, character: 999 } }).length
-        : 0) },
+      end: {
+        line: d.line,
+        character: Math.max(
+          0,
+          textDocument.lineCount > d.line
+            ? textDocument.getText({
+                start: { line: d.line, character: 0 },
+                end: { line: d.line, character: 999 },
+              }).length
+            : 0
+        ),
+      },
     },
     message: d.message,
     source: 'sparta',
@@ -92,29 +103,38 @@ connection.onCompletion((params: CompletionParams): CompletionItem[] => {
     end: { line: params.position.line, character: params.position.character },
   });
 
-  const trimmed = line.trimStart();
-  const words = getLineWords(trimmed);
-  const isStartOfLine = trimmed.length === line.trimStart().length && !trimmed.includes(' ');
+  const prefix = getWordAtPosition(line, params.position.character) ?? '';
+  const prefixStart = getPrefixStart(line, params.position.character);
 
-  if (words.length <= 1 && isStartOfLine) {
-    const prefix = getWordAtPosition(trimmed, params.position.character) ?? '';
-    const commandItems = provideCommandCompletions(trimmed, words[0]);
-    if (prefix) {
-      return commandItems.filter((item) => item.label.startsWith(prefix));
+  const items = provideCompletions({
+    linePrefix: line,
+    prefix,
+    prefixStart,
+    character: params.position.character,
+  });
+
+  // LSP ranges must use absolute document positions
+  return items.map((item) => {
+    if (item.textEdit && 'range' in item.textEdit) {
+      return {
+        ...item,
+        textEdit: {
+          range: {
+            start: {
+              line: params.position.line,
+              character: item.textEdit.range.start.character,
+            },
+            end: {
+              line: params.position.line,
+              character: item.textEdit.range.end.character,
+            },
+          },
+          newText: item.textEdit.newText,
+        },
+      };
     }
-    return commandItems;
-  }
-
-  if (words.length >= 1) {
-    const styleItems = provideCommandCompletions(trimmed, words[0]);
-    if (styleItems.length > 0 && words.length === 2) {
-      const prefix = words[1] ?? '';
-      return styleItems.filter((item) => !prefix || item.label.startsWith(prefix));
-    }
-    return provideSnippetCompletions(trimmed, words);
-  }
-
-  return provideCommandCompletions(trimmed, undefined);
+    return item;
+  });
 });
 
 connection.onHover((params: TextDocumentPositionParams): Hover | null => {
