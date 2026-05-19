@@ -1,0 +1,105 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "SPARTA",
+  "scopeName": "source.sparta",
+  "patterns": [
+    { "include": "#comment" },
+    { "include": "#triple-quoted-string" },
+    { "include": "#double-quoted-string" },
+    { "include": "#single-quoted-string" },
+    { "include": "#line-continuation" },
+    { "include": "#variable" },
+    { "include": "#command-line" }
+  ],
+  "repository": {
+    "comment": {
+      "name": "comment.line.number-sign.sparta",
+      "match": "#.*$"
+    },
+    "line-continuation": {
+      "name": "punctuation.separator.continuation.sparta",
+      "match": "&\\s*(#.*)?$"
+    },
+    "triple-quoted-string": {
+      "name": "string.quoted.triple.sparta",
+      "begin": "\"\"\"",
+      "end": "\"\"\"",
+      "patterns": [
+        { "include": "#variable-in-string" }
+      ]
+    },
+    "double-quoted-string": {
+      "name": "string.quoted.double.sparta",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        { "include": "#variable-in-string" }
+      ]
+    },
+    "single-quoted-string": {
+      "name": "string.quoted.single.sparta",
+      "begin": "'",
+      "end": "'",
+      "patterns": [
+        { "include": "#variable-in-string" }
+      ]
+    },
+    "variable-in-string": {
+      "comment": "Variables inside quotes are not expanded by SPARTA but may appear literally",
+      "match": "\\$[a-zA-Z_][\\w]*|\\$\\{[^}]+\\}|\\$\\([^)]+\\)",
+      "name": "variable.other.sparta"
+    },
+    "variable": {
+      "patterns": [
+        {
+          "name": "variable.other.sparta",
+          "match": "\\$\\{[^}]+\\}"
+        },
+        {
+          "name": "variable.other.sparta",
+          "match": "\\$\\([^)]+\\)"
+        },
+        {
+          "name": "variable.other.sparta",
+          "match": "\\$[a-zA-Z_]"
+        }
+      ]
+    },
+    "command-line": {
+      "begin": "^(\\s*)(?=[a-zA-Z_])",
+      "beginCaptures": {
+        "1": { "name": "punctuation.whitespace.leading.sparta" }
+      },
+      "end": "$",
+      "patterns": [
+        {
+          "comment": "First word on line is the command",
+          "match": "\\b([a-z][a-z_/]*)(?=[\\s#&]|$)",
+          "captures": {
+            "1": { "name": "entity.name.function.sparta" }
+          }
+        },
+        {
+          "name": "constant.language.sparta",
+          "match": "\\b(yes|no|NULL|INF|all|none|twopass)\\b"
+        },
+        {
+          "name": "constant.other.boundary.sparta",
+          "match": "\\b[orspm]\\b"
+        },
+        {
+          "name": "constant.numeric.sparta",
+          "match": "\\b-?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE][+-]?\\d+)?\\b"
+        },
+        {
+          "name": "keyword.other.sparta",
+          "match": "\\b(block|custom|twopass|vstream|subsonic|perspecies|nevery|region|modulate|clip|invert|scale|rotate|trans|levels|subset|index|equal|loop|world|universe|uloop|string|format|delete|python|particle|grid|surf|then|elif|else|here)\\b"
+        },
+        {
+          "name": "entity.name.type.sparta",
+          "match": "\\b[a-zA-Z_][\\w./]*\\b"
+        }
+      ]
+    }
+  }
+}

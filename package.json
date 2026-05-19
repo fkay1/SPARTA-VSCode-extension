@@ -1,0 +1,117 @@
+{
+  "name": "sparta-input",
+  "displayName": "SPARTA Input",
+  "description": "Language support for SPARTA (Stochastic PArallel Rarefied-gas Time-accurate Analyzer) input scripts",
+  "version": "0.1.0",
+  "publisher": "sparta",
+  "license": "GPL-2.0-or-later",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": [
+    "sparta",
+    "dsmc",
+    "rarefied gas",
+    "simulation"
+  ],
+  "activationEvents": [
+    "onLanguage:sparta",
+    "workspaceContains:**/in.*"
+  ],
+  "main": "./client/out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "sparta",
+        "aliases": [
+          "SPARTA",
+          "sparta"
+        ],
+        "extensions": [
+          ".sparta"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "configurationDefaults": {
+      "files.associations": {
+        "in.*": "sparta",
+        "**/in.*": "sparta"
+      }
+    },
+    "grammars": [
+      {
+        "language": "sparta",
+        "scopeName": "source.sparta",
+        "path": "./syntaxes/sparta.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "sparta",
+        "path": "./snippets/sparta.json"
+      }
+    ],
+    "configuration": {
+      "title": "SPARTA",
+      "properties": {
+        "sparta.trace.server": {
+          "scope": "window",
+          "type": "string",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "description": "Traces the communication between VS Code and the SPARTA language server."
+        },
+        "sparta.executablePath": {
+          "scope": "resource",
+          "type": "string",
+          "default": "",
+          "description": "Path to the SPARTA executable for run tasks and optional validation."
+        },
+        "sparta.workingDirectory": {
+          "scope": "resource",
+          "type": "string",
+          "default": "",
+          "description": "Working directory for SPARTA runs. Defaults to the workspace folder containing the input script."
+        },
+        "sparta.docBaseUrl": {
+          "scope": "resource",
+          "type": "string",
+          "default": "https://sparta.github.io",
+          "description": "Base URL for SPARTA manual documentation links in hover tooltips."
+        },
+        "sparta.validateOrdering": {
+          "scope": "resource",
+          "type": "boolean",
+          "default": true,
+          "description": "Report warnings when commands appear before required simulation state (e.g. create_grid before create_box)."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -b",
+    "watch": "tsc -b -w",
+    "lint": "tsc -b --noEmit",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^2.24.0",
+    "typescript": "^5.4.0"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1",
+    "vscode-languageserver": "^9.0.1",
+    "vscode-languageserver-textdocument": "^1.0.11"
+  }
+}

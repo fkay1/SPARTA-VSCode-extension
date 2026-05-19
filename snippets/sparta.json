@@ -1,0 +1,63 @@
+{
+  "Minimal 2D flow": {
+    "prefix": "sparta-2d-flow",
+    "description": "Minimal 2D external flow setup (circle-style)",
+    "body": [
+      "################################################################################",
+      "# ${1:Case description}",
+      "################################################################################",
+      "",
+      "seed                ${2:12345}",
+      "dimension           2",
+      "global              gridcut 0.0",
+      "",
+      "boundary            o r p",
+      "",
+      "create_box          ${3:0} ${4:10} ${5:0} ${6:10} -0.5 0.5",
+      "create_grid         ${7:20} ${8:20} 1",
+      "balance_grid        rcb cell",
+      "",
+      "global              nrho ${9:1.0} fnum ${10:0.001}",
+      "",
+      "species             ${11:air.species} ${12:N} ${13:O}",
+      "mixture             air ${12:N} ${13:O} vstream ${14:100.0} 0 0",
+      "",
+      "read_surf           ${15:data.circle}",
+      "surf_collide        1 diffuse ${16:300.0} 0.0",
+      "surf_modify         all collide 1",
+      "",
+      "collide             vss air ${17:air.vss}",
+      "",
+      "timestep            ${18:0.0001}",
+      "stats               ${19:100}",
+      "run                 ${20:1000}",
+      "$0"
+    ]
+  },
+  "Variable block": {
+    "prefix": "sparta-vars",
+    "description": "Common equal-style variable definitions",
+    "body": [
+      "variable            ${1:V} equal ${2:6000.0}",
+      "variable            ${3:nden} equal ${4:1.0e20}",
+      "variable            ${5:Fnum} equal ${6:100}",
+      "variable            ${7:tstep} equal ${8:1.0e-9}",
+      "print               \"Velocity = \\${${1:V}}\"",
+      "$0"
+    ]
+  },
+  "Fix emit/face": {
+    "prefix": "fix emit/face",
+    "description": "Inflow boundary fix",
+    "body": [
+      "fix                 ${1:in} emit/face ${2:air} ${3|all,xlo,xhi,ylo,yhi,zlo,zhi|} $0"
+    ]
+  },
+  "Compute": {
+    "prefix": "compute",
+    "description": "Define a compute",
+    "body": [
+      "compute             ${1:1} ${2|grid,temp,ke/particle,boundary|} ${3:all} $0"
+    ]
+  }
+}
