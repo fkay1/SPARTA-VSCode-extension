@@ -61,15 +61,20 @@ connection.onInitialize((params: InitializeParams): InitializeResult => {
         full: true,
         range: false,
       },
+      workspace: {
+        workspaceFolders: {
+          supported: true,
+          changeNotifications: true,
+        },
+      },
     },
   };
 });
 
-connection.onInitialized(() => {
-  connection.client.register(DidChangeConfigurationNotification.type, undefined);
-});
-
-connection.workspace.onDidChangeWorkspaceFolders((event) => {
+function applyWorkspaceFolderChange(event: {
+  added: { uri: string }[];
+  removed: { uri: string }[];
+}): void {
   for (const folder of event.removed) {
     const dir = documentDirFromUri(folder.uri);
     if (dir) {
@@ -81,6 +86,17 @@ connection.workspace.onDidChangeWorkspaceFolders((event) => {
     if (dir && !workspaceRoots.includes(dir)) {
       workspaceRoots.push(dir);
     }
+  }
+}
+
+connection.onInitialized(() => {
+  connection.client.register(DidChangeConfigurationNotification.type, undefined);
+
+  // Only subscribe when the client advertises workspace folder support.
+  try {
+    connection.workspace.onDidChangeWorkspaceFolders(applyWorkspaceFolderChange);
+  } catch {
+    // Workspace roots from onInitialize are sufficient for path completion.
   }
 });
 
