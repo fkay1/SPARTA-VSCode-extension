@@ -15,6 +15,10 @@ export interface LogicalLine {
   endLine: number;
 }
 
+import commandList from './schema/commands.json';
+
+const COMMAND_SET = new Set<string>(commandList as string[]);
+
 export interface LexResult {
   logicalLines: LogicalLine[];
   diagnostics: LexDiagnostic[];
@@ -186,11 +190,42 @@ function countTripleQuotes(line: string): number {
 }
 
 /**
+ * SPARTA continuation lines may wrap an entire command in outer quotes, e.g.
+ * "variable args string '-quarter --cutoff 1e-6' " &
+ */
+export function unwrapQuotedCommandLine(line: string): string {
+  const trimmed = line.trimStart();
+  if (!trimmed.startsWith('"') && !trimmed.startsWith("'")) {
+    return line;
+  }
+
+  const quote = trimmed[0];
+  let i = 1;
+  while (i < trimmed.length) {
+    if (trimmed[i] === quote) {
+      const inner = trimmed.slice(1, i);
+      const after = trimmed.slice(i + 1);
+      if (!/^\s*$/.test(after)) {
+        return line;
+      }
+      const firstWord = inner.trimStart().split(/\s+/)[0];
+      if (firstWord && COMMAND_SET.has(firstWord)) {
+        return inner;
+      }
+      return line;
+    }
+    i++;
+  }
+
+  return line;
+}
+
+/**
  * Tokenize a logical line into words, respecting quoted strings.
  */
 export function tokenizeLine(line: string): { tokens: Token[]; diagnostics: LexDiagnostic[] } {
   const diagnostics: LexDiagnostic[] = [];
-  const content = stripComment(line).trim();
+  const content = stripComment(unwrapQuotedCommandLine(line)).trim();
   if (!content) {
     return { tokens: [], diagnostics };
   }

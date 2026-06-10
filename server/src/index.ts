@@ -15,9 +15,11 @@ import {
   CompletionParams,
   DocumentSymbolParams,
   SemanticTokensParams,
+  DocumentLinkParams,
 } from 'vscode-languageserver/node';
 import { TextDocument } from 'vscode-languageserver-textdocument';
 
+import { getDocumentationPageUrls } from './doc-pages';
 import { getArgContext } from './file-args';
 import { getLineArgStateAt, getWordRangeAtPosition } from './completion-stages';
 import { lexDocument } from './lexer';
@@ -27,8 +29,10 @@ import {
   getPrefixStart,
   getWordAtPosition,
   provideCompletions,
+  provideDefinition,
   provideHover,
 } from './providers/completion';
+import { provideDocumentLinks } from './providers/documentLinks';
 import { provideDocumentSymbols } from './providers/documentSymbols';
 import {
   documentDirFromUri,
@@ -63,6 +67,9 @@ connection.onInitialize((params: InitializeParams): InitializeResult => {
         full: true,
         range: false,
       },
+      documentLinkProvider: {
+        resolveProvider: false,
+      },
       workspace: {
         workspaceFolders: {
           supported: true,
@@ -91,8 +98,9 @@ function applyWorkspaceFolderChange(event: {
   }
 }
 
-connection.onInitialized(() => {
+connection.onInitialized(async () => {
   connection.client.register(DidChangeConfigurationNotification.type, undefined);
+  await syncConfiguration();
 
   // Only subscribe when the client advertises workspace folder support.
   try {
@@ -102,6 +110,16 @@ connection.onInitialized(() => {
   }
 });
 
+async function syncConfiguration(): Promise<void> {
+  try {
+    const config = await connection.workspace.getConfiguration({ section: 'sparta' });
+    validateOrdering = config?.validateOrdering ?? true;
+    docBaseUrl = config?.docBaseUrl ?? 'https://sparta.github.io';
+  } catch {
+    // Defaults from module scope are used when configuration is unavailable.
+  }
+}
+
 connection.onDidChangeConfiguration((change) => {
   const settings = change.settings as {
     sparta?: { validateOrdering?: boolean; docBaseUrl?: string };
@@ -110,7 +128,17 @@ connection.onDidChangeConfiguration((change) => {
   docBaseUrl = settings?.sparta?.docBaseUrl ?? 'https://sparta.github.io';
 });
 
+function isLogSpartaFile(uri: string): boolean {
+  const normalized = uri.replace(/\\/g, '/');
+  return normalized.endsWith('/log.sparta') || normalized.endsWith('log.sparta');
+}
+
 function validateTextDocument(textDocument: TextDocument): void {
+  if (isLogSpartaFile(textDocument.uri)) {
+    connection.sendDiagnostics({ uri: textDocument.uri, diagnostics: [] });
+    return;
+  }
+
   const text = textDocument.getText();
   const { logicalLines, diagnostics: lexDiags } = lexDocument(text);
   const { diagnostics: parseDiags } = parseDocument(logicalLines, validateOrdering);
@@ -223,12 +251,46 @@ connection.onDocumentSymbol((params: DocumentSymbolParams) => {
   return provideDocumentSymbols(document);
 });
 
+connection.onDocumentLinks((params: DocumentLinkParams) => {
+  const document = documents.get(params.textDocument.uri);
+  if (!document) {
+    return [];
+  }
+  return provideDocumentLinks(document, docBaseUrl);
+});
+
 connection.languages.semanticTokens.on((params: SemanticTokensParams) => {
   const document = documents.get(params.textDocument.uri);
   if (!document) {
     return { data: [] };
   }
   return provideSemanticTokens(document);
+});
+
+connection.onRequest(
+  'sparta/documentationUrl',
+  (params: TextDocumentPositionParams): string | null => {
+    const document = documents.get(params.textDocument.uri);
+    if (!document) {
+      return null;
+    }
+
+    const line = document.getText({
+      start: { line: params.position.line, character: 0 },
+      end: { line: params.position.line, character: Number.MAX_SAFE_INTEGER },
+    });
+
+    const word = getWordAtPosition(line, params.position.character);
+    if (!word) {
+      return null;
+    }
+
+    return provideDefinition(word, docBaseUrl);
+  }
+);
+
+connection.onRequest('sparta/documentationPages', (): string[] => {
+  return getDocumentationPageUrls(docBaseUrl);
 });
 
 connection.onHover((params: TextDocumentPositionParams): Hover | null => {

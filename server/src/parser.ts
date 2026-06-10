@@ -322,11 +322,11 @@ function collectReferenceDiagnostics(
   ctx: RefContext
 ): void {
   if (command === 'variable') {
-    const style = args[0];
-    const name = args[1];
+    const name = args[0];
+    const style = args[1];
     if (style === 'delete') {
-      for (let i = 1; i < args.length; i++) {
-        ctx.definedVars.delete(args[i]);
+      if (name) {
+        ctx.definedVars.delete(name);
       }
     } else if (name) {
       ctx.definedVars.add(name);

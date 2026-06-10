@@ -3,6 +3,13 @@ export function escapeMarkdown(text: string): string {
   return text.replace(/([\\`*_{}\[\]()#+\-.!|>])/g, '\\$1');
 }
 
+/** Build a SPARTA manual page URL from the configured base URL and page slug. */
+export function docPageUrl(baseUrl: string, slug: string): string {
+  const base = baseUrl.replace(/\/+$/, '');
+  const docBase = base.endsWith('/doc') ? base : `${base}/doc`;
+  return `${docBase}/${slug}.html`;
+}
+
 /** Convert raw SPARTA doc text into readable plain text for hover tooltips. */
 export function plainDocText(raw: string, maxLen = 500): string {
   const text = raw

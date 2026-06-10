@@ -36,6 +36,19 @@ run 100`;
     const { diagnostics } = parse(src);
     expect(diagnostics.filter((d) => d.severity === 'error')).toHaveLength(0);
   });
+
+  it('skips ordering diagnostics when validateOrdering is false', () => {
+    const { lines } = mergeLogicalLines('create_grid 10 10 1');
+    const { diagnostics } = parseDocument(lines, false);
+    expect(diagnostics.some((d) => d.code === 'sparta/order/box-required')).toBe(false);
+  });
+
+  it('recognizes variables defined with index style', () => {
+    const src = `variable quarter_simulation index 1
+if \${quarter_simulation} then print done`;
+    const { diagnostics } = parse(src);
+    expect(diagnostics.some((d) => d.code === 'sparta/ref/undefined-variable')).toBe(false);
+  });
 });
 
 describe('completion', () => {

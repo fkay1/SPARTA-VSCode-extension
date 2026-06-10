@@ -3,18 +3,29 @@
   "name": "SPARTA",
   "scopeName": "source.sparta",
   "patterns": [
-    { "include": "#comment" },
+    { "include": "#full-line-comment" },
+    { "include": "#quoted-command-line" },
+    { "include": "#command-line" },
     { "include": "#triple-quoted-string" },
     { "include": "#double-quoted-string" },
     { "include": "#single-quoted-string" },
     { "include": "#line-continuation" },
-    { "include": "#variable" },
-    { "include": "#command-line" }
+    { "include": "#variable" }
   ],
   "repository": {
-    "comment": {
+    "full-line-comment": {
+      "name": "comment.line.number-sign.sparta",
+      "match": "^\\s*#.*$"
+    },
+    "inline-comment": {
       "name": "comment.line.number-sign.sparta",
       "match": "#.*$"
+    },
+    "comment": {
+      "patterns": [
+        { "include": "#full-line-comment" },
+        { "include": "#inline-comment" }
+      ]
     },
     "line-continuation": {
       "name": "punctuation.separator.continuation.sparta",
@@ -65,12 +76,36 @@
         }
       ]
     },
+    "quoted-command-line": {
+      "comment": "Continuation lines that wrap an entire command in outer quotes",
+      "begin": "^(\\s*)([\"'])",
+      "beginCaptures": {
+        "1": { "name": "punctuation.whitespace.leading.sparta" },
+        "2": { "name": "punctuation.definition.string.begin.sparta" }
+      },
+      "end": "(\\2)\\s*(&\\s*)?(#.*)?$",
+      "endCaptures": {
+        "1": { "name": "punctuation.definition.string.end.sparta" },
+        "2": { "name": "punctuation.separator.continuation.sparta" },
+        "3": { "name": "comment.line.number-sign.sparta" }
+      },
+      "patterns": [
+        { "include": "#command-body" }
+      ]
+    },
     "command-line": {
       "begin": "^(\\s*)(?=[a-zA-Z_])",
       "beginCaptures": {
         "1": { "name": "punctuation.whitespace.leading.sparta" }
       },
       "end": "$",
+      "patterns": [
+        { "include": "#command-body" },
+        { "include": "#inline-comment" },
+        { "include": "#line-continuation" }
+      ]
+    },
+    "command-body": {
       "patterns": [
         {
           "comment": "First word on line is the command",
@@ -94,6 +129,26 @@
         {
           "name": "keyword.other.sparta",
           "match": "\\b(block|custom|twopass|vstream|subsonic|perspecies|nevery|region|modulate|clip|invert|scale|rotate|trans|levels|subset|index|equal|loop|world|universe|uloop|string|format|delete|python|particle|grid|surf|then|elif|else|here)\\b"
+        },
+        {
+          "name": "string.quoted.single.sparta",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            { "include": "#variable-in-string" }
+          ]
+        },
+        {
+          "name": "string.quoted.double.sparta",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            { "include": "#variable-in-string" }
+          ]
+        },
+        {
+          "name": "variable.other.sparta",
+          "match": "\\$\\{[^}]+\\}|\\$\\([^)]+\\)|\\$[a-zA-Z_]"
         },
         {
           "name": "entity.name.type.sparta",

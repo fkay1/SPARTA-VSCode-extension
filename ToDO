@@ -1,12 +1,12 @@
- - dont show errors in log.sparta files
- - keep colored commands, syntax, numbers even when a comment is behind it (boundary o o o #all walls open) -> is not color coded right now
- - treat commands in quotes where lines start with quotes as normal commands and not as strings 
+[x] dont show errors in log.sparta files
+[x] keep colored commands, syntax, numbers even when a comment is behind it (boundary o o o #all walls open) -> is not color coded right now
+[x] treat commands in quotes where lines start with quotes as normal commands and not as strings 
     if ${quarter_simulation} then &
     "variable args string '-quarter --cutoff 1e-6' " & -> variable command and argument is not color coded.
- - command click on command opens a viewer in vscode that leads to the html documentation
- - option to turn off errors "xxx before simulation box is defined" etc.
+[x] command click on command opens a viewer in vscode that leads to the html documentation
+[x] option to turn off errors "xxx before simulation box is defined" etc. (sparta.validateOrdering setting)
 
- - Variable not recognized:
+[x] Variable not recognized:
 variable quarter_simulation   index 1
 if ${quarter_simulation} then & # hover shows "Undefined variable: ${quarter_simulation}sparta(sparta/ref/undefined-variable)"
 "variable args string '-quarter --cutoff 1e-6' " &

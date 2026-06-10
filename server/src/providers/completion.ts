@@ -19,6 +19,7 @@ import {
   getWordRangeAtPosition,
 } from '../completion-stages';
 import { plainDocText, escapeMarkdown } from '../doc-markdown';
+import { getDocumentationLinkUrl, hasDocumentationPage } from '../style-doc-links';
 import { createEmptyIdRegistry, getCommands, getStyles } from '../parser';
 import { getStyleArgSnippet } from '../style-snippets';
 
@@ -340,7 +341,7 @@ for (const [family, entries] of Object.entries(
 function buildHoverContents(
   title: string,
   rawDescription: string | undefined,
-  url: string
+  url?: string
 ): MarkupContent {
   const parts = [title];
   if (rawDescription) {
@@ -349,11 +350,17 @@ function buildHoverContents(
       parts.push(escapeMarkdown(text));
     }
   }
-  parts.push(`[SPARTA manual](${url})`);
+  if (url) {
+    parts.push(`[SPARTA manual](${url})`);
+  }
   return {
     kind: MarkupKind.Markdown,
     value: parts.join('\n\n'),
   };
+}
+
+export function provideDefinition(word: string, docBaseUrl: string): string | null {
+  return getDocumentationLinkUrl(word, docBaseUrl);
 }
 
 export function provideHover(
@@ -362,27 +369,25 @@ export function provideHover(
 ): { contents: MarkupContent } | null {
   const commandDoc = COMMAND_DOCS[word];
   if (commandDoc) {
+    const url = getDocumentationLinkUrl(word, docBaseUrl);
     return {
       contents: buildHoverContents(
         `**${word}**`,
         commandDoc,
-        `${docBaseUrl}/${word}.html`
+        url ?? undefined
       ),
     };
   }
 
   for (const [family, styleList] of Object.entries(getStylesMap())) {
     if (styleList.includes(word)) {
-      const slug =
-        family === 'fix' || family === 'compute'
-          ? `${family}_${word.replace(/\//g, '_')}`
-          : word;
       const styleDoc = STYLE_DOCS.get(word);
+      const url = hasDocumentationPage(word) ? getDocumentationLinkUrl(word, docBaseUrl) : null;
       return {
         contents: buildHoverContents(
           `**${family} style: ${word}**`,
           styleDoc?.description,
-          `${docBaseUrl}/${slug}.html`
+          url ?? undefined
         ),
       };
     }

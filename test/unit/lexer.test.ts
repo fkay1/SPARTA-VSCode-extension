@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { lexDocument, mergeLogicalLines, stripComment, tokenizeLine } from '../../server/src/lexer';
+import { lexDocument, mergeLogicalLines, stripComment, tokenizeLine, unwrapQuotedCommandLine } from '../../server/src/lexer';
 
 describe('lexer', () => {
   it('strips comments outside quotes', () => {
@@ -26,6 +26,23 @@ describe('lexer', () => {
   it('tokenizes quoted strings as single args', () => {
     const { tokens } = tokenizeLine('print "hello world"');
     expect(tokens.map((t) => t.text)).toEqual(['print', 'hello world']);
+  });
+
+  it('unwraps quoted command lines', () => {
+    const line = `"variable args string '-quarter --cutoff 1e-6' "`;
+    expect(unwrapQuotedCommandLine(line)).toBe(`variable args string '-quarter --cutoff 1e-6' `);
+    const { tokens } = tokenizeLine(line);
+    expect(tokens.map((t) => t.text)).toEqual([
+      'variable',
+      'args',
+      'string',
+      '-quarter --cutoff 1e-6',
+    ]);
+  });
+
+  it('leaves normal quoted strings unchanged', () => {
+    const line = 'print "hello world"';
+    expect(unwrapQuotedCommandLine(line)).toBe(line);
   });
 
   it('parses circle example without lexer errors', () => {

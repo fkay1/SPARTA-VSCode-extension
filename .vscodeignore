@@ -1,0 +1,26 @@
+.vscode/**
+.vscode-test/**
+.git/**
+.gitignore
+
+# TypeScript sources (compiled output is shipped)
+client/src/**
+server/src/**
+**/*.ts
+**/*.tsbuildinfo
+
+# Source maps and declaration files
+**/*.js.map
+**/*.d.ts
+
+# Dev, test, and tooling
+test/**
+scripts/**
+vitest.config.ts
+tsconfig.json
+client/tsconfig.json
+server/tsconfig.json
+ToDO
+coverage/**
+*.log
+*.vsix

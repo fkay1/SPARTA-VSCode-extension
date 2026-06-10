@@ -2,9 +2,13 @@
   "name": "sparta-input",
   "displayName": "SPARTA Input",
   "description": "Language support for SPARTA (Stochastic PArallel Rarefied-gas Time-accurate Analyzer) input scripts",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha.1",
   "publisher": "sparta",
   "license": "GPL-2.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fkay1/SPARTA-VSCode-extension.git"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -95,17 +99,41 @@
         "sparta.docBaseUrl": {
           "scope": "resource",
           "type": "string",
-          "default": "https://sparta.github.io",
-          "description": "Base URL for SPARTA manual documentation links in hover tooltips."
+          "default": "https://sparta.github.io/doc",
+          "description": "Base URL for SPARTA manual documentation links (e.g. https://sparta.github.io/doc)."
         },
         "sparta.validateOrdering": {
           "scope": "resource",
           "type": "boolean",
           "default": true,
-          "description": "Report warnings when commands appear before required simulation state (e.g. create_grid before create_box)."
+          "description": "Report errors when commands appear before required simulation state (e.g. create_grid before create_box). Set to false to disable ordering diagnostics."
+        },
+        "sparta.cacheDocumentation": {
+          "scope": "application",
+          "type": "boolean",
+          "default": true,
+          "description": "Download and cache SPARTA manual pages locally for faster Cmd+Click documentation."
+        },
+        "sparta.docCacheMaxAgeDays": {
+          "scope": "application",
+          "type": "number",
+          "default": 7,
+          "minimum": 1,
+          "description": "Re-download cached manual pages after this many days."
         }
       }
-    }
+    },
+    "commands": [
+      {
+        "command": "sparta.openDoc",
+        "title": "SPARTA: Open Documentation Page",
+        "enablement": "false"
+      },
+      {
+        "command": "sparta.refreshDocCache",
+        "title": "SPARTA: Refresh Documentation Cache"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -114,6 +142,7 @@
     "lint": "tsc -b --noEmit",
     "package": "vsce package",
     "extract-schema": "tsx scripts/extract-schema.ts",
+    "verify-doc-pages": "tsx scripts/verify-doc-pages.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },

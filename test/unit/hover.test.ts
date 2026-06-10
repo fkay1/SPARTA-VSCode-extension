@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { MarkupKind } from 'vscode-languageserver';
-import { plainDocText } from '../../server/src/doc-markdown';
+import { plainDocText, docPageUrl } from '../../server/src/doc-markdown';
 import {
   getWordAtPosition,
   getWordRangeAtPosition,
+  provideDefinition,
   provideHover,
 } from '../../server/src/providers/completion';
 
@@ -69,11 +70,50 @@ describe('provideHover', () => {
     expect(hover).not.toBeNull();
     expect(hover!.contents.value).toContain('fix style: adapt');
     expect(hover!.contents.value).toMatch(/grid adaptation/i);
+    expect(hoverMarkdown(hover!)).toContain('[SPARTA manual]');
+  });
+
+  it('omits manual link for styles without a dedicated page', () => {
+    const hover = provideHover('vss', baseUrl);
+    expect(hover).not.toBeNull();
+    expect(hoverMarkdown(hover!)).not.toContain('[SPARTA manual]');
   });
 
   it('shows command description for create_box', () => {
     const hover = provideHover('create_box', baseUrl);
     expect(hover).not.toBeNull();
     expect(hoverMarkdown(hover!)).toMatch(/simulation box/i);
+  });
+});
+
+describe('docPageUrl', () => {
+  it('adds /doc when missing from base URL', () => {
+    expect(docPageUrl('https://sparta.github.io', 'read_surf')).toBe(
+      'https://sparta.github.io/doc/read_surf.html'
+    );
+  });
+
+  it('does not duplicate /doc when already present', () => {
+    expect(docPageUrl('https://sparta.github.io/doc', 'read_surf')).toBe(
+      'https://sparta.github.io/doc/read_surf.html'
+    );
+  });
+});
+
+describe('provideDefinition', () => {
+  const baseUrl = 'https://sparta.github.io';
+
+  it('returns manual URL for commands', () => {
+    expect(provideDefinition('create_box', baseUrl)).toBe(`${baseUrl}/doc/create_box.html`);
+    expect(provideDefinition('read_surf', baseUrl)).toBe(`${baseUrl}/doc/read_surf.html`);
+  });
+
+  it('returns manual URL for styles', () => {
+    expect(provideDefinition('adapt', baseUrl)).toBe(`${baseUrl}/doc/fix_adapt.html`);
+  });
+
+  it('returns null for styles without dedicated manual pages', () => {
+    expect(provideDefinition('vss', baseUrl)).toBeNull();
+    expect(provideDefinition('diffuse', baseUrl)).toBeNull();
   });
 });
