@@ -1,5 +1,6 @@
 import commands from './schema/commands.json';
 import styles from './schema/styles.json';
+import { createEmptyIdRegistry, IdRegistry } from './id-registry';
 import { LexDiagnostic, LogicalLine, tokenizeLine } from './lexer';
 
 export interface ParsedCommand {
@@ -26,7 +27,11 @@ export interface ParseResult {
   commands: ParsedCommand[];
   diagnostics: ParseDiagnostic[];
   state: SimState;
+  idRegistry: IdRegistry;
 }
+
+export type { IdRegistry } from './id-registry';
+export { createEmptyIdRegistry } from './id-registry';
 
 const COMMAND_SET = new Set<string>(commands as string[]);
 const STYLE_MAP = styles as Record<string, string[]>;
@@ -51,6 +56,9 @@ export function parseDocument(
   const definedVars = new Set<string>();
   const fixIds = new Map<string, number>();
   const computeIds = new Map<string, number>();
+  const regionIds = new Map<string, number>();
+  const surfCollideIds = new Map<string, number>();
+  const surfReactIds = new Map<string, number>();
 
   for (const line of logicalLines) {
     const content = line.text.trim();
@@ -95,11 +103,25 @@ export function parseDocument(
       definedVars,
       fixIds,
       computeIds,
+      regionIds,
+      surfCollideIds,
+      surfReactIds,
       diagnostics,
     });
   }
 
-  return { commands: parsed, diagnostics, state };
+  return {
+    commands: parsed,
+    diagnostics,
+    state,
+    idRegistry: {
+      fix: [...fixIds.keys()],
+      compute: [...computeIds.keys()],
+      region: [...regionIds.keys()],
+      surf_collide: [...surfCollideIds.keys()],
+      surf_react: [...surfReactIds.keys()],
+    },
+  };
 }
 
 function checkOrdering(
@@ -220,7 +242,77 @@ interface RefContext {
   definedVars: Set<string>;
   fixIds: Map<string, number>;
   computeIds: Map<string, number>;
+  regionIds: Map<string, number>;
+  surfCollideIds: Map<string, number>;
+  surfReactIds: Map<string, number>;
   diagnostics: ParseDiagnostic[];
+}
+
+function registerIdStyle(
+  command: string,
+  args: string[],
+  line: number,
+  ctx: RefContext
+): void {
+  if (args.length < 1) {
+    return;
+  }
+  const id = args[0];
+  const style = args[1];
+
+  switch (command) {
+    case 'fix': {
+      if (ctx.fixIds.has(id)) {
+        ctx.diagnostics.push({
+          message: `Fix ID "${id}" already defined`,
+          line,
+          code: 'sparta/ref/duplicate-fix-id',
+          severity: 'warning',
+        });
+      }
+      ctx.fixIds.set(id, line);
+      if (style) {
+        validateStyle('fix', style, line, ctx.diagnostics);
+      }
+      break;
+    }
+    case 'compute': {
+      if (ctx.computeIds.has(id)) {
+        ctx.diagnostics.push({
+          message: `Compute ID "${id}" already defined`,
+          line,
+          code: 'sparta/ref/duplicate-compute-id',
+          severity: 'error',
+        });
+      }
+      ctx.computeIds.set(id, line);
+      if (style) {
+        validateStyle('compute', style, line, ctx.diagnostics);
+      }
+      break;
+    }
+    case 'region': {
+      ctx.regionIds.set(id, line);
+      if (style) {
+        validateStyle('region', style, line, ctx.diagnostics);
+      }
+      break;
+    }
+    case 'surf_collide': {
+      ctx.surfCollideIds.set(id, line);
+      if (style) {
+        validateStyle('surf_collide', style, line, ctx.diagnostics);
+      }
+      break;
+    }
+    case 'surf_react': {
+      ctx.surfReactIds.set(id, line);
+      if (style) {
+        validateStyle('surf_react', style, line, ctx.diagnostics);
+      }
+      break;
+    }
+  }
 }
 
 function collectReferenceDiagnostics(
@@ -242,56 +334,16 @@ function collectReferenceDiagnostics(
     return;
   }
 
-  if (command === 'fix' && args.length >= 2) {
-    const id = args[0];
-    const style = args[1];
-    if (ctx.fixIds.has(id)) {
-      ctx.diagnostics.push({
-        message: `Fix ID "${id}" already defined`,
-        line,
-        code: 'sparta/ref/duplicate-fix-id',
-        severity: 'warning',
-      });
-    }
-    ctx.fixIds.set(id, line);
-    validateStyle('fix', style, line, ctx.diagnostics);
-    return;
-  }
-
-  if (command === 'compute' && args.length >= 2) {
-    const id = args[0];
-    const style = args[1];
-    if (ctx.computeIds.has(id)) {
-      ctx.diagnostics.push({
-        message: `Compute ID "${id}" already defined`,
-        line,
-        code: 'sparta/ref/duplicate-compute-id',
-        severity: 'error',
-      });
-    }
-    ctx.computeIds.set(id, line);
-    validateStyle('compute', style, line, ctx.diagnostics);
-    return;
-  }
-
-  if (command === 'collide' && args.length >= 1) {
+  if (command === 'fix' || command === 'compute' || command === 'region' ||
+      command === 'surf_collide' || command === 'surf_react') {
+    registerIdStyle(command, args, line, ctx);
+    // fall through for ${var} checks
+  } else if (command === 'collide' && args.length >= 1) {
     validateStyle('collide', args[0], line, ctx.diagnostics);
   }
 
   if (command === 'react' && args.length >= 1) {
     validateStyle('react', args[0], line, ctx.diagnostics);
-  }
-
-  if (command === 'region' && args.length >= 2) {
-    validateStyle('region', args[1], line, ctx.diagnostics);
-  }
-
-  if (command === 'surf_collide' && args.length >= 2) {
-    validateStyle('surf_collide', args[1], line, ctx.diagnostics);
-  }
-
-  if (command === 'surf_react' && args.length >= 2) {
-    validateStyle('surf_react', args[1], line, ctx.diagnostics);
   }
 
   // Undefined ${var} references in raw args

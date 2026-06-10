@@ -6,34 +6,34 @@ import {
   MarkupKind,
   Range,
 } from 'vscode-languageserver';
-import { getCommands, getStyles, isStyleCommand } from '../parser';
+import commandsFull from '../schema/commands-full.json';
+import stylesFull from '../schema/styles-full.json';
+import type { IdRegistry } from '../id-registry';
+import {
+  getLineArgState,
+  idRegistryKey,
+  isIdStyleCommand,
+  resolveStage,
+  styleFamilyForCommand,
+  STYLE_FIRST_COMMANDS,
+  getWordRangeAtPosition,
+} from '../completion-stages';
+import { plainDocText, escapeMarkdown } from '../doc-markdown';
+import { createEmptyIdRegistry, getCommands, getStyles } from '../parser';
+import { getStyleArgSnippet } from '../style-snippets';
 
 export interface CompletionContext {
-  /** Text from line start to cursor */
   linePrefix: string;
-  /** Word fragment being typed at cursor */
   prefix: string;
-  /** Character offset where prefix starts on the line */
   prefixStart: number;
-  /** Cursor character offset on the line */
   character: number;
+  idRegistry?: IdRegistry;
 }
 
-/** Argument snippets keyed by command name. insertText is args-only unless fullLine is true. */
 const ARG_SNIPPETS: Record<
   string,
   { label: string; insertText: string; detail: string; fullLine?: boolean }
 > = {
-  fix: {
-    label: 'fix — ID style …',
-    insertText: '${1:ID} ${2|ablate,adapt,ave/grid,ave/time,emit/face,grid/check,halt|} $0',
-    detail: 'Insert fix ID and style',
-  },
-  compute: {
-    label: 'compute — ID style …',
-    insertText: '${1:ID} ${2|grid,temp,ke/particle,boundary,gas/collision/grid|} ${3:all} $0',
-    detail: 'Insert compute ID and style',
-  },
   create_box: {
     label: 'create_box — xmin xmax ymin ymax zmin zmax',
     insertText: '${1:0} ${2:10} ${3:0} ${4:10} ${5:-0.5} ${6:0.5}',
@@ -76,12 +76,6 @@ const ARG_SNIPPETS: Record<
     detail: 'Define species mixture',
     fullLine: true,
   },
-  collide: {
-    label: 'collide — vss mix-ID file',
-    insertText: 'vss ${1:air} ${2:air.vss}',
-    detail: 'VSS collision model',
-    fullLine: true,
-  },
   timestep: {
     label: 'timestep — dt',
     insertText: '${1:1.0e-9}',
@@ -90,36 +84,47 @@ const ARG_SNIPPETS: Record<
   },
 };
 
+const DEFAULT_ID_SUGGESTIONS = ['1', '2', 'in', 'out', 'myFix', 'myCompute'];
+
 export function provideCompletions(ctx: CompletionContext): CompletionItem[] {
+  const registry = ctx.idRegistry ?? createEmptyIdRegistry();
   const trimmed = ctx.linePrefix.trimStart();
-  const endsWithSpace = ctx.linePrefix.endsWith(' ') || /\s$/.test(ctx.linePrefix);
+  const endsWithSpace = /\s$/.test(ctx.linePrefix);
   const words = trimmed.split(/\s+/).filter(Boolean);
   const replaceRange: Range = {
     start: { line: 0, character: ctx.prefixStart },
     end: { line: 0, character: ctx.character },
   };
 
-  // After "command " — offer arg snippet and/or style list
-  if (words.length >= 1 && endsWithSpace) {
-    const command = words[0];
-    const items: CompletionItem[] = [];
-
-    const argSnippet = ARG_SNIPPETS[command];
-    if (argSnippet) {
-      items.push(buildArgSnippetItem(command, argSnippet, {
-        start: { line: 0, character: ctx.character },
-        end: { line: 0, character: ctx.character },
-      }));
+  const argState = getLineArgState(ctx.linePrefix);
+  if (argState) {
+    const stage = resolveStage(argState);
+    if (stage === 'user-id') {
+      return buildIdItems(argState, registry, replaceRange, endsWithSpace);
     }
-
-    if (words.length === 1 && isStyleCommand(command)) {
-      items.push(...buildStyleItems(command, words[1] ?? ''));
+    if (stage === 'style') {
+      return buildStyleItemsForState(argState, replaceRange);
     }
-
-    return items;
+    if (stage === 'style-args') {
+      return buildStyleArgItems(argState, replaceRange, endsWithSpace);
+    }
   }
 
-  // Typing first word on the line — commands + arg snippet when fully matched
+  // After "command " — simple commands with full-line snippets
+  if (words.length >= 1 && endsWithSpace && words.length === 1) {
+    const command = words[0];
+    const snippet = ARG_SNIPPETS[command];
+    if (snippet) {
+      return [
+        buildInsertSnippet(snippet.label, snippet.insertText, snippet.detail, {
+          start: { line: 0, character: ctx.character },
+          end: { line: 0, character: ctx.character },
+        }),
+      ];
+    }
+  }
+
+  // First word on line — top-level commands
   if (words.length <= 1) {
     const items: CompletionItem[] = [];
     const matching = getCommands().filter(
@@ -132,91 +137,186 @@ export function provideCompletions(ctx: CompletionContext): CompletionItem[] {
         kind: CompletionItemKind.Keyword,
         detail: 'SPARTA command',
         sortText: `1_${cmd}`,
-        textEdit: {
-          range: replaceRange,
-          newText: cmd,
-        },
+        textEdit: { range: replaceRange, newText: cmd },
       });
 
-      // Offer arg snippet when the typed prefix fully matches a command
-      if (ctx.prefix === cmd && ARG_SNIPPETS[cmd]) {
-        items.push(buildCommandSnippetItem(cmd, ARG_SNIPPETS[cmd], replaceRange));
+      if (ctx.prefix === cmd && isIdStyleCommand(cmd)) {
+        items.push({
+          label: `${cmd} — ID style …`,
+          kind: CompletionItemKind.Snippet,
+          detail: `Insert ${cmd} with ID and style placeholders`,
+          sortText: `0_${cmd}`,
+          insertText: `${cmd} \${1:ID} \${2:style} $0`,
+          insertTextFormat: InsertTextFormat.Snippet,
+          textEdit: {
+            range: replaceRange,
+            newText: `${cmd} \${1:ID} \${2:style} $0`,
+          },
+        });
+      } else if (ctx.prefix === cmd && ARG_SNIPPETS[cmd]) {
+        const sn = ARG_SNIPPETS[cmd];
+        items.push(
+          buildInsertSnippet(
+            sn.label,
+            `${cmd} ${sn.insertText}`,
+            sn.detail,
+            replaceRange
+          )
+        );
       }
     }
-
     return items;
-  }
-
-  // Typing second token on a style command line (e.g. "fix ad")
-  if (words.length === 2 && !endsWithSpace && isStyleCommand(words[0])) {
-    const stylePrefix = words[1] ?? '';
-    return buildStyleItems(words[0], stylePrefix).map((item) => ({
-      ...item,
-      textEdit: {
-        range: replaceRange,
-        newText: item.label,
-      },
-    }));
   }
 
   return [];
 }
 
-function buildCommandSnippetItem(
-  command: string,
-  snippet: (typeof ARG_SNIPPETS)[string],
+function buildIdItems(
+  state: ReturnType<typeof getLineArgState>,
+  registry: IdRegistry,
+  replaceRange: Range,
+  endsWithSpace: boolean
+): CompletionItem[] {
+  if (!state) {
+    return [];
+  }
+  const key = isIdStyleCommand(state.command) ? idRegistryKey(state.command) : null;
+  const existing = key ? registry[key as keyof IdRegistry] : [];
+  const partial = state.partial.toLowerCase();
+  const items: CompletionItem[] = [];
+
+  for (const id of existing) {
+    if (partial && !id.toLowerCase().startsWith(partial)) {
+      continue;
+    }
+    items.push({
+      label: id,
+      kind: CompletionItemKind.Variable,
+      detail: `Existing ${state.command} ID`,
+      sortText: `0_${id}`,
+      textEdit: { range: replaceRange, newText: id },
+    });
+  }
+
+  for (const suggestion of DEFAULT_ID_SUGGESTIONS) {
+    if (existing.includes(suggestion)) {
+      continue;
+    }
+    if (partial && !suggestion.toLowerCase().startsWith(partial)) {
+      continue;
+    }
+    items.push({
+      label: suggestion,
+      kind: CompletionItemKind.Variable,
+      detail: `New ${state.command} ID`,
+      sortText: `1_${suggestion}`,
+      textEdit: { range: replaceRange, newText: suggestion },
+    });
+  }
+
+  if (endsWithSpace && items.length === 0) {
+    items.push({
+      label: 'ID',
+      kind: CompletionItemKind.Snippet,
+      detail: `${state.command} ID`,
+      insertText: '${1:ID} ',
+      insertTextFormat: InsertTextFormat.Snippet,
+      textEdit: {
+        range: replaceRange,
+        newText: '${1:ID} ',
+      },
+    });
+  }
+
+  return items;
+}
+
+function buildStyleItemsForState(
+  state: NonNullable<ReturnType<typeof getLineArgState>>,
   replaceRange: Range
-): CompletionItem {
-  const newText = snippet.fullLine
-    ? `${command} ${snippet.insertText}`
-    : `${command} ${snippet.insertText}`;
+): CompletionItem[] {
+  let family: string;
+  if (isIdStyleCommand(state.command)) {
+    family = styleFamilyForCommand(state.command);
+  } else if ((STYLE_FIRST_COMMANDS as readonly string[]).includes(state.command)) {
+    family = state.command;
+  } else {
+    return [];
+  }
 
-  return {
-    label: snippet.label,
-    kind: CompletionItemKind.Snippet,
-    detail: snippet.detail,
-    sortText: `0_${command}`,
-    filterText: command,
-    insertText: newText,
-    insertTextFormat: InsertTextFormat.Snippet,
-    textEdit: {
-      range: replaceRange,
-      newText,
-    },
-  };
-}
-
-function buildArgSnippetItem(
-  command: string,
-  snippet: (typeof ARG_SNIPPETS)[string],
-  range: Range
-): CompletionItem {
-  return {
-    label: snippet.label,
-    kind: CompletionItemKind.Snippet,
-    detail: snippet.detail,
-    sortText: `0_${command}_args`,
-    insertText: snippet.insertText,
-    insertTextFormat: InsertTextFormat.Snippet,
-    textEdit: {
-      range,
-      newText: snippet.insertText,
-    },
-  };
-}
-
-function buildStyleItems(family: string, prefix: string): CompletionItem[] {
+  const partial = state.partial.toLowerCase();
   return getStyles(family)
-    .filter((style) => !prefix || style.startsWith(prefix))
+    .filter((style) => !partial || style.toLowerCase().startsWith(partial))
     .map((style) => ({
       label: style,
       kind: CompletionItemKind.Method,
       detail: `${family} style`,
       sortText: `0_${style}`,
+      textEdit: { range: replaceRange, newText: style },
     }));
 }
 
-import commandsFull from '../schema/commands-full.json';
+function buildStyleArgItems(
+  state: NonNullable<ReturnType<typeof getLineArgState>>,
+  replaceRange: Range,
+  endsWithSpace: boolean
+): CompletionItem[] {
+  let family: string;
+  let style: string | undefined;
+
+  if (isIdStyleCommand(state.command)) {
+    family = styleFamilyForCommand(state.command);
+    style = state.argsBefore[1];
+  } else if ((STYLE_FIRST_COMMANDS as readonly string[]).includes(state.command)) {
+    family = state.command;
+    style = state.argsBefore[0];
+  } else {
+    return [];
+  }
+
+  if (!style) {
+    return [];
+  }
+
+  const snippet = getStyleArgSnippet(family, style);
+  if (!snippet && !endsWithSpace) {
+    return [];
+  }
+
+  const insertText = snippet ?? '$0';
+  const range = endsWithSpace
+    ? { start: { line: 0, character: replaceRange.end.character }, end: replaceRange.end }
+    : replaceRange;
+
+  return [
+    {
+      label: `${state.command} ${style} — arguments`,
+      kind: CompletionItemKind.Snippet,
+      detail: `Arguments for ${family} style ${style}`,
+      sortText: '0_args',
+      insertText,
+      insertTextFormat: InsertTextFormat.Snippet,
+      textEdit: { range, newText: insertText },
+    },
+  ];
+}
+
+function buildInsertSnippet(
+  label: string,
+  insertText: string,
+  detail: string,
+  range: Range
+): CompletionItem {
+  return {
+    label,
+    kind: CompletionItemKind.Snippet,
+    detail,
+    sortText: '0_snippet',
+    insertText,
+    insertTextFormat: InsertTextFormat.Snippet,
+    textEdit: { range, newText: insertText },
+  };
+}
 
 const COMMAND_DOCS: Record<string, string> = Object.fromEntries(
   (commandsFull as Array<{ command: string; description?: string }>)
@@ -224,15 +324,50 @@ const COMMAND_DOCS: Record<string, string> = Object.fromEntries(
     .map((c) => [c.command, c.description as string])
 );
 
-export function provideHover(word: string, docBaseUrl: string): { contents: MarkupContent } | null {
-  const doc = COMMAND_DOCS[word];
-  if (doc) {
-    const url = `${docBaseUrl}/${word}.html`;
+type StyleDocEntry = { family: string; style: string; description?: string };
+
+const STYLE_DOCS = new Map<string, StyleDocEntry>();
+for (const [family, entries] of Object.entries(
+  stylesFull as Record<string, StyleDocEntry[]>
+)) {
+  for (const entry of entries) {
+    if (!STYLE_DOCS.has(entry.style)) {
+      STYLE_DOCS.set(entry.style, { ...entry, family });
+    }
+  }
+}
+
+function buildHoverContents(
+  title: string,
+  rawDescription: string | undefined,
+  url: string
+): MarkupContent {
+  const parts = [title];
+  if (rawDescription) {
+    const text = plainDocText(rawDescription);
+    if (text) {
+      parts.push(escapeMarkdown(text));
+    }
+  }
+  parts.push(`[SPARTA manual](${url})`);
+  return {
+    kind: MarkupKind.Markdown,
+    value: parts.join('\n\n'),
+  };
+}
+
+export function provideHover(
+  word: string,
+  docBaseUrl: string
+): { contents: MarkupContent } | null {
+  const commandDoc = COMMAND_DOCS[word];
+  if (commandDoc) {
     return {
-      contents: {
-        kind: MarkupKind.Markdown,
-        value: `**${word}**\n\n${doc}\n\n[SPARTA manual](${url})`,
-      },
+      contents: buildHoverContents(
+        `**${word}**`,
+        commandDoc,
+        `${docBaseUrl}/${word}.html`
+      ),
     };
   }
 
@@ -242,12 +377,13 @@ export function provideHover(word: string, docBaseUrl: string): { contents: Mark
         family === 'fix' || family === 'compute'
           ? `${family}_${word.replace(/\//g, '_')}`
           : word;
-      const url = `${docBaseUrl}/${slug}.html`;
+      const styleDoc = STYLE_DOCS.get(word);
       return {
-        contents: {
-          kind: MarkupKind.Markdown,
-          value: `**${family} style: ${word}**\n\n[SPARTA manual](${url})`,
-        },
+        contents: buildHoverContents(
+          `**${family} style: ${word}**`,
+          styleDoc?.description,
+          `${docBaseUrl}/${slug}.html`
+        ),
       };
     }
   }
@@ -272,16 +408,11 @@ function getStylesMap(): Record<string, string[]> {
 }
 
 export function getWordAtPosition(line: string, character: number): string | undefined {
-  const before = line.slice(0, character);
-  const match = before.match(/([a-zA-Z_][\w./]*)$/);
-  return match?.[1];
+  return getWordRangeAtPosition(line, character)?.word;
 }
 
 export function getPrefixStart(line: string, character: number): number {
-  const before = line.slice(0, character);
-  const match = before.match(/([a-zA-Z_][\w./]*)$/);
-  if (!match) {
-    return character;
-  }
-  return character - match[1].length;
+  return getWordRangeAtPosition(line, character)?.start ?? character;
 }
+
+export { getWordRangeAtPosition } from '../completion-stages';

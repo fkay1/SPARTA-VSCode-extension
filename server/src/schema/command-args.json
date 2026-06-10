@@ -1,0 +1,6906 @@
+[
+  {
+    "command": "adapt_grid",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "action1",
+        "action2",
+        "style",
+        "args",
+        "keyword",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which grid cells adaptation will be attempted on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "action1"
+          ],
+          "description": "{refine} or {coarsen}",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "action2"
+          ],
+          "description": "{coarsen} or {refine}, optional",
+          "templateIndex": 2
+        },
+        {
+          "names": [
+            "style"
+          ],
+          "description": "{particle} or {surf} or {value} or {random}",
+          "templateIndex": 3
+        },
+        {
+          "names": [
+            "{iterate} arg"
+          ],
+          "description": "niterate"
+        },
+        {
+          "names": [
+            "niterate"
+          ],
+          "description": "number of iterations of action loop"
+        },
+        {
+          "names": [
+            "{maxlevel} arg"
+          ],
+          "description": "Nmax"
+        },
+        {
+          "names": [
+            "Nmax"
+          ],
+          "description": "do not refine to create child cells at a level > Nmax"
+        },
+        {
+          "names": [
+            "{minlevel} arg"
+          ],
+          "description": "Nmin"
+        },
+        {
+          "names": [
+            "Nmin"
+          ],
+          "description": "do not coarsen to create child cells at a level < Nmin"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "iterate",
+          "description": "Keyword: iterate | maxlevel | minlevel | thresh | combine | cells | region | dir"
+        }
+      ],
+      "styleVariants": [
+        {
+          "styles": [
+            "particle"
+          ],
+          "template": [
+            "rthresh",
+            "cthresh"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "rcount"
+              ],
+              "description": "threshold in particle count for refinment"
+            },
+            {
+              "names": [
+                "ccount"
+              ],
+              "description": "threshold in particle count for coarsening"
+            },
+            {
+              "names": [
+                "{surf} arg"
+              ],
+              "description": "surfID ssize"
+            },
+            {
+              "names": [
+                "surfID"
+              ],
+              "description": "group ID for which surface elements to consider"
+            },
+            {
+              "names": [
+                "ssize"
+              ],
+              "description": "do not refine to create cells smaller than ssize (dist units)"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "value"
+          ],
+          "template": [
+            "c_ID/c_ID\\[N\\]/f_ID/f_ID\\[N\\]",
+            "rthresh",
+            "cthresh"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "c_ID"
+              ],
+              "description": "ID of a compute that calculates a per grid vector, use values from vector"
+            },
+            {
+              "names": [
+                "c_ID\\[N\\]"
+              ],
+              "description": "ID of a compute that calculates a per grid array, use values from Nth column of array"
+            },
+            {
+              "names": [
+                "f_ID"
+              ],
+              "description": "ID of a fix that calculates a per grid vector, use vector"
+            },
+            {
+              "names": [
+                "f_ID\\[N\\]"
+              ],
+              "description": "ID of a fix that calculates a per grid array, use Nth column of array"
+            },
+            {
+              "names": [
+                "rvalue"
+              ],
+              "description": "threshold in value for refinement"
+            },
+            {
+              "names": [
+                "cvalue"
+              ],
+              "description": "threshold in value for coarsening"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "random"
+          ],
+          "template": [
+            "rfrac",
+            "cfrac"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "rfrac"
+              ],
+              "description": "fraction of child cells to refine",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "cfrac"
+              ],
+              "description": "fraction of parent cells to coarsen",
+              "templateIndex": 1
+            }
+          ]
+        },
+        {
+          "styles": [
+            "thresh"
+          ],
+          "template": [
+            "rdecide",
+            "cdecide"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "rdecide"
+              ],
+              "description": "{less} or {more} = refine when value is less or more than rvalue",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "cdecide"
+              ],
+              "description": "{less} or {more} = coarsen when value is less or more than cvalue",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "{combine} arg"
+              ],
+              "description": "{sum} or {min} or {max} = how to combine child values into parent value"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "cells"
+          ],
+          "template": [
+            "Nx",
+            "Ny",
+            "Nz"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Nx",
+                "Ny",
+                "Nz"
+              ],
+              "description": "refine a cell into Nx by Ny by Nz child cells",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "region"
+          ],
+          "template": [
+            "regID",
+            "rflag"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "regID"
+              ],
+              "description": "ID of region that cells must be inside to be eligible for adaptation",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "rflag"
+              ],
+              "description": "{all} or {one} or {center} = what portion of grid cell must be inside",
+              "templateIndex": 1
+            }
+          ]
+        },
+        {
+          "styles": [
+            "dir"
+          ],
+          "template": [
+            "Sx",
+            "Sy",
+            "Sz"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Sx",
+                "Sy",
+                "Sz"
+              ],
+              "description": "vector components used with style {surf} to test surf elements",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "{file} arg"
+              ],
+              "description": "filename"
+            },
+            {
+              "names": [
+                "filename"
+              ],
+              "description": "name of file to write out with new parent grid info"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "command": "balance_grid",
+    "syntax": {
+      "template": [
+        "style",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "style"
+          ],
+          "description": "{none} or {stride} or {clump} or {block} or {random} or {proc} or {rcb}",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "dims"
+          ],
+          "description": "string with any of \"x\", \"y\", or \"z\" characters in it"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "axes",
+          "description": "Keyword: axes | flip",
+          "values": []
+        }
+      ],
+      "styleVariants": [
+        {
+          "styles": [
+            "none"
+          ],
+          "template": [
+            "none"
+          ],
+          "parameters": []
+        },
+        {
+          "styles": [
+            "stride"
+          ],
+          "template": [
+            "{xyz}",
+            "or",
+            "{xzy}",
+            "or",
+            "{yxz}",
+            "or",
+            "{yzx}",
+            "or",
+            "{zxy}",
+            "or",
+            "{zyx}"
+          ],
+          "parameters": []
+        },
+        {
+          "styles": [
+            "clump"
+          ],
+          "template": [
+            "{xyz}",
+            "or",
+            "{xzy}",
+            "or",
+            "{yxz}",
+            "or",
+            "{yzx}",
+            "or",
+            "{zxy}",
+            "or",
+            "{zyx}"
+          ],
+          "parameters": []
+        },
+        {
+          "styles": [
+            "block"
+          ],
+          "template": [
+            "Px",
+            "Py",
+            "Pz"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Px",
+                "Py",
+                "Pz"
+              ],
+              "description": "# of processors in each dimension",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "random"
+          ],
+          "template": [
+            "none"
+          ],
+          "parameters": []
+        },
+        {
+          "styles": [
+            "proc"
+          ],
+          "template": [
+            "none"
+          ],
+          "parameters": []
+        },
+        {
+          "styles": [
+            "rcb"
+          ],
+          "template": [
+            "weight"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "weight"
+              ],
+              "description": "{cell} or {part} or {time}",
+              "templateIndex": 0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "command": "bound_modify",
+    "syntax": {
+      "template": [
+        "wall1",
+        "wall2",
+        "keyword",
+        "value"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "wall1",
+            "wall2",
+            "..."
+          ],
+          "description": "{xlo} or {xhi} or {ylo} or {yhi} or {zlo} or {zhi}",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "keywords"
+          ],
+          "description": "{collide} or {react}"
+        },
+        {
+          "names": [
+            "sc-ID"
+          ],
+          "description": "ID of a surface collision model"
+        },
+        {
+          "names": [
+            "sr-ID"
+          ],
+          "description": "ID of a surface reaction model or none"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "boundary",
+    "syntax": {
+      "template": [
+        "x",
+        "y",
+        "z"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "x",
+            "y",
+            "z"
+          ],
+          "description": "{o} or {p} or {r} or {a} or {s}, one or two letters",
+          "templateIndex": 0
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "clear",
+    "syntax": {
+      "template": [],
+      "parameters": [],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "collide",
+    "syntax": {
+      "template": [
+        "style",
+        "args",
+        "keyword",
+        "value"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "style"
+          ],
+          "description": "{none} or {vss}",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "args"
+          ],
+          "description": "arguments for that style",
+          "templateIndex": 1
+        }
+      ],
+      "keywords": [
+        {
+          "name": "relax",
+          "description": "Keyword: relax",
+          "values": [
+            {
+              "name": "constant",
+              "description": ""
+            },
+            {
+              "name": "variable",
+              "description": ""
+            }
+          ]
+        }
+      ],
+      "styleVariants": [
+        {
+          "styles": [
+            "none"
+          ],
+          "template": [
+            "none"
+          ],
+          "parameters": []
+        },
+        {
+          "styles": [
+            "vss"
+          ],
+          "template": [
+            "mix-ID",
+            "file"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "mix-ID"
+              ],
+              "description": "ID of mixture to use for group definitions",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "file"
+              ],
+              "description": "filename that lists species with their VSS model parameters",
+              "templateIndex": 1
+            }
+          ]
+        },
+        {
+          "styles": [
+            "vss/kk"
+          ],
+          "template": [
+            "mix-ID",
+            "file"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "mix-ID"
+              ],
+              "description": "ID of mixture to use for group definitions",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "file"
+              ],
+              "description": "filename that lists species with their VSS model parameters",
+              "templateIndex": 1
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "command": "collide_modify",
+    "syntax": {
+      "template": [
+        "keyword",
+        "values"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "keywords"
+          ],
+          "description": "{vremax} or {remain} or {ambipolar} or {nearcp} or {rotate} or {vibrate}"
+        },
+        {
+          "names": [
+            "{vremax} values"
+          ],
+          "description": "Nevery startflag"
+        },
+        {
+          "names": [
+            "Nevery"
+          ],
+          "description": "zero vremax every this many timesteps"
+        },
+        {
+          "names": [
+            "startflag"
+          ],
+          "description": "{yes} or {no} = zero vremax at start of every run"
+        },
+        {
+          "names": [
+            "{nearcp} values"
+          ],
+          "description": "choice Nlimit"
+        },
+        {
+          "names": [
+            "choice"
+          ],
+          "description": "{yes} or {no} to turn on/off near collision partners"
+        },
+        {
+          "names": [
+            "Nlimit"
+          ],
+          "description": "max # of attempts made to find a collision partner"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "compute",
+    "syntax": {
+      "template": [
+        "ID",
+        "style",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "ID"
+          ],
+          "description": "user-assigned name for the computation",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "style"
+          ],
+          "description": "one of a list of possible style names (see below)",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "args"
+          ],
+          "description": "arguments used by a particular style",
+          "templateIndex": 2
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "create_box",
+    "syntax": {
+      "template": [
+        "xlo",
+        "xhi",
+        "ylo",
+        "yhi",
+        "zlo",
+        "zhi"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "xlo",
+            "xhi"
+          ],
+          "description": "box bounds in the x dimension (distance units)",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "ylo",
+            "yhi"
+          ],
+          "description": "box bounds in the y dimension (distance units)",
+          "templateIndex": 2
+        },
+        {
+          "names": [
+            "zlo",
+            "zhi"
+          ],
+          "description": "box bounds in the z dimension (distance units)",
+          "templateIndex": 4
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "create_grid",
+    "syntax": {
+      "template": [
+        "Nx",
+        "Ny",
+        "Nz",
+        "keyword",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "Nx",
+            "Ny",
+            "Nz"
+          ],
+          "description": "size of 1st-level grid in each dimension",
+          "templateIndex": 0
+        }
+      ],
+      "keywords": [
+        {
+          "name": "block",
+          "description": "Keyword: block | clump | random | stride | levels | subset | region | inside"
+        }
+      ],
+      "styleVariants": [
+        {
+          "styles": [
+            "block"
+          ],
+          "template": [
+            "Px",
+            "Py",
+            "Pz"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Px",
+                "Py",
+                "Pz"
+              ],
+              "description": "# of processors in each dimension, any can be * (see below)",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "{clump} arg"
+              ],
+              "description": "{xyz} or {xzy} or {yxz} or {yzx} or {zxy} or {zyx}"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "random"
+          ],
+          "template": [
+            "none"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "{stride} arg"
+              ],
+              "description": "{xyz} or {xzy} or {yxz} or {yzx} or {zxy} or {zyx}"
+            },
+            {
+              "names": [
+                "{levels} arg"
+              ],
+              "description": "Nlevels"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "subset"
+          ],
+          "template": [
+            "Ilevel",
+            "Px",
+            "Py",
+            "Pz",
+            "Cx",
+            "Cy",
+            "Cz"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Ilevel"
+              ],
+              "description": "which level(s) to define, see syntax below",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "Px Py Pz"
+              ],
+              "description": "extent of parent cells in each dimension in which to create child cells"
+            },
+            {
+              "names": [
+                "Cx Cy Cz"
+              ],
+              "description": "size of child sub-grid in each dimension within parent cells"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "region"
+          ],
+          "template": [
+            "Ilevel",
+            "reg-ID",
+            "Cx",
+            "Cy",
+            "Cz"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Ilevel"
+              ],
+              "description": "which level(s) to define, see syntax below",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "reg-ID"
+              ],
+              "description": "ID of region which parent cells must be in to create child cells",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "Cx Cy Cz"
+              ],
+              "description": "size of child sub-grid in each dimension within parent cells"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "inside"
+          ],
+          "template": [
+            "{any}",
+            "or",
+            "{all}"
+          ],
+          "parameters": []
+        }
+      ]
+    }
+  },
+  {
+    "command": "create_isurf",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "ablateID",
+        "thresh",
+        "mode"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "grid ID for which grid cells to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "ablateID"
+          ],
+          "description": "ID of a \"fix ablate\"_fix_ablate.html command",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "thresh"
+          ],
+          "description": "threshold for corner values used to generate implicit surfaces, value > 0.0 and < 255.0",
+          "templateIndex": 2
+        },
+        {
+          "names": [
+            "mode"
+          ],
+          "description": "{inout} or {ave} or {multi}",
+          "templateIndex": 3
+        },
+        {
+          "names": [
+            "{inout}"
+          ],
+          "description": "mark corner points as either inside or outside surf"
+        },
+        {
+          "names": [
+            "{voxel}"
+          ],
+          "description": "assign corner point values based on local solid fraction"
+        },
+        {
+          "names": [
+            "{ave}"
+          ],
+          "description": "smooth values by averaging expected corner point values based on intersections between the explicit surfaces and cell edges"
+        },
+        {
+          "names": [
+            "{multi}"
+          ],
+          "description": "mark corners using multiple values (i.e. multivalues)"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "create_particles",
+    "syntax": {
+      "template": [
+        "mix-ID",
+        "style",
+        "args",
+        "keyword",
+        "value"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "mix-ID"
+          ],
+          "description": "ID of mixture to use when creating particles",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "style"
+          ],
+          "description": "{n} or {single}",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "{species} values"
+          ],
+          "description": "svar xvar yvar zvar"
+        },
+        {
+          "names": [
+            "svar"
+          ],
+          "description": "name of equal-style variable for species type"
+        },
+        {
+          "names": [
+            "xvar",
+            "yvar",
+            "zvar"
+          ],
+          "description": "names of internal-style variables for x,y,z"
+        },
+        {
+          "names": [
+            "{density} values"
+          ],
+          "description": "dvar xvar yvar zvar"
+        },
+        {
+          "names": [
+            "svar"
+          ],
+          "description": "name of equal-style variable for density"
+        },
+        {
+          "names": [
+            "xvar",
+            "yvar",
+            "zvar"
+          ],
+          "description": "names of internal-style variables for x,y,z"
+        },
+        {
+          "names": [
+            "{temperature} values"
+          ],
+          "description": "tvar xvar yvar zvar"
+        },
+        {
+          "names": [
+            "tvar"
+          ],
+          "description": "name of equal-style variable for temperature"
+        },
+        {
+          "names": [
+            "xvar",
+            "yvar",
+            "zvar"
+          ],
+          "description": "names of internal-style variables for x,y,z"
+        },
+        {
+          "names": [
+            "{vstream} values"
+          ],
+          "description": "vxvar vyvar vzvar xvar yvar zvar"
+        },
+        {
+          "names": [
+            "vxvar",
+            "vyvar",
+            "vzvar"
+          ],
+          "description": "names of equal-style variables for vx,vy,vz"
+        },
+        {
+          "names": [
+            "xvar",
+            "yvar",
+            "zvar"
+          ],
+          "description": "names of internal-style variables for x,y,z"
+        },
+        {
+          "names": [
+            "{custom} values"
+          ],
+          "description": "attribute g_name"
+        },
+        {
+          "names": [
+            "attribute"
+          ],
+          "description": "{density} or {temperature} or {vstream} or {fractions}"
+        },
+        {
+          "names": [
+            "g_name"
+          ],
+          "description": "custom per-grid vector or array with name"
+        },
+        {
+          "names": [
+            "{twopass} values"
+          ],
+          "description": "none"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "cut",
+          "description": "Keyword: cut | global | region | species | density | temperature | vstream | custom | twopass",
+          "values": []
+        }
+      ],
+      "styleVariants": [
+        {
+          "styles": [
+            "n"
+          ],
+          "template": [
+            "Np"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Np"
+              ],
+              "description": "0 or number of particles to create",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "single"
+          ],
+          "template": [
+            "species-ID",
+            "x",
+            "y",
+            "z",
+            "vx",
+            "vy",
+            "vz"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "species-ID"
+              ],
+              "description": "ID of species of single particle",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "x",
+                "y",
+                "z"
+              ],
+              "description": "position of particle (distance units)",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "vx",
+                "vy",
+                "vz"
+              ],
+              "description": "velocity of particle (velocity units)",
+              "templateIndex": 4
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "command": "custom",
+    "syntax": {
+      "template": [
+        "style",
+        "action",
+        "args",
+        "action",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "style"
+          ],
+          "description": "{particle} or {grid} or {surf}",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "action"
+          ],
+          "description": "{create} or {remove} or {set} or {file}",
+          "templateIndex": 1
+        }
+      ],
+      "keywords": [],
+      "styleVariants": [
+        {
+          "styles": [
+            "create"
+          ],
+          "template": [
+            "cname",
+            "datatype",
+            "Nc"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "cname"
+              ],
+              "description": "name of custom vector or array to create and initialize with zeroes",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "datatype"
+              ],
+              "description": "{int} or {float} = for integer or floating point values",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "Nc"
+              ],
+              "description": "0 for a vector (single value), Nc >= 1 for an array (one or more values)",
+              "templateIndex": 2
+            },
+            {
+              "names": [
+                "{remove} arg2"
+              ],
+              "description": "cname"
+            },
+            {
+              "names": [
+                "cname"
+              ],
+              "description": "name of custom vector or array to remove"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "set"
+          ],
+          "template": [
+            "cname",
+            "v_name",
+            "subset-ID",
+            "region-ID"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "cname"
+              ],
+              "description": "specify as name (no brackets) for custom vector with name",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "v_name"
+              ],
+              "description": "equal-, particle-, grid-, or surf-style variable with name",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "subset-ID"
+              ],
+              "description": "mixture ID (particles) or group ID (grid cells or surf elements)",
+              "templateIndex": 2
+            },
+            {
+              "names": [
+                "region-ID"
+              ],
+              "description": "only apply to particle/grid/surf in region, NULL to not test",
+              "templateIndex": 3
+            }
+          ]
+        },
+        {
+          "styles": [
+            "file"
+          ],
+          "template": [
+            "fname",
+            "M",
+            "cname1",
+            "cname2",
+            "cnameM"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "fname"
+              ],
+              "description": "name of file with custom attributes for grid cells or surf elements",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "M"
+              ],
+              "description": "# of custom values listed on each line of the file",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "cname1",
+                "cname2",
+                "...",
+                "cnameM"
+              ],
+              "description": "which attribute each line's values are assigned to",
+              "templateIndex": 2
+            },
+            {
+              "names": [
+                "cnameI"
+              ],
+              "description": "name of a custom vector"
+            },
+            {
+              "names": [
+                "cnameI"
+              ],
+              "description": "name\\[N\\] for Nth column of a custom array with name"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "file/coarse"
+          ],
+          "template": [
+            "Nfile",
+            "filestyle",
+            "fname",
+            "M",
+            "cname1",
+            "cname2",
+            "cnameM"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Nfile"
+              ],
+              "description": "number of coarse files",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "filestyle"
+              ],
+              "description": "{text} or {binary}",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "fname"
+              ],
+              "description": "name of file with custom attributes for coarse grid cells",
+              "templateIndex": 2
+            },
+            {
+              "names": [
+                "M"
+              ],
+              "description": "# of custom values listed for each coarse cell entry in the file",
+              "templateIndex": 3
+            },
+            {
+              "names": [
+                "cname1",
+                "cname2",
+                "...",
+                "cnameM"
+              ],
+              "description": "which attribute each coarse cell's values are assigned to",
+              "templateIndex": 4
+            },
+            {
+              "names": [
+                "cnameI"
+              ],
+              "description": "name of a custom vector"
+            },
+            {
+              "names": [
+                "cnameI"
+              ],
+              "description": "name\\[N\\] for Nth column of a custom array with name"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "command": "dimension",
+    "syntax": {
+      "template": [
+        "N"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "N"
+          ],
+          "description": "2 or 3",
+          "templateIndex": 0
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "dump",
+    "syntax": {
+      "template": [
+        "ID",
+        "style",
+        "select-ID",
+        "N",
+        "file",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "ID"
+          ],
+          "description": "user-assigned name for the dump",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "style"
+          ],
+          "description": "{particle} or {grid} or {surf} or {tally} or {image}",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "select-ID"
+          ],
+          "description": "which particles, grid cells, surface elements to dump",
+          "templateIndex": 2
+        },
+        {
+          "names": [
+            "for dump style"
+          ],
+          "description": "particle or image, use a mixture ID"
+        },
+        {
+          "names": [
+            "for style"
+          ],
+          "description": "grid, use a grid group ID"
+        },
+        {
+          "names": [
+            "for style"
+          ],
+          "description": "surf, use a surface group ID"
+        },
+        {
+          "names": [
+            "for style"
+          ],
+          "description": "tally, select-ID is ignored"
+        },
+        {
+          "names": [
+            "for style"
+          ],
+          "description": "image, see the \"dump image\"_dump_image.html doc page"
+        },
+        {
+          "names": [
+            "N"
+          ],
+          "description": "dump every this many timesteps",
+          "templateIndex": 3
+        },
+        {
+          "names": [
+            "file"
+          ],
+          "description": "name of file to write dump info to",
+          "templateIndex": 4
+        },
+        {
+          "names": [
+            "args"
+          ],
+          "description": "list of arguments for a particular style",
+          "templateIndex": 5
+        }
+      ],
+      "keywords": [],
+      "styleVariants": [
+        {
+          "styles": [
+            "particle"
+          ],
+          "template": [
+            "list",
+            "of",
+            "particle",
+            "attributes"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "possible attributes"
+              ],
+              "description": "id, type, proc, cellID, x, y, z, xs, ys, zs, vx, vy, vz,"
+            },
+            {
+              "names": [
+                "id"
+              ],
+              "description": "particle ID"
+            },
+            {
+              "names": [
+                "type"
+              ],
+              "description": "particle species as an integer index"
+            },
+            {
+              "names": [
+                "proc"
+              ],
+              "description": "ID of owning processor"
+            },
+            {
+              "names": [
+                "cellID"
+              ],
+              "description": "ID of grid cell particle is in"
+            },
+            {
+              "names": [
+                "x",
+                "y",
+                "z"
+              ],
+              "description": "unscaled particle coordinates"
+            },
+            {
+              "names": [
+                "xs",
+                "ys",
+                "zs"
+              ],
+              "description": "scaled particle coordinates"
+            },
+            {
+              "names": [
+                "vx",
+                "vy",
+                "vz"
+              ],
+              "description": "particle velocities"
+            },
+            {
+              "names": [
+                "ke",
+                "erot",
+                "evib"
+              ],
+              "description": "translational, rotational, and vibrational energy"
+            },
+            {
+              "names": [
+                "c_ID"
+              ],
+              "description": "per-particle vector calculated by a compute with ID"
+            },
+            {
+              "names": [
+                "c_ID\\[N\\]"
+              ],
+              "description": "Nth column of per-particle array calculated by a compute with ID, N can include wildcard (see below)"
+            },
+            {
+              "names": [
+                "f_ID"
+              ],
+              "description": "per-particle vector calculated by a fix with ID"
+            },
+            {
+              "names": [
+                "f_ID\\[N\\]"
+              ],
+              "description": "Nth column of per-particle array calculated by a fix with ID, N can include wildcard (see below)"
+            },
+            {
+              "names": [
+                "v_name"
+              ],
+              "description": "per-particle vector calculated by a particle-style variable with name"
+            },
+            {
+              "names": [
+                "p_name"
+              ],
+              "description": "custom per-particle vector with name"
+            },
+            {
+              "names": [
+                "p_name\\[N\\]"
+              ],
+              "description": "Nth column of custom per-particle array with name, N can include wildcard (see below)"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "grid"
+          ],
+          "template": [
+            "list",
+            "of",
+            "grid",
+            "attributes"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "possible attributes"
+              ],
+              "description": "id, idstr, split, proc, xlo, ylo, zlo, xhi, yhi, zhi,"
+            },
+            {
+              "names": [
+                "id"
+              ],
+              "description": "integer form of grid cell ID"
+            },
+            {
+              "names": [
+                "idstr"
+              ],
+              "description": "string form of grid cell ID"
+            },
+            {
+              "names": [
+                "split"
+              ],
+              "description": "integer, either 0 (unsplit cell) or 1..N (split cell index + 1)"
+            },
+            {
+              "names": [
+                "proc"
+              ],
+              "description": "processor that owns grid cell"
+            },
+            {
+              "names": [
+                "xlo",
+                "ylo",
+                "zlo"
+              ],
+              "description": "coords of lower left corner of grid cell"
+            },
+            {
+              "names": [
+                "xhi",
+                "yhi",
+                "zhi"
+              ],
+              "description": "coords of lower left corner of grid cell"
+            },
+            {
+              "names": [
+                "xc",
+                "yc",
+                "zc"
+              ],
+              "description": "coords of center of grid cell"
+            },
+            {
+              "names": [
+                "vol"
+              ],
+              "description": "flow volume of grid cell (area in 2d)"
+            },
+            {
+              "names": [
+                "c_ID"
+              ],
+              "description": "per-grid vector calculated by a compute with ID"
+            },
+            {
+              "names": [
+                "c_ID\\[N\\]"
+              ],
+              "description": "Nth column of per-grid array calculated by a compute with ID, N can include wildcard (see below)"
+            },
+            {
+              "names": [
+                "f_ID"
+              ],
+              "description": "per-grid vector calculated by a fix with ID"
+            },
+            {
+              "names": [
+                "f_ID\\[N\\]"
+              ],
+              "description": "Nth column of per-grid array calculated by a fix with ID, N can include wildcard (see below)"
+            },
+            {
+              "names": [
+                "v_name"
+              ],
+              "description": "per-grid vector calculated by a grid-style variable with name"
+            },
+            {
+              "names": [
+                "g_name"
+              ],
+              "description": "custom per-grid vector with name"
+            },
+            {
+              "names": [
+                "g_name\\[N\\]"
+              ],
+              "description": "Nth column of custom per-grid array with name, N can include wildcard (see below)"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "surf"
+          ],
+          "template": [
+            "list",
+            "of",
+            "surf",
+            "attributes"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "possible attributes"
+              ],
+              "description": "id, v1x, v1y, v1z, v2x, v2y, v2z, v3x, v3y, v3z, area,"
+            },
+            {
+              "names": [
+                "id"
+              ],
+              "description": "surface element ID"
+            },
+            {
+              "names": [
+                "v1x",
+                "v1y",
+                "v1z"
+              ],
+              "description": "coords of 1st vertex in surface element"
+            },
+            {
+              "names": [
+                "v2x",
+                "v2y",
+                "v2z"
+              ],
+              "description": "coords of 2nd vertex in surface element"
+            },
+            {
+              "names": [
+                "v3x",
+                "v3y",
+                "v3z"
+              ],
+              "description": "coords of 3rd vertex in surface element"
+            },
+            {
+              "names": [
+                "area"
+              ],
+              "description": "surface element area (3d, axisymmetric) or length (2d)"
+            },
+            {
+              "names": [
+                "c_ID"
+              ],
+              "description": "per-surf vector calculated by a compute with ID"
+            },
+            {
+              "names": [
+                "c_ID\\[N\\]"
+              ],
+              "description": "Nth column of per-surf array calculated by a compute with ID, N can include wildcard (see below)"
+            },
+            {
+              "names": [
+                "f_ID"
+              ],
+              "description": "per-surf vector calculated by a fix with ID"
+            },
+            {
+              "names": [
+                "f_ID\\[N\\]"
+              ],
+              "description": "Nth column of per-surf array calculated by a fix with ID, N can include wildcard (see below)"
+            },
+            {
+              "names": [
+                "v_name"
+              ],
+              "description": "per-surf vector calculated by a surf-style variable with name"
+            },
+            {
+              "names": [
+                "s_name"
+              ],
+              "description": "custom per-surf vector with name"
+            },
+            {
+              "names": [
+                "s_name\\[N\\]"
+              ],
+              "description": "Nth column of custom per-surf array with name, N can include wildcard (see below)"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "tally"
+          ],
+          "template": [
+            "list",
+            "of",
+            "tally",
+            "computes"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "possible attributes"
+              ],
+              "description": "c_ID, c_ID\\[N\\]"
+            },
+            {
+              "names": [
+                "c_ID"
+              ],
+              "description": "per-tally vector calculated by a compute with ID"
+            },
+            {
+              "names": [
+                "c_ID\\[N\\]"
+              ],
+              "description": "Nth column of per-tally array calculated by a compute with ID, I can include wildcard (see below)"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "image"
+          ],
+          "template": [
+            "discussed",
+            "on",
+            "\"dump",
+            "image\"_dump_image.html",
+            "doc",
+            "page"
+          ],
+          "parameters": []
+        }
+      ]
+    }
+  },
+  {
+    "command": "dump_modify",
+    "syntax": {
+      "template": [
+        "dump-ID",
+        "keyword",
+        "values"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "dump-ID"
+          ],
+          "description": "ID of dump to modify",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "{append} arg"
+          ],
+          "description": "{yes} or {no}"
+        },
+        {
+          "names": [
+            "{buffer} arg"
+          ],
+          "description": "{yes} or {no}"
+        },
+        {
+          "names": [
+            "{every} arg"
+          ],
+          "description": "N"
+        },
+        {
+          "names": [
+            "N"
+          ],
+          "description": "dump every this many timesteps"
+        },
+        {
+          "names": [
+            "{fileper} arg"
+          ],
+          "description": "Np"
+        },
+        {
+          "names": [
+            "Np"
+          ],
+          "description": "write one file for every this many processors"
+        },
+        {
+          "names": [
+            "{first} arg"
+          ],
+          "description": "{yes} or {no}"
+        },
+        {
+          "names": [
+            "{flush} arg"
+          ],
+          "description": "{yes} or {no}"
+        },
+        {
+          "names": [
+            "{backcolor} arg"
+          ],
+          "description": "color"
+        },
+        {
+          "names": [
+            "color"
+          ],
+          "description": "name of color for background"
+        },
+        {
+          "names": [
+            "{bitrate} arg"
+          ],
+          "description": "rate"
+        },
+        {
+          "names": [
+            "rate"
+          ],
+          "description": "target bitrate for movie in kbps"
+        },
+        {
+          "names": [
+            "{boxcolor} arg"
+          ],
+          "description": "color"
+        },
+        {
+          "names": [
+            "color"
+          ],
+          "description": "name of color for box lines"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "append",
+          "description": "Keyword: append | buffer | every | fileper | first | flush | format | nfile | pad | region | thresh"
+        },
+        {
+          "name": "bcolor",
+          "description": "Keyword: bcolor | bdiam | backcolor | bitrate | boxcolor | cmap | color | framerate | gcolor | glinecolor | pcolor | pdiam | scolor | slinecolor"
+        }
+      ],
+      "styleVariants": [
+        {
+          "styles": [
+            "format"
+          ],
+          "template": [
+            "{line}",
+            "string,",
+            "{int}",
+            "string,",
+            "{float}",
+            "string,",
+            "M",
+            "string,",
+            "or",
+            "{none}"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "string"
+              ],
+              "description": "C-style format string"
+            },
+            {
+              "names": [
+                "M"
+              ],
+              "description": "integer from 1 to N, where N = # of per-atom quantities being output",
+              "templateIndex": 6
+            },
+            {
+              "names": [
+                "{nfile} arg"
+              ],
+              "description": "Nf"
+            },
+            {
+              "names": [
+                "Nf"
+              ],
+              "description": "write this many files, one from each of Nf processors"
+            },
+            {
+              "names": [
+                "{pad} arg"
+              ],
+              "description": "Nchar = # of characters to convert timestep to"
+            },
+            {
+              "names": [
+                "{region} arg"
+              ],
+              "description": "region-ID or \"none\""
+            }
+          ]
+        },
+        {
+          "styles": [
+            "thresh"
+          ],
+          "template": [
+            "attribute",
+            "operation",
+            "value"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "attribute"
+              ],
+              "description": "same attributes (x,fy,etotal,sxx,etc) used by dump custom style",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "operation"
+              ],
+              "description": "\"<\" or \"<=\" or \">\" or \">=\" or \"==\" or \"!=\"",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "value"
+              ],
+              "description": "numeric value to compare to",
+              "templateIndex": 2
+            }
+          ]
+        },
+        {
+          "styles": [
+            "cmap"
+          ],
+          "template": [
+            "mode",
+            "lo",
+            "hi",
+            "style",
+            "delta",
+            "N",
+            "entry1",
+            "entry2",
+            "entryN"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "mode"
+              ],
+              "description": "{particle} or {grid} or {surf} or {gridx} or {gridy} or {gridz}",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "lo"
+              ],
+              "description": "number or {min} = lower bound of range of color map",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "hi"
+              ],
+              "description": "number or {max} = upper bound of range of color map",
+              "templateIndex": 2
+            },
+            {
+              "names": [
+                "style"
+              ],
+              "description": "2 letters = \"c\" or \"d\" or \"s\" plus \"a\" or \"f\"",
+              "templateIndex": 3
+            },
+            {
+              "names": [
+                "delta"
+              ],
+              "description": "binsize (only used for style \"s\", otherwise ignored)",
+              "templateIndex": 4
+            },
+            {
+              "names": [
+                "binsize"
+              ],
+              "description": "range is divided into bins of this width"
+            },
+            {
+              "names": [
+                "N"
+              ],
+              "description": "# of subsequent entries",
+              "templateIndex": 5
+            },
+            {
+              "names": [
+                "entry"
+              ],
+              "description": "value color (for continuous style)"
+            },
+            {
+              "names": [
+                "value"
+              ],
+              "description": "number or {min} or {max} = single value within range"
+            },
+            {
+              "names": [
+                "color"
+              ],
+              "description": "name of color used for that value"
+            },
+            {
+              "names": [
+                "entry"
+              ],
+              "description": "lo hi color (for discrete style)"
+            },
+            {
+              "names": [
+                "lo/hi"
+              ],
+              "description": "number or {min} or {max} = lower/upper bound of subset of range"
+            },
+            {
+              "names": [
+                "color"
+              ],
+              "description": "name of color used for that subset of values"
+            },
+            {
+              "names": [
+                "entry"
+              ],
+              "description": "color (for sequential style)"
+            },
+            {
+              "names": [
+                "color"
+              ],
+              "description": "name of color used for a bin of values"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "color"
+          ],
+          "template": [
+            "name",
+            "R",
+            "G",
+            "B"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "name"
+              ],
+              "description": "name of color",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "R",
+                "G",
+                "B"
+              ],
+              "description": "red/green/blue numeric values from 0.0 to 1.0",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "{framerate} arg"
+              ],
+              "description": "fps"
+            },
+            {
+              "names": [
+                "fps"
+              ],
+              "description": "frames per second for movie"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "gcolor"
+          ],
+          "template": [
+            "proc",
+            "color"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "proc"
+              ],
+              "description": "proc ID or range of IDs (see below)",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "color"
+              ],
+              "description": "name of color or color1/color2/...",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "{glinecolor} arg"
+              ],
+              "description": "color"
+            },
+            {
+              "names": [
+                "color"
+              ],
+              "description": "name of color for grid cell outlines"
+            },
+            {
+              "names": [
+                "{gridgroup} arg"
+              ],
+              "description": "group-ID"
+            },
+            {
+              "names": [
+                "group-ID"
+              ],
+              "description": "name of a user-defined grid group, see the \"group\"_group.html command"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "pcolor"
+          ],
+          "template": [
+            "type",
+            "color"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "type"
+              ],
+              "description": "particle type or range of types or proc ID or range of IDs (see below)",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "color"
+              ],
+              "description": "name of color or color1/color2/...",
+              "templateIndex": 1
+            }
+          ]
+        },
+        {
+          "styles": [
+            "pdiam"
+          ],
+          "template": [
+            "type",
+            "diam"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "type"
+              ],
+              "description": "particle type or range of types (see below)",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "diam"
+              ],
+              "description": "diameter of particles of that type (distance units)",
+              "templateIndex": 1
+            }
+          ]
+        },
+        {
+          "styles": [
+            "scolor"
+          ],
+          "template": [
+            "proc",
+            "color"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "proc"
+              ],
+              "description": "proc ID or range of IDs (see below)",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "color"
+              ],
+              "description": "name of color for surf one option",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "{slinecolor} arg"
+              ],
+              "description": "color"
+            },
+            {
+              "names": [
+                "color"
+              ],
+              "description": "name of color for surface element outlines"
+            },
+            {
+              "names": [
+                "{surfgroup} arg"
+              ],
+              "description": "group-ID"
+            },
+            {
+              "names": [
+                "group-ID"
+              ],
+              "description": "name of a user-defined surf group, see the \"group\"_group.html command"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "command": "echo",
+    "syntax": {
+      "template": [
+        "style"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "style"
+          ],
+          "description": "{none} or {screen} or {log} or {both}",
+          "templateIndex": 0
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "fix",
+    "syntax": {
+      "template": [
+        "ID",
+        "style",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "ID"
+          ],
+          "description": "user-assigned name for the fix",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "style"
+          ],
+          "description": "one of a long list of possible style names (see below)",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "args"
+          ],
+          "description": "arguments used by a particular style",
+          "templateIndex": 2
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "global",
+    "syntax": {
+      "template": [
+        "keyword",
+        "values"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "ratio"
+          ],
+          "description": "Fnum ratio of physical particles to simulation particles"
+        },
+        {
+          "names": [
+            "density"
+          ],
+          "description": "number density of background gas (# per length^3 units)"
+        },
+        {
+          "names": [
+            "{vstream} values"
+          ],
+          "description": "Vx Vy Vz"
+        },
+        {
+          "names": [
+            "Vx",
+            "Vy",
+            "Vz"
+          ],
+          "description": "streaming velocity of background gas (velocity units)"
+        },
+        {
+          "names": [
+            "{temp} values"
+          ],
+          "description": "thermal"
+        },
+        {
+          "names": [
+            "thermal"
+          ],
+          "description": "temperature of background gas (temperature units)"
+        },
+        {
+          "names": [
+            "{field} values"
+          ],
+          "description": "fstyle args"
+        },
+        {
+          "names": [
+            "fstyle"
+          ],
+          "description": "{none} or {constant} or {particle} or {grid}"
+        },
+        {
+          "names": [
+            "{field} arg"
+          ],
+          "description": "none"
+        },
+        {
+          "names": [
+            "explicit"
+          ],
+          "description": "surfs defined in read_surf file, each proc owns copy of all surfs"
+        },
+        {
+          "names": [
+            "explicit/distributed"
+          ],
+          "description": "surfs defined in read_surf file, each proc owns"
+        },
+        {
+          "names": [
+            "implicit"
+          ],
+          "description": "surfs defined in read_isurf file, each proc owns"
+        },
+        {
+          "names": [
+            "percell"
+          ],
+          "description": "loop over my cells and check every surf"
+        },
+        {
+          "names": [
+            "persurf"
+          ],
+          "description": "loop over my surfs and cells they overlap"
+        },
+        {
+          "names": [
+            "auto"
+          ],
+          "description": "choose percell or persurf based on surface element and proc count"
+        },
+        {
+          "names": [
+            "Nsurf"
+          ],
+          "description": "max # of surface elements allowed in single grid cell"
+        },
+        {
+          "names": [
+            "Nsplit"
+          ],
+          "description": "max # of sub-cells one grid cell can be split into by surface elements"
+        },
+        {
+          "names": [
+            "reduce"
+          ],
+          "description": "tally surf collision info via MPI_Allreduce operations"
+        },
+        {
+          "names": [
+            "rvous"
+          ],
+          "description": "tally via a rendezvous algorithm"
+        },
+        {
+          "names": [
+            "auto"
+          ],
+          "description": "choose reduce or rvous based on surface element and proc count"
+        },
+        {
+          "names": [
+            "cutoff"
+          ],
+          "description": "acquire ghost cells up to this far away (distance units)"
+        },
+        {
+          "names": [
+            "yes/no"
+          ],
+          "description": "sort incoming messages by proc ID if yes, else no sort"
+        },
+        {
+          "names": [
+            "neigh"
+          ],
+          "description": "setup particle comm with subset of near-neighbor processor"
+        },
+        {
+          "names": [
+            "all"
+          ],
+          "description": "allow particle comm with potentially any processor"
+        },
+        {
+          "names": [
+            "wstyle"
+          ],
+          "description": "{cell}"
+        },
+        {
+          "names": [
+            "mode"
+          ],
+          "description": "{none} or {volume} or {radius} or {radius/only}"
+        },
+        {
+          "names": [
+            "nsteps"
+          ],
+          "description": "reorder the particles every this many timesteps"
+        },
+        {
+          "names": [
+            "grid"
+          ],
+          "description": "limit extra memory for load-balancing, particle reordering, and restart file read/write to grid cell memory"
+        },
+        {
+          "names": [
+            "bytes"
+          ],
+          "description": "limit extra particle memory to this amount (in MBytes)"
+        },
+        {
+          "names": [
+            "yes/no"
+          ],
+          "description": "use optimized particle move if yes, else use regular move"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "fnum",
+          "description": "Keyword: fnum | nrho | vstream | temp | field | surfs | surfgrid | surfmax | splitmax | surftally | gridcut | comm/sort | comm/style | weight | particle/reorder | mem/limit",
+          "values": []
+        }
+      ],
+      "styleVariants": [
+        {
+          "styles": [
+            "constant"
+          ],
+          "template": [
+            "mag",
+            "ex",
+            "ey",
+            "ez"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "mag"
+              ],
+              "description": "magnitude of field acceleration (acceleration units)",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "ex",
+                "ey",
+                "ez"
+              ],
+              "description": "direction vector which the field acts along",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "{particle} arg"
+              ],
+              "description": "fixID"
+            },
+            {
+              "names": [
+                "fixID"
+              ],
+              "description": "ID of fix that computes per particle field components"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "grid"
+          ],
+          "template": [
+            "fixID",
+            "Nfreq"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "fixID"
+              ],
+              "description": "ID of fix that computes per grid cell field components",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "Nfreq"
+              ],
+              "description": "update field values every this many timesteps",
+              "templateIndex": 1
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "command": "group",
+    "syntax": {
+      "template": [
+        "ID",
+        "which",
+        "style",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "ID"
+          ],
+          "description": "user-defined name of the grid or surface group",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "which"
+          ],
+          "description": "{grid} or {surf}",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "style options for which"
+          ],
+          "description": "grid: {region} or {subtract} or {union} or {intersect} or {clear}"
+        },
+        {
+          "names": [
+            "style options for which"
+          ],
+          "description": "surf: {type} or {id} or {region} or {subtract} or {union} or {intersect} or {clear}"
+        },
+        {
+          "names": [
+            "args"
+          ],
+          "description": "list of one or more surface element types or IDs",
+          "templateIndex": 3
+        },
+        {
+          "names": [
+            "A"
+          ],
+          "description": "starting index, B = ending index"
+        },
+        {
+          "names": [
+            "args"
+          ],
+          "description": "logical value"
+        },
+        {
+          "names": [
+            "logical"
+          ],
+          "description": "\"<\" or \"<=\" or \">\" or \">=\" or \"==\" or \"!=\""
+        },
+        {
+          "names": [
+            "value"
+          ],
+          "description": "a surface element type or ID"
+        },
+        {
+          "names": [
+            "args"
+          ],
+          "description": "logical value1 value2"
+        },
+        {
+          "names": [
+            "logical"
+          ],
+          "description": "\"<>\""
+        },
+        {
+          "names": [
+            "value1",
+            "value2"
+          ],
+          "description": "surface element types or IDs"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": [
+        {
+          "styles": [
+            "region"
+          ],
+          "template": [
+            "region-ID",
+            "rflag"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "region-ID"
+              ],
+              "description": "ID of region which grid cell or surface element must be in",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "rflag"
+              ],
+              "description": "{one} or {all} or {center}",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "{one}"
+              ],
+              "description": "one (or more) corner points of grid cell or surface element in region"
+            },
+            {
+              "names": [
+                "{all}"
+              ],
+              "description": "all corner points of grid cell or surface element in region"
+            },
+            {
+              "names": [
+                "{center}"
+              ],
+              "description": "center point of grid cell or surface element in region"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "subtract"
+          ],
+          "template": [
+            "two",
+            "or",
+            "more",
+            "group",
+            "IDs"
+          ],
+          "parameters": []
+        },
+        {
+          "styles": [
+            "union"
+          ],
+          "template": [
+            "one",
+            "or",
+            "more",
+            "group",
+            "IDs"
+          ],
+          "parameters": []
+        },
+        {
+          "styles": [
+            "intersect"
+          ],
+          "template": [
+            "two",
+            "or",
+            "more",
+            "group",
+            "IDs"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "{clear}"
+              ],
+              "description": "no args"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "command": "if",
+    "syntax": {
+      "template": [
+        "boolean",
+        "then",
+        "t1",
+        "t2",
+        "elif",
+        "boolean",
+        "f1",
+        "f2",
+        "elif",
+        "boolean",
+        "f1",
+        "f2",
+        "else",
+        "e1",
+        "e2"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "boolean"
+          ],
+          "description": "a Boolean expression evaluated as TRUE or FALSE (see below)",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "then"
+          ],
+          "description": "required word",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "t1",
+            "t2",
+            "...",
+            "tN"
+          ],
+          "description": "one or more SPARTA commands to execute if condition is met, each enclosed in quotes",
+          "templateIndex": 2
+        },
+        {
+          "names": [
+            "elif"
+          ],
+          "description": "optional word, can appear multiple times",
+          "templateIndex": 4
+        },
+        {
+          "names": [
+            "f1",
+            "f2",
+            "...",
+            "fN"
+          ],
+          "description": "one or more SPARTA commands to execute if elif condition is met, each enclosed in quotes (optional arguments)",
+          "templateIndex": 6
+        },
+        {
+          "names": [
+            "else"
+          ],
+          "description": "optional argument",
+          "templateIndex": 12
+        },
+        {
+          "names": [
+            "e1",
+            "e2",
+            "...",
+            "eN"
+          ],
+          "description": "one or more SPARTA commands to execute if no condition is met, each enclosed in quotes (optional arguments)",
+          "templateIndex": 13
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "include",
+    "syntax": {
+      "template": [
+        "file"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "file"
+          ],
+          "description": "filename of new input script to switch to",
+          "templateIndex": 0
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "jump",
+    "syntax": {
+      "template": [
+        "file",
+        "label"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "file"
+          ],
+          "description": "filename of new input script to switch to",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "label"
+          ],
+          "description": "optional label within file to jump to",
+          "templateIndex": 1
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "label",
+    "syntax": {
+      "template": [
+        "ID"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "ID"
+          ],
+          "description": "string used as label name",
+          "templateIndex": 0
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "log",
+    "syntax": {
+      "template": [
+        "file",
+        "keyword"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "file"
+          ],
+          "description": "name of new logfile",
+          "templateIndex": 0
+        }
+      ],
+      "keywords": [
+        {
+          "name": "append",
+          "description": "Keyword: append"
+        }
+      ],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "mixture",
+    "syntax": {
+      "template": [
+        "ID",
+        "species1",
+        "species2",
+        "keyword",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "ID"
+          ],
+          "description": "user-defined name of the mixture",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "species1",
+            "species2",
+            "..."
+          ],
+          "description": "zero or more species IDs to include in the mixture",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "{nrho} arg"
+          ],
+          "description": "density"
+        },
+        {
+          "names": [
+            "density"
+          ],
+          "description": "number density of entire mixture (# per length^3 units)"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "nrho",
+          "description": "Keyword: nrho | vstream | temp | frac | group | copy | delete"
+        }
+      ],
+      "styleVariants": [
+        {
+          "styles": [
+            "vstream"
+          ],
+          "template": [
+            "Vx",
+            "Vy",
+            "Vz"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Vx",
+                "Vy",
+                "Vz"
+              ],
+              "description": "streaming velocity of entire mixture (velocity units)",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "{temp} arg"
+              ],
+              "description": "thermal"
+            },
+            {
+              "names": [
+                "thermal"
+              ],
+              "description": "temperature of entire mixture (temperature units)"
+            },
+            {
+              "names": [
+                "{trot} arg"
+              ],
+              "description": "Trot"
+            },
+            {
+              "names": [
+                "Trot"
+              ],
+              "description": "rotational temperature of entire mixture (temperature units)"
+            },
+            {
+              "names": [
+                "{tvib} arg"
+              ],
+              "description": "Tvib"
+            },
+            {
+              "names": [
+                "Tvib"
+              ],
+              "description": "vibrational temperature of entire mixture (temperature units)"
+            },
+            {
+              "names": [
+                "{frac} arg"
+              ],
+              "description": "fraction"
+            },
+            {
+              "names": [
+                "fraction"
+              ],
+              "description": "number fraction for each listed species (0 to 1)"
+            },
+            {
+              "names": [
+                "{group} arg"
+              ],
+              "description": "SELF or group-ID"
+            },
+            {
+              "names": [
+                "SELF"
+              ],
+              "description": "put each listed species (or all species if none listed) in its own group"
+            },
+            {
+              "names": [
+                "group-ID"
+              ],
+              "description": "put the listed species (or all species if none listed) in a group with this ID"
+            },
+            {
+              "names": [
+                "{copy} arg"
+              ],
+              "description": "new-ID"
+            },
+            {
+              "names": [
+                "new-ID"
+              ],
+              "description": "ID of new mixture to create, as a copy of this one"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "delete"
+          ],
+          "template": [
+            "sp1",
+            "sp2"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "sp1",
+                "sp2",
+                "..."
+              ],
+              "description": "species to delete from the mixture",
+              "templateIndex": 0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "command": "move_surf",
+    "syntax": {
+      "template": [
+        "groupID",
+        "style",
+        "args",
+        "keyword",
+        "value"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which surface elements to move"
+        },
+        {
+          "names": [
+            "style"
+          ],
+          "description": "{file} or {trans} or {rotate}",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "connect arg"
+          ],
+          "description": "yes or no"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "connect",
+          "description": "Keyword: connect"
+        }
+      ],
+      "styleVariants": [
+        {
+          "styles": [
+            "file"
+          ],
+          "template": [
+            "filename",
+            "entry"
+          ],
+          "parameters": []
+        },
+        {
+          "styles": [
+            "trans"
+          ],
+          "template": [
+            "Dx",
+            "Dy",
+            "Dz"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Dx",
+                "Dy",
+                "Dz"
+              ],
+              "description": "displacement applied to all surface points (distance units)",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "rotate"
+          ],
+          "template": [
+            "theta",
+            "Rx",
+            "Ry",
+            "Rz",
+            "Ox",
+            "Oy",
+            "Oz"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "theta"
+              ],
+              "description": "rotate surface points by this angle in counter-clockwise direction (degrees)",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "Rx",
+                "Ry",
+                "Rz"
+              ],
+              "description": "rotate around vector starting at origin pointing in this direction",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "Ox",
+                "Oy",
+                "Oz"
+              ],
+              "description": "origin to rotate around (distance units)",
+              "templateIndex": 4
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "command": "next",
+    "syntax": {
+      "template": [
+        "variables"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "variables"
+          ],
+          "description": "one or more variable names",
+          "templateIndex": 0
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "package",
+    "syntax": {
+      "template": [
+        "style",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "style"
+          ],
+          "description": "{kokkos}",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "args"
+          ],
+          "description": "arguments specific to the style",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "threaded"
+          ],
+          "description": "perform pack/unpack using KOKKOS (e.g. on GPU or using OpenMP) (default for GPUs)"
+        },
+        {
+          "names": [
+            "serial"
+          ],
+          "description": "perform communication pack/unpack in non-KOKKOS mode (default for CPUs)"
+        },
+        {
+          "names": [
+            "{react/extra}"
+          ],
+          "description": "{factor}"
+        },
+        {
+          "names": [
+            "factor"
+          ],
+          "description": "increase memory used for collisions by this factor (default)"
+        },
+        {
+          "names": [
+            "{react/retry}"
+          ],
+          "description": "{yes} or {no}"
+        },
+        {
+          "names": [
+            "yes"
+          ],
+          "description": "retry collision algorithm until successful"
+        },
+        {
+          "names": [
+            "no"
+          ],
+          "description": "do not retry collision algorithm (default)"
+        },
+        {
+          "names": [
+            "{gpu/aware}"
+          ],
+          "description": "{yes} or {no}"
+        },
+        {
+          "names": [
+            "yes"
+          ],
+          "description": "use GPU-aware MPI (default)"
+        },
+        {
+          "names": [
+            "no"
+          ],
+          "description": "do not use GPU-aware MPI"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": [
+        {
+          "styles": [
+            "kokkos"
+          ],
+          "template": [
+            "keyword",
+            "value"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "keywords"
+              ],
+              "description": "{comm} or {react/extra} or {react/retry} or {gpu/aware}"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "command": "partition",
+    "syntax": {
+      "template": [
+        "style",
+        "N",
+        "command"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "style"
+          ],
+          "description": "{yes} or {no}",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "N"
+          ],
+          "description": "partition number (see asterisk form below)",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "command"
+          ],
+          "description": "any SPARTA command",
+          "templateIndex": 2
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "print",
+    "syntax": {
+      "template": [
+        "string",
+        "keyword",
+        "value"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "string"
+          ],
+          "description": "text string to print, which may contain variables",
+          "templateIndex": 0
+        }
+      ],
+      "keywords": [
+        {
+          "name": "file",
+          "description": "Keyword: file | append | screen",
+          "values": [
+            {
+              "name": "yes",
+              "description": ""
+            },
+            {
+              "name": "no",
+              "description": ""
+            }
+          ]
+        }
+      ],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "python",
+    "syntax": {
+      "template": [
+        "mode",
+        "keyword",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "mode"
+          ],
+          "description": "{source} or {name} of a Python function",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "{here} arg"
+          ],
+          "description": "inline"
+        },
+        {
+          "names": [
+            "inline"
+          ],
+          "description": "one or more lines of Python code which will be executed immediately"
+        },
+        {
+          "names": [
+            "{Python file}"
+          ],
+          "description": "name of a file with Python code which will be executed immediately"
+        },
+        {
+          "names": [
+            "{invoke} arg"
+          ],
+          "description": "logreturn (optional)"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "here",
+          "description": "Keyword: here | Python file"
+        },
+        {
+          "name": "invoke",
+          "description": "Keyword: invoke | input | return | format | length | file | here | exists"
+        }
+      ],
+      "styleVariants": [
+        {
+          "styles": [
+            "input"
+          ],
+          "template": [
+            "N",
+            "i1",
+            "i2",
+            "iN"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "N"
+              ],
+              "description": "# of inputs to function",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "i1",
+                "...",
+                "iN"
+              ],
+              "description": "value, SELF, or SPARTA variable name",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "value"
+              ],
+              "description": "integer number, floating point number, or string"
+            },
+            {
+              "names": [
+                "SELF"
+              ],
+              "description": "reference to SPARTA itself which can then be accessed by Python function"
+            },
+            {
+              "names": [
+                "variable"
+              ],
+              "description": "v_name, where name = name of SPARTA variable, e.g. v_abc"
+            },
+            {
+              "names": [
+                "internal variable"
+              ],
+              "description": "iv_name, where name = name of a SPARTA internal-style variable, e.g. iv_xyz"
+            },
+            {
+              "names": [
+                "{return} arg"
+              ],
+              "description": "varReturn"
+            },
+            {
+              "names": [
+                "varReturn"
+              ],
+              "description": "v_name  = SPARTA variable name which the return value of the Python function will be assigned to"
+            },
+            {
+              "names": [
+                "{format} arg"
+              ],
+              "description": "fstring with M characters"
+            },
+            {
+              "names": [
+                "M"
+              ],
+              "description": "N if no return value, where N = # of inputs"
+            },
+            {
+              "names": [
+                "M"
+              ],
+              "description": "N+1 if there is a return value"
+            },
+            {
+              "names": [
+                "fstring"
+              ],
+              "description": "each character (i,f,s,p) corresponds (in order) to an input or return value"
+            },
+            {
+              "names": [
+                "'i'"
+              ],
+              "description": "integer, 'f' = floating point, 's' = string, 'p' = SELF"
+            },
+            {
+              "names": [
+                "{length} arg"
+              ],
+              "description": "Nlen"
+            },
+            {
+              "names": [
+                "Nlen"
+              ],
+              "description": "max length of string returned from Python function"
+            },
+            {
+              "names": [
+                "{file} arg"
+              ],
+              "description": "filename"
+            },
+            {
+              "names": [
+                "filename"
+              ],
+              "description": "file of Python code, which defines the Python function"
+            },
+            {
+              "names": [
+                "{here} arg"
+              ],
+              "description": "one or more lines of Python code which defines the Python function"
+            },
+            {
+              "names": [
+                "{exists} arg"
+              ],
+              "description": "none = Python code has been loaded by previous python command"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "command": "quit",
+    "syntax": {
+      "template": [],
+      "parameters": [],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "react",
+    "syntax": {
+      "template": [
+        "style",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "style"
+          ],
+          "description": "{none} or {tce} or {qk} or {tce/qk}",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "args"
+          ],
+          "description": "arguments for that style",
+          "templateIndex": 1
+        }
+      ],
+      "keywords": [],
+      "styleVariants": [
+        {
+          "styles": [
+            "none"
+          ],
+          "template": [
+            "none"
+          ],
+          "parameters": []
+        },
+        {
+          "styles": [
+            "tce"
+          ],
+          "template": [
+            "infile"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "infile"
+              ],
+              "description": "file with list of gas-phase chemistry reactions",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "qk"
+          ],
+          "template": [
+            "infile"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "infile"
+              ],
+              "description": "file with list of gas-phase chemistry reactions",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "tce/qk"
+          ],
+          "template": [
+            "infile"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "infile"
+              ],
+              "description": "file with list of gas-phase chemistry reactions",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "tce/kk"
+          ],
+          "template": [
+            "infile"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "infile"
+              ],
+              "description": "file with list of gas-phase chemistry reactions",
+              "templateIndex": 0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "command": "react_modify",
+    "syntax": {
+      "template": [
+        "keyword",
+        "values"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "keywords"
+          ],
+          "description": "{recomb} or {rboost} or {compute_chem_rates} or {partial_energy}"
+        },
+        {
+          "names": [
+            "rfactor"
+          ],
+          "description": "boost probability of recombination reactions by this factor"
+        },
+        {
+          "names": [
+            "{partial_energy}"
+          ],
+          "description": "yes or no = use partial energy or total energy for TCE chemistry"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "read_grid",
+    "syntax": {
+      "template": [
+        "filename",
+        "keyword",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "filename"
+          ],
+          "description": "name of grid file",
+          "templateIndex": 0
+        }
+      ],
+      "keywords": [
+        {
+          "name": "custom",
+          "description": "Keyword: custom"
+        }
+      ],
+      "styleVariants": [
+        {
+          "styles": [
+            "custom"
+          ],
+          "template": [
+            "name",
+            "datatype",
+            "Nc"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "name"
+              ],
+              "description": "name of custom per-grid vector or array",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "datatype"
+              ],
+              "description": "{int} or {float} = for integer or floating point values",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "Nc"
+              ],
+              "description": "0 for a vector (single value), Nc >= 1 for an array (one or more values)",
+              "templateIndex": 2
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "command": "read_isurf",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "Nx",
+        "Ny",
+        "Nz",
+        "filename",
+        "thresh",
+        "ablateID",
+        "keyword",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which grid cells to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "Nx",
+            "Ny",
+            "Nz"
+          ],
+          "description": "grid cell extent for adding implicit surfs",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "filename"
+          ],
+          "description": "binary file with grid corner point values",
+          "templateIndex": 4
+        },
+        {
+          "names": [
+            "thresh"
+          ],
+          "description": "threshold for surface definition, value > 0.0 and < 255.0",
+          "templateIndex": 5
+        },
+        {
+          "names": [
+            "ablateID"
+          ],
+          "description": "ID of a \"fix ablate\"_fix_ablate.html command",
+          "templateIndex": 6
+        },
+        {
+          "names": [
+            "group arg"
+          ],
+          "description": "group-ID"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "new or existing surface group to assign the surface elements to"
+        },
+        {
+          "names": [
+            "type arg"
+          ],
+          "description": "tfile"
+        },
+        {
+          "names": [
+            "tfile"
+          ],
+          "description": "binary file with per grid cell surface type values"
+        },
+        {
+          "names": [
+            "push arg"
+          ],
+          "description": "yes or no = whether to push corner point values to 0/255"
+        },
+        {
+          "names": [
+            "precision arg"
+          ],
+          "description": "int or double"
+        },
+        {
+          "names": [
+            "read arg"
+          ],
+          "description": "serial or parallel"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "group",
+          "description": "Keyword: group | type | push | precision | read"
+        }
+      ],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "read_particles",
+    "syntax": {
+      "template": [
+        "file",
+        "Nstep"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "file"
+          ],
+          "description": "dump file to read snapshot from",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "Nstep"
+          ],
+          "description": "timestep to read",
+          "templateIndex": 1
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "read_restart",
+    "syntax": {
+      "template": [
+        "file",
+        "keyword",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "file"
+          ],
+          "description": "name of binary restart file to read in",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "keywords"
+          ],
+          "description": "{gridcut} or {balance}"
+        },
+        {
+          "names": [
+            "{gridcut} arg"
+          ],
+          "description": "cutoff"
+        },
+        {
+          "names": [
+            "cutoff"
+          ],
+          "description": "acquire ghost cells up to this far away (distance units)"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": [
+        {
+          "styles": [
+            "balance"
+          ],
+          "template": [
+            "same",
+            "as",
+            "for",
+            "\"balance_grid\"_balance_grid.html",
+            "command"
+          ],
+          "parameters": []
+        }
+      ]
+    }
+  },
+  {
+    "command": "read_surf",
+    "syntax": {
+      "template": [
+        "filename",
+        "keyword",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "filename"
+          ],
+          "description": "name of surface file",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "{type} arg"
+          ],
+          "description": "none"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "type",
+          "description": "Keyword: type | custom | origin | trans | atrans"
+        }
+      ],
+      "styleVariants": [
+        {
+          "styles": [
+            "custom"
+          ],
+          "template": [
+            "name",
+            "datatype",
+            "Nc"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "name"
+              ],
+              "description": "name of custom per-surf vector or array",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "datatype"
+              ],
+              "description": "{int} or {float} = for integer or floating point values",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "Nc"
+              ],
+              "description": "0 for a vector (single value), Nc >= 1 for an array (one or more values)",
+              "templateIndex": 2
+            }
+          ]
+        },
+        {
+          "styles": [
+            "origin"
+          ],
+          "template": [
+            "Ox",
+            "Oy",
+            "Oz"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Ox",
+                "Oy",
+                "Oz"
+              ],
+              "description": "set origin of surface to this point (distance units)",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "trans"
+          ],
+          "template": [
+            "Dx",
+            "Dy",
+            "Dz"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Dx",
+                "Dy",
+                "Dz"
+              ],
+              "description": "translate origin by this displacement (distance units)",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "atrans"
+          ],
+          "template": [
+            "Ax",
+            "Ay",
+            "Az"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Ax",
+                "Ax",
+                "Az"
+              ],
+              "description": "translate origin to this absolute point (distance units)",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "ftrans"
+          ],
+          "template": [
+            "Fx",
+            "Fy",
+            "Fz"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Fx",
+                "Fy",
+                "Fz"
+              ],
+              "description": "translate origin to this fractional point in simulation box",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "scale"
+          ],
+          "template": [
+            "Sx",
+            "Sy",
+            "Sz"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Sx",
+                "Sy",
+                "Sz"
+              ],
+              "description": "scale surface by these factors around origin",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "rotate"
+          ],
+          "template": [
+            "theta",
+            "Rx",
+            "Ry",
+            "Rz"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "theta"
+              ],
+              "description": "rotate surface by this angle in counter-clockwise direction (degrees)",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "Rx",
+                "Ry",
+                "Rz"
+              ],
+              "description": "rotate around vector starting at origin pointing in this direction",
+              "templateIndex": 1
+            }
+          ]
+        },
+        {
+          "styles": [
+            "transparent"
+          ],
+          "template": [
+            "none"
+          ],
+          "parameters": []
+        },
+        {
+          "styles": [
+            "invert"
+          ],
+          "template": [
+            "none"
+          ],
+          "parameters": []
+        },
+        {
+          "styles": [
+            "clip"
+          ],
+          "template": [
+            "none",
+            "or",
+            "fraction"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "fraction"
+              ],
+              "description": "push points close to the box boundary to the boundary (optional)",
+              "templateIndex": 2
+            },
+            {
+              "names": [
+                "{group} arg"
+              ],
+              "description": "group-ID"
+            },
+            {
+              "names": [
+                "group-ID"
+              ],
+              "description": "new or existing surface group to assign the surface elements to"
+            },
+            {
+              "names": [
+                "{typeadd} arg"
+              ],
+              "description": "Noffset"
+            },
+            {
+              "names": [
+                "Noffset"
+              ],
+              "description": "add Noffset to the type value of each element"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "particle"
+          ],
+          "template": [
+            "{none}",
+            "or",
+            "{check}",
+            "or",
+            "{keep}"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "none"
+              ],
+              "description": "allow no particles in simulation when read surfs (default)",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "check"
+              ],
+              "description": "delete particles inside surfs or in cells intersected by surfs",
+              "templateIndex": 2
+            },
+            {
+              "names": [
+                "keep"
+              ],
+              "description": "keep all particles",
+              "templateIndex": 4
+            }
+          ]
+        },
+        {
+          "styles": [
+            "file"
+          ],
+          "template": [
+            "identical",
+            "to",
+            "those",
+            "defined",
+            "for",
+            "the",
+            "\"write_surf\"_write_surf.html",
+            "command"
+          ],
+          "parameters": []
+        }
+      ]
+    }
+  },
+  {
+    "command": "region",
+    "syntax": {
+      "template": [
+        "ID",
+        "style",
+        "args",
+        "keyword",
+        "value"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "ID"
+          ],
+          "description": "user-assigned name for the region",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "style"
+          ],
+          "description": "{block} or {cylinder} or {plane} or {sphere} or {union} or {intersect} or {block/kk} or {cylinder/kk} or {plane/kk} or {sphere/kk}",
+          "templateIndex": 1
+        }
+      ],
+      "keywords": [
+        {
+          "name": "side",
+          "description": "Keyword: side",
+          "values": [
+            {
+              "name": "in",
+              "description": "the region is inside the specified geometry"
+            },
+            {
+              "name": "out",
+              "description": "the region is outside the specified geometry"
+            }
+          ]
+        }
+      ],
+      "styleVariants": [
+        {
+          "styles": [
+            "block",
+            "block/kk"
+          ],
+          "template": [
+            "xlo",
+            "xhi",
+            "ylo",
+            "yhi",
+            "zlo",
+            "zhi"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "xlo",
+                "xhi",
+                "ylo",
+                "yhi",
+                "zlo",
+                "zhi"
+              ],
+              "description": "bounds of block in all dimensions (distance units)",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "cylinder",
+            "cylinder/kk"
+          ],
+          "template": [
+            "dim",
+            "c1",
+            "c2",
+            "radius",
+            "lo",
+            "hi"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "dim"
+              ],
+              "description": "{x} or {y} or {z} = axis of cylinder",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "c1",
+                "c2"
+              ],
+              "description": "coords of cylinder axis in other 2 dimensions (distance units)",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "radius"
+              ],
+              "description": "cylinder radius (distance units)",
+              "templateIndex": 3
+            },
+            {
+              "names": [
+                "lo",
+                "hi"
+              ],
+              "description": "bounds of cylinder in dim (distance units)",
+              "templateIndex": 4
+            }
+          ]
+        },
+        {
+          "styles": [
+            "plane",
+            "plane/kk"
+          ],
+          "template": [
+            "px",
+            "py",
+            "pz",
+            "nx",
+            "ny",
+            "nz"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "px",
+                "py",
+                "pz"
+              ],
+              "description": "point on the plane (distance units)",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "nx",
+                "ny",
+                "nz"
+              ],
+              "description": "direction normal to plane (distance units)",
+              "templateIndex": 3
+            }
+          ]
+        },
+        {
+          "styles": [
+            "sphere",
+            "sphere/kk"
+          ],
+          "template": [
+            "x",
+            "y",
+            "z",
+            "radius"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "x",
+                "y",
+                "z"
+              ],
+              "description": "center of sphere (distance units)",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "radius"
+              ],
+              "description": "radius of sphere (distance units)",
+              "templateIndex": 3
+            }
+          ]
+        },
+        {
+          "styles": [
+            "union"
+          ],
+          "template": [
+            "N",
+            "reg-ID1",
+            "reg-ID2"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "N"
+              ],
+              "description": "# of regions to follow, must be 2 or greater",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "reg-ID1",
+                "reg-ID2",
+                "..."
+              ],
+              "description": "IDs of regions to join together",
+              "templateIndex": 1
+            }
+          ]
+        },
+        {
+          "styles": [
+            "intersect"
+          ],
+          "template": [
+            "N",
+            "reg-ID1",
+            "reg-ID2"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "N"
+              ],
+              "description": "# of regions to follow, must be 2 or greater",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "reg-ID1",
+                "reg-ID2",
+                "..."
+              ],
+              "description": "IDs of regions to intersect",
+              "templateIndex": 1
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "command": "remove_surf",
+    "syntax": {
+      "template": [
+        "surfID"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "surfID"
+          ],
+          "description": "group ID for which surface elements to remove",
+          "templateIndex": 0
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "reset_timestep",
+    "syntax": {
+      "template": [
+        "N"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "N"
+          ],
+          "description": "timestep number",
+          "templateIndex": 0
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "restart",
+    "syntax": {
+      "template": [
+        "0"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "N"
+          ],
+          "description": "write a restart file every this many timesteps"
+        },
+        {
+          "names": [
+            "root"
+          ],
+          "description": "filename to which timestep # is appended"
+        },
+        {
+          "names": [
+            "file1",
+            "file2"
+          ],
+          "description": "two full filenames, toggle between them when writing file"
+        },
+        {
+          "names": [
+            "{fileper} arg"
+          ],
+          "description": "Np"
+        },
+        {
+          "names": [
+            "Np"
+          ],
+          "description": "write one file for every this many processors"
+        },
+        {
+          "names": [
+            "{nfile} arg"
+          ],
+          "description": "Nf"
+        },
+        {
+          "names": [
+            "Nf"
+          ],
+          "description": "write this many files, one from each of Nf processors"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "fileper",
+          "description": "Keyword: fileper | nfile"
+        }
+      ],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "run",
+    "syntax": {
+      "template": [
+        "N",
+        "keyword",
+        "values"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "value"
+          ],
+          "description": "# of integer timesteps N"
+        },
+        {
+          "names": [
+            "N1"
+          ],
+          "description": "timestep at which 1st run started"
+        },
+        {
+          "names": [
+            "N2"
+          ],
+          "description": "timestep at which last run will end"
+        },
+        {
+          "names": [
+            "{every} values"
+          ],
+          "description": "M c1 c2 ..."
+        },
+        {
+          "names": [
+            "M"
+          ],
+          "description": "break the run into M-timestep segments and invoke one or more commands between each segment"
+        },
+        {
+          "names": [
+            "c1",
+            "c2",
+            "...",
+            "cN"
+          ],
+          "description": "one or more SPARTA commands, each enclosed in quotes"
+        },
+        {
+          "names": [
+            "c1"
+          ],
+          "description": "NULL means no command will be invoked"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "upto",
+          "description": "Keyword: upto | start | stop | pre | post | every",
+          "values": [
+            {
+              "name": "no",
+              "description": ""
+            },
+            {
+              "name": "yes",
+              "description": ""
+            }
+          ]
+        }
+      ],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "scale_particles",
+    "syntax": {
+      "template": [
+        "mix-ID",
+        "factor"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "mix-ID"
+          ],
+          "description": "ID of mixture to use when scaling particles",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "factor"
+          ],
+          "description": "scale factor",
+          "templateIndex": 1
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "seed",
+    "syntax": {
+      "template": [
+        "Nvalue"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "Nvalue"
+          ],
+          "description": "seed for a random number generator (positive integer)",
+          "templateIndex": 0
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "shell",
+    "syntax": {
+      "template": [
+        "cmd",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "cmd"
+          ],
+          "description": "{cd} or {mkdir} or {mv} or {rm} or {rmdir} or {putenv} or arbitrary command",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "{cd} arg"
+          ],
+          "description": "dir"
+        },
+        {
+          "names": [
+            "dir"
+          ],
+          "description": "directory to change to"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": [
+        {
+          "styles": [
+            "mkdir"
+          ],
+          "template": [
+            "dir1",
+            "dir2"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "dir1",
+                "dir2"
+              ],
+              "description": "one or more directories to create",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "mv"
+          ],
+          "template": [
+            "old",
+            "new"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "old"
+              ],
+              "description": "old filename",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "new"
+              ],
+              "description": "new filename",
+              "templateIndex": 1
+            }
+          ]
+        },
+        {
+          "styles": [
+            "rm"
+          ],
+          "template": [
+            "file1",
+            "file2"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "file1",
+                "file2"
+              ],
+              "description": "one or more filenames to delete",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "rmdir"
+          ],
+          "template": [
+            "dir1",
+            "dir2"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "dir1",
+                "dir2"
+              ],
+              "description": "one or more directories to delete",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "putenv"
+          ],
+          "template": [
+            "var1=value1",
+            "var2=value2"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "var"
+              ],
+              "description": "value = one of more definitions of environment variables"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "command": "species",
+    "syntax": {
+      "template": [
+        "file",
+        "ID1",
+        "ID2",
+        "keyword",
+        "value"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "file"
+          ],
+          "description": "filename with species info",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "ID1",
+            "ID2",
+            "..."
+          ],
+          "description": "one or more species names listed in file",
+          "templateIndex": 1
+        }
+      ],
+      "keywords": [
+        {
+          "name": "vibfile",
+          "description": "Keyword: vibfile",
+          "values": []
+        }
+      ],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "species_modify",
+    "syntax": {
+      "template": [
+        "ID",
+        "property",
+        "value"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "ID"
+          ],
+          "description": "species ID",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "property"
+          ],
+          "description": "{mu}",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "mu"
+          ],
+          "description": "magnetic moment"
+        },
+        {
+          "names": [
+            "value"
+          ],
+          "description": "value of property for that species",
+          "templateIndex": 2
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "stats",
+    "syntax": {
+      "template": [
+        "N"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "N"
+          ],
+          "description": "output statistics every N timesteps",
+          "templateIndex": 0
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "stats_modify",
+    "syntax": {
+      "template": [
+        "keyword",
+        "value"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "{format} values"
+          ],
+          "description": "{line} string, {int} string, {float} string, M string, or {none}"
+        },
+        {
+          "names": [
+            "string"
+          ],
+          "description": "C-style format string"
+        },
+        {
+          "names": [
+            "M"
+          ],
+          "description": "integer from 1 to N, where N = # of quantities being output"
+        },
+        {
+          "names": [
+            "v_name"
+          ],
+          "description": "an equal-style variable name"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "flush",
+          "description": "Keyword: flush | format | every",
+          "values": []
+        }
+      ],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "stats_style",
+    "syntax": {
+      "template": [
+        "arg1",
+        "arg2"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "arg1",
+            "arg2",
+            "..."
+          ],
+          "description": "list of keywords",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "possible keywords"
+          ],
+          "description": "step, elapsed, elaplong, dt, time, cpu, tpcpu, spcpu,"
+        },
+        {
+          "names": [
+            "step"
+          ],
+          "description": "timestep"
+        },
+        {
+          "names": [
+            "elapsed"
+          ],
+          "description": "timesteps since start of this run"
+        },
+        {
+          "names": [
+            "elaplong"
+          ],
+          "description": "timesteps since start of initial run in a series of runs"
+        },
+        {
+          "names": [
+            "dt"
+          ],
+          "description": "timestep size"
+        },
+        {
+          "names": [
+            "time"
+          ],
+          "description": "simulation time"
+        },
+        {
+          "names": [
+            "cpu"
+          ],
+          "description": "elapsed CPU time in seconds within a run"
+        },
+        {
+          "names": [
+            "tpcpu"
+          ],
+          "description": "time per CPU second"
+        },
+        {
+          "names": [
+            "spcpu"
+          ],
+          "description": "timesteps per CPU second"
+        },
+        {
+          "names": [
+            "wall"
+          ],
+          "description": "wallclock time in seconds"
+        },
+        {
+          "names": [
+            "np",
+            "npave"
+          ],
+          "description": "# of particles (this step, per-step)"
+        },
+        {
+          "names": [
+            "ntouch",
+            "ntouchave"
+          ],
+          "description": "# of cell touches by particles (this step, per-step)"
+        },
+        {
+          "names": [
+            "ncomm",
+            "ncommave"
+          ],
+          "description": "# of particles communicated (this step, per-step)"
+        },
+        {
+          "names": [
+            "nbound",
+            "nboundave"
+          ],
+          "description": "# of boundary collisions (this step, per-step)"
+        },
+        {
+          "names": [
+            "nexit",
+            "nexitave"
+          ],
+          "description": "# of boundary exits (this step, per-step)"
+        },
+        {
+          "names": [
+            "nscoll",
+            "nscollave"
+          ],
+          "description": "# of surface collisions (this step, per-step)"
+        },
+        {
+          "names": [
+            "nscheck",
+            "nscheckave"
+          ],
+          "description": "# of surface checks (this step, per-step)"
+        },
+        {
+          "names": [
+            "ncoll",
+            "ncollave"
+          ],
+          "description": "# of particle/particle collisions (this step, per-step)"
+        },
+        {
+          "names": [
+            "nattempt",
+            "nattemptave"
+          ],
+          "description": "# of attempted collisions (this step, per-step)"
+        },
+        {
+          "names": [
+            "nreact",
+            "nreactave"
+          ],
+          "description": "# of chemical reactions (this step, per-step)"
+        },
+        {
+          "names": [
+            "nsreact",
+            "nsreactave"
+          ],
+          "description": "# of chemical reactions on surfs and boundaries (this step, per-step)"
+        },
+        {
+          "names": [
+            "ngrid"
+          ],
+          "description": "# of grid cells (including split cells)"
+        },
+        {
+          "names": [
+            "nsplit"
+          ],
+          "description": "# of split cells"
+        },
+        {
+          "names": [
+            "maxlevel"
+          ],
+          "description": "# of refinement levels in current grid"
+        },
+        {
+          "names": [
+            "vol"
+          ],
+          "description": "volume of simulation box"
+        },
+        {
+          "names": [
+            "lx",
+            "ly",
+            "lz"
+          ],
+          "description": "simulation box lengths"
+        },
+        {
+          "names": [
+            "xlo",
+            "xhi",
+            "ylo",
+            "yhi",
+            "zlo",
+            "zhi"
+          ],
+          "description": "box boundaries"
+        },
+        {
+          "names": [
+            "c_ID"
+          ],
+          "description": "global scalar value calculated by a compute with ID"
+        },
+        {
+          "names": [
+            "c_ID\\[I\\]"
+          ],
+          "description": "Ith component of global vector calculated by a compute with ID, I can include wildcard (see below)"
+        },
+        {
+          "names": [
+            "c_ID\\[I\\]\\[J\\]"
+          ],
+          "description": "I,J component of global array calculated by a compute with ID"
+        },
+        {
+          "names": [
+            "f_ID"
+          ],
+          "description": "global scalar value calculated by a fix with ID"
+        },
+        {
+          "names": [
+            "f_ID\\[I\\]"
+          ],
+          "description": "Ith component of global vector calculated by a fix with ID, I can include wildcard (see below)"
+        },
+        {
+          "names": [
+            "f_ID\\[I\\]\\[J\\]"
+          ],
+          "description": "I,J component of global array calculated by a fix with ID"
+        },
+        {
+          "names": [
+            "sc_ID\\[I\\]"
+          ],
+          "description": "Ith component of global vector calculated by a surface collision model with ID"
+        },
+        {
+          "names": [
+            "sr_ID\\[I\\]"
+          ],
+          "description": "Ith component of global vector calculated by a surface reaction model with ID"
+        },
+        {
+          "names": [
+            "v_name"
+          ],
+          "description": "scalar value calculated by an equal-style variable with name"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "suffix",
+    "syntax": {
+      "template": [
+        "style",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "style"
+          ],
+          "description": "{off} or {on} or {kk}",
+          "templateIndex": 0
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "surf_collide",
+    "syntax": {
+      "template": [
+        "ID",
+        "style",
+        "args",
+        "keyword",
+        "values"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "ID"
+          ],
+          "description": "user-assigned name for the surface collision model",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "style"
+          ],
+          "description": "{specular} or {diffuse} or {cll} or {adiabatic} or {impulsive} or {td} or {piston} or {transparent} or {vanish} or {specular/kk} or {diffuse/kk} or {piston/kk} or {vanish/kk}",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "args"
+          ],
+          "description": "arguments for specific style",
+          "templateIndex": 2
+        },
+        {
+          "names": [
+            "values"
+          ],
+          "description": "values for specific keyword",
+          "templateIndex": 4
+        }
+      ],
+      "keywords": [
+        {
+          "name": "translate",
+          "description": "Keyword: translate | rotate | temp/freq | partial | barrier | bond | init_energy | step | double | intenergy"
+        }
+      ],
+      "styleVariants": [
+        {
+          "styles": [
+            "specular",
+            "specular/kk"
+          ],
+          "template": [
+            "noslip",
+            "(optional)"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "noslip"
+              ],
+              "description": "reflect all velocity components off surface (not just normal component)",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "diffuse",
+            "diffuse/kk"
+          ],
+          "template": [
+            "Tsurf",
+            "acc"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Tsurf"
+              ],
+              "description": "temperature of surface (temperature units)",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "acc"
+              ],
+              "description": "accommodation coefficient",
+              "templateIndex": 1
+            }
+          ]
+        },
+        {
+          "styles": [
+            "cll"
+          ],
+          "template": [
+            "Tsurf",
+            "acc_n",
+            "acc_t",
+            "acc_rot",
+            "acc_vib"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Tsurf"
+              ],
+              "description": "temperature of surface (temperature units)",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "acc_n"
+              ],
+              "description": "accommodation coefficient in the surface normal direction",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "acc_t"
+              ],
+              "description": "accommodation coefficient in the surface tangential direction",
+              "templateIndex": 2
+            },
+            {
+              "names": [
+                "acc_rot"
+              ],
+              "description": "accommodation coefficient for the rotational modes",
+              "templateIndex": 3
+            },
+            {
+              "names": [
+                "acc_vib"
+              ],
+              "description": "accommodation coefficient for the vibrational modes",
+              "templateIndex": 4
+            }
+          ]
+        },
+        {
+          "styles": [
+            "adiabatic"
+          ],
+          "template": [
+            "none"
+          ],
+          "parameters": []
+        },
+        {
+          "styles": [
+            "impulsive"
+          ],
+          "template": [
+            "Tsurf",
+            "model",
+            "param1",
+            "param2",
+            "var",
+            "theta_peak",
+            "pol_pow",
+            "azi_pow"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Tsurf"
+              ],
+              "description": "temperature of surface (temperature units)",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "softsphere"
+          ],
+          "template": [
+            "en_ratio",
+            "eff_mass"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "param1"
+              ],
+              "description": "en_ratio = fraction of energy lost in the collision"
+            },
+            {
+              "names": [
+                "param2"
+              ],
+              "description": "eff_mass = effective mass of the surface atom"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "tempvar"
+          ],
+          "template": [
+            "a1",
+            "a0"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "param1"
+              ],
+              "description": "a1 = linear term in the variation with temperature"
+            },
+            {
+              "names": [
+                "param2"
+              ],
+              "description": "a0 = constant term in the variation with temperature"
+            },
+            {
+              "names": [
+                "var"
+              ],
+              "description": "variance of the scattered particle velocity distribution"
+            },
+            {
+              "names": [
+                "theta_peak"
+              ],
+              "description": "peak location of the polar angle distribution"
+            },
+            {
+              "names": [
+                "pol_pow"
+              ],
+              "description": "cosine power represeting the polar angular distribution"
+            },
+            {
+              "names": [
+                "azi_pow"
+              ],
+              "description": "cosine power represeting the azimuthal angular distribution"
+            },
+            {
+              "names": [
+                "{td} arg"
+              ],
+              "description": "Tsurf"
+            },
+            {
+              "names": [
+                "Tsurf"
+              ],
+              "description": "temperature of surface (temperature units)"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "piston",
+            "piston/kk"
+          ],
+          "template": [
+            "Vwall"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Vwall"
+              ],
+              "description": "velocity of boundary wall (velocity units)",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "transparent",
+            "transparent/kk"
+          ],
+          "template": [
+            "none"
+          ],
+          "parameters": []
+        },
+        {
+          "styles": [
+            "vanish",
+            "vanish/kk"
+          ],
+          "template": [
+            "none"
+          ],
+          "parameters": []
+        },
+        {
+          "styles": [
+            "translate"
+          ],
+          "template": [
+            "Vx",
+            "Vy",
+            "Vz"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Vx",
+                "Vy",
+                "Vz"
+              ],
+              "description": "translational velocity of surface (velocity units)",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "rotate"
+          ],
+          "template": [
+            "Pz",
+            "Py",
+            "Pz",
+            "Wx",
+            "Wy",
+            "Wz"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Px",
+                "Py",
+                "Pz"
+              ],
+              "description": "point to rotate surface around (distance units)",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "Wx",
+                "Wy",
+                "Wz"
+              ],
+              "description": "angular velocity of surface around point (radians/time)",
+              "templateIndex": 3
+            },
+            {
+              "names": [
+                "{temp/freq} arg"
+              ],
+              "description": "Nfreq"
+            },
+            {
+              "names": [
+                "Nfreq"
+              ],
+              "description": "evaulate a temperature variable every this many timesteps (default = 1)"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "partial"
+          ],
+          "template": [
+            "eccen",
+            "(only",
+            "for",
+            "{cll}",
+            "style)"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "eccen"
+              ],
+              "description": "eccentricity parameter",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "barrier"
+          ],
+          "template": [
+            "bar_val",
+            "(only",
+            "for",
+            "{td}",
+            "style)"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "{bar_val}"
+              ],
+              "description": "value of the desorption barrier in temperature units",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "bond"
+          ],
+          "template": [
+            "bond_trans",
+            "bond_rot",
+            "bond_vib",
+            "(only",
+            "for",
+            "{td}",
+            "style)"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "{bond_trans}"
+              ],
+              "description": "amount of bond dissociation energy (in temperature units) going into translational mode",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "{bond_rot}"
+              ],
+              "description": "amount of bond dissociation energy (in temperature units) going into rotational mode",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "{bond_vib}"
+              ],
+              "description": "amount of bond dissociation energy (in temperature units) going into vibrational mode",
+              "templateIndex": 2
+            },
+            {
+              "names": [
+                "{init_energy}"
+              ],
+              "description": "IE_trans IE_rot IE_vib (only for {td} style)"
+            },
+            {
+              "names": [
+                "{IE_trans}"
+              ],
+              "description": "fraction of initial translational energy going into translational mode"
+            },
+            {
+              "names": [
+                "{IE_rot}"
+              ],
+              "description": "fraction of initial translational energy going into rotational mode"
+            },
+            {
+              "names": [
+                "{IE_vib}"
+              ],
+              "description": "fraction of initial translational energy going into vibrational mode"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "step"
+          ],
+          "template": [
+            "epsilon",
+            "(only",
+            "for",
+            "{impulsive}",
+            "style)"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "epsilon"
+              ],
+              "description": "ratio of the height to the width of the step",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "double"
+          ],
+          "template": [
+            "polar_pow_2",
+            "(only",
+            "for",
+            "{impulsive}",
+            "style)"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "polar_pow_2"
+              ],
+              "description": "cosine power for the polar angular distribution between peak and surface",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "intenergy"
+          ],
+          "template": [
+            "frac_rot",
+            "frac_vib",
+            "(only",
+            "for",
+            "{impulsive}",
+            "style)"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "frac_rot"
+              ],
+              "description": "fraction of lost translational energy going into the rotational mode",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "frac_vib"
+              ],
+              "description": "fraction of lost translational energy going into the vibrational mode",
+              "templateIndex": 1
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "command": "surf_modify",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "keyword",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "ID of the surface group to operate on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "{collide} arg"
+          ],
+          "description": "sc-ID"
+        },
+        {
+          "names": [
+            "sc-ID"
+          ],
+          "description": "ID of a surface collision model"
+        },
+        {
+          "names": [
+            "{react} arg"
+          ],
+          "description": "sr-ID"
+        },
+        {
+          "names": [
+            "sr-ID"
+          ],
+          "description": "ID of a surface reaction model or {none}"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "collide",
+          "description": "Keyword: collide"
+        }
+      ],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "surf_react",
+    "syntax": {
+      "template": [
+        "ID",
+        "style",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "ID"
+          ],
+          "description": "user-assigned name for the surface reaction model",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "style"
+          ],
+          "description": "{global} or {prob} or {adsorb} or {global/kk} or {prob/kk}",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "args"
+          ],
+          "description": "arguments for that style",
+          "templateIndex": 2
+        }
+      ],
+      "keywords": [],
+      "styleVariants": [
+        {
+          "styles": [
+            "global",
+            "global/kk"
+          ],
+          "template": [
+            "pdelete",
+            "pcreate"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "pdelete"
+              ],
+              "description": "probability that surface collision removes the incident particle",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "pcreate"
+              ],
+              "description": "probability that surface collision clones the incident particle",
+              "templateIndex": 1
+            }
+          ]
+        },
+        {
+          "styles": [
+            "prob",
+            "prob/kk"
+          ],
+          "template": [
+            "infile"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "infile"
+              ],
+              "description": "file with list of surface chemistry reactions",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "adsorb"
+          ],
+          "template": [
+            "model",
+            "infile(s)",
+            "n=Nsync",
+            "type",
+            "temp",
+            "n_sites",
+            "adsp1",
+            "adsp2"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "model"
+              ],
+              "description": "{gs} or {ps} or {gs/ps}",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "gs"
+              ],
+              "description": "gas-surface reactions"
+            },
+            {
+              "names": [
+                "ps"
+              ],
+              "description": "pure-surface reactions"
+            },
+            {
+              "names": [
+                "gs/ps"
+              ],
+              "description": "both gas-surface and pure-surface reactions"
+            },
+            {
+              "names": [
+                "infile(s)"
+              ],
+              "description": "file(s) with list of surface chemistry reactions",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "Nsync"
+              ],
+              "description": "perform PS reactions and sync across processors every this many timesteps"
+            },
+            {
+              "names": [
+                "type"
+              ],
+              "description": "{face} or {surf}",
+              "templateIndex": 3
+            },
+            {
+              "names": [
+                "face"
+              ],
+              "description": "domain boundary treated as a surface"
+            },
+            {
+              "names": [
+                "surf"
+              ],
+              "description": "surface elements = triangles in 3d, lines in 2d"
+            },
+            {
+              "names": [
+                "temp"
+              ],
+              "description": "temperature of the surface",
+              "templateIndex": 4
+            },
+            {
+              "names": [
+                "n_sites"
+              ],
+              "description": "# of available adsorption sites per unit area (3D) or length (2D)",
+              "templateIndex": 5
+            },
+            {
+              "names": [
+                "adsp1",
+                "adsp2",
+                "..."
+              ],
+              "description": "list of species that can adsorb on surface",
+              "templateIndex": 6
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "command": "timestep",
+    "syntax": {
+      "template": [
+        "dt"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "dt"
+          ],
+          "description": "timestep size (time units)",
+          "templateIndex": 0
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "uncompute",
+    "syntax": {
+      "template": [
+        "compute-ID"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "compute-ID"
+          ],
+          "description": "ID of a previously defined compute",
+          "templateIndex": 0
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "undump",
+    "syntax": {
+      "template": [
+        "dump-ID"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "dump-ID"
+          ],
+          "description": "ID of previously defined dump",
+          "templateIndex": 0
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "unfix",
+    "syntax": {
+      "template": [
+        "fix-ID"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "fix-ID"
+          ],
+          "description": "ID of a previously defined fix",
+          "templateIndex": 0
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "units",
+    "syntax": {
+      "template": [
+        "style"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "style"
+          ],
+          "description": "{cgs} or {si}",
+          "templateIndex": 0
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "variable",
+    "syntax": {
+      "template": [
+        "name",
+        "style",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "name"
+          ],
+          "description": "name of variable to define",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "style"
+          ],
+          "description": "{delete} or {index} or {loop} or {world} or {universe} or {uloop} or {string} or {format} or {getenv} or {file} or {python} or {internal} or {equal} or {particle} or {grid} or {surf}",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "{delete}"
+          ],
+          "description": "no args"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": [
+        {
+          "styles": [
+            "index"
+          ],
+          "template": [
+            "one",
+            "or",
+            "more",
+            "strings"
+          ],
+          "parameters": []
+        },
+        {
+          "styles": [
+            "loop"
+          ],
+          "template": [
+            "N"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "N"
+              ],
+              "description": "integer size of loop, loop from 1 to N inclusive",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "loop"
+          ],
+          "template": [
+            "N",
+            "pad"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "N"
+              ],
+              "description": "integer size of loop, loop from 1 to N inclusive",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "pad"
+              ],
+              "description": "all values will be same length, e.g. 001, 002, ..., 100",
+              "templateIndex": 1
+            }
+          ]
+        },
+        {
+          "styles": [
+            "loop"
+          ],
+          "template": [
+            "N1",
+            "N2"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "N1",
+                "N2"
+              ],
+              "description": "loop from N1 to N2 inclusive",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "loop"
+          ],
+          "template": [
+            "N1",
+            "N2",
+            "pad"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "N1",
+                "N2"
+              ],
+              "description": "loop from N1 to N2 inclusive",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "pad"
+              ],
+              "description": "all values will be same length, e.g. 050, 051, ..., 100",
+              "templateIndex": 2
+            }
+          ]
+        },
+        {
+          "styles": [
+            "world"
+          ],
+          "template": [
+            "one",
+            "string",
+            "for",
+            "each",
+            "partition",
+            "of",
+            "processors"
+          ],
+          "parameters": []
+        },
+        {
+          "styles": [
+            "universe"
+          ],
+          "template": [
+            "one",
+            "or",
+            "more",
+            "strings"
+          ],
+          "parameters": []
+        },
+        {
+          "styles": [
+            "uloop"
+          ],
+          "template": [
+            "N"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "N"
+              ],
+              "description": "integer size of loop",
+              "templateIndex": 0
+            }
+          ]
+        },
+        {
+          "styles": [
+            "uloop"
+          ],
+          "template": [
+            "N",
+            "pad"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "N"
+              ],
+              "description": "integer size of loop",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "pad"
+              ],
+              "description": "all values will be same length, e.g. 001, 002, ..., 100",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "{string} arg"
+              ],
+              "description": "one string"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "format"
+          ],
+          "template": [
+            "vname",
+            "fstr"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "vname"
+              ],
+              "description": "name of equal-style variable to evaluate",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "fstr"
+              ],
+              "description": "C-style format string",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "{getenv} arg"
+              ],
+              "description": "one string"
+            },
+            {
+              "names": [
+                "{file} arg"
+              ],
+              "description": "filename"
+            },
+            {
+              "names": [
+                "{python} arg"
+              ],
+              "description": "function"
+            },
+            {
+              "names": [
+                "{internal} arg"
+              ],
+              "description": "numeric value"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "equal",
+            "particle",
+            "grid",
+            "surf"
+          ],
+          "template": [
+            "one",
+            "formula"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "numbers"
+              ],
+              "description": "0.0, 100, -5.4, 2.8e-4, etc"
+            },
+            {
+              "names": [
+                "constants"
+              ],
+              "description": "PI"
+            },
+            {
+              "names": [
+                "stats keywords"
+              ],
+              "description": "step, np, vol, etc from \"stats_style\"_stats_style.html"
+            },
+            {
+              "names": [
+                "math operators"
+              ],
+              "description": "(), -x, x+y, x-y, x*y, x/y, x^y, x%y,"
+            },
+            {
+              "names": [
+                "x"
+              ],
+              "description": "=y, x!=y, x<y, x<=y, x>y, x>=y, x&&y, x||y, !x"
+            },
+            {
+              "names": [
+                "math functions"
+              ],
+              "description": "sqrt(x), exp(x), ln(x), log(x), abs(x),"
+            },
+            {
+              "names": [
+                "special functions"
+              ],
+              "description": "sum(x), min(x), max(x), ave(x), trap(x), slope(x), next(x), grid2part(x), is_file(x)"
+            },
+            {
+              "names": [
+                "python function wrapper"
+              ],
+              "description": "py_varname(x,y,z,...)"
+            },
+            {
+              "names": [
+                "particle vectors"
+              ],
+              "description": "id, type, mass, q, mu, x, y, z, vx, vy, vz"
+            },
+            {
+              "names": [
+                "grid vectors"
+              ],
+              "description": "cxlo, cxhi, cylo, cyhi, czlo, czhi"
+            },
+            {
+              "names": [
+                "compute references"
+              ],
+              "description": "c_ID, c_ID\\[I\\], c_ID\\[I\\]\\[J\\]"
+            },
+            {
+              "names": [
+                "fix references"
+              ],
+              "description": "f_ID, f_ID\\[I\\], f_ID\\[I\\]\\[J\\]"
+            },
+            {
+              "names": [
+                "custom attribute references"
+              ],
+              "description": "p_name, p_name\\[I\\], g_name, g_name\\[I\\], s_name, s_name\\[I\\]"
+            },
+            {
+              "names": [
+                "surface collision model references"
+              ],
+              "description": "sc_ID\\[I\\]"
+            },
+            {
+              "names": [
+                "surface reaction model references"
+              ],
+              "description": "sr_ID\\[I\\]"
+            },
+            {
+              "names": [
+                "variable references"
+              ],
+              "description": "v_name"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "command": "write_grid",
+    "syntax": {
+      "template": [
+        "filename",
+        "keyword",
+        "arg"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "filename"
+          ],
+          "description": "name of file to write grid info to",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "{custom} arg"
+          ],
+          "description": "name"
+        },
+        {
+          "names": [
+            "name"
+          ],
+          "description": "name of custom per-surf vector or array"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "custom",
+          "description": "Keyword: custom"
+        }
+      ],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "write_isurf",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "Nx",
+        "Ny",
+        "Nz",
+        "filename",
+        "ablateID",
+        "keyword",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which grid cells store the implicit surfs",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "Nx",
+            "Ny",
+            "Nz"
+          ],
+          "description": "grid cell extent of the grid cell group",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "filename"
+          ],
+          "description": "name of file to write grid corner point info to",
+          "templateIndex": 4
+        },
+        {
+          "names": [
+            "ablateID"
+          ],
+          "description": "ID of the \"fix ablate\"_fix_ablate.html command which stores the corner points",
+          "templateIndex": 5
+        },
+        {
+          "names": [
+            "precision arg"
+          ],
+          "description": "int or double"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "precision",
+          "description": "Keyword: precision"
+        }
+      ],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "write_restart",
+    "syntax": {
+      "template": [
+        "file",
+        "keyword",
+        "value"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "file"
+          ],
+          "description": "name of file to write restart information to",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "{fileper} arg"
+          ],
+          "description": "Np"
+        },
+        {
+          "names": [
+            "Np"
+          ],
+          "description": "write one file for every this many processors"
+        },
+        {
+          "names": [
+            "{nfile} arg"
+          ],
+          "description": "Nf"
+        },
+        {
+          "names": [
+            "Nf"
+          ],
+          "description": "write this many files, one from each of Nf processors"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "fileper",
+          "description": "Keyword: fileper | nfile"
+        }
+      ],
+      "styleVariants": []
+    }
+  },
+  {
+    "command": "write_surf",
+    "syntax": {
+      "template": [
+        "file"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "file"
+          ],
+          "description": "name of file to write surface element info to",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "{points} arg"
+          ],
+          "description": "{yes} or {no} to include a Points section in the file"
+        },
+        {
+          "names": [
+            "{type} arg"
+          ],
+          "description": "none"
+        },
+        {
+          "names": [
+            "{custom} arg"
+          ],
+          "description": "name"
+        },
+        {
+          "names": [
+            "name"
+          ],
+          "description": "name of custom per-surf vector or array"
+        },
+        {
+          "names": [
+            "{fileper} arg"
+          ],
+          "description": "Np"
+        },
+        {
+          "names": [
+            "Np"
+          ],
+          "description": "write one file for every this many processors"
+        },
+        {
+          "names": [
+            "{nfile} arg"
+          ],
+          "description": "Nf"
+        },
+        {
+          "names": [
+            "Nf"
+          ],
+          "description": "write this many files, one from each of Nf processors"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "points",
+          "description": "Keyword: points | type | custom | fileper | nfile"
+        }
+      ],
+      "styleVariants": []
+    }
+  }
+]

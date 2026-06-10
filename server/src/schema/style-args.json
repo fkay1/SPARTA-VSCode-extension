@@ -1,0 +1,4629 @@
+[
+  {
+    "family": "fix",
+    "style": "ablate",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "Nevery",
+        "scale",
+        "source",
+        "maxrandom",
+        "keyword",
+        "value"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "ablate"
+          ],
+          "description": "style name of this fix command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "ID of group of grid cells that contain implicit surfaces",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "Nevery"
+          ],
+          "description": "perform ablation once every Nevery steps",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "scale"
+          ],
+          "description": "scale factor to convert source to grid corner point value decrement",
+          "templateIndex": 2
+        },
+        {
+          "names": [
+            "source"
+          ],
+          "description": "computeID or fixID or uniform or random",
+          "templateIndex": 3
+        },
+        {
+          "names": [
+            "computeID"
+          ],
+          "description": "c_ID or c_ID\\[n\\] for a compute that calculates per grid cell values"
+        },
+        {
+          "names": [
+            "fixID"
+          ],
+          "description": "f_ID or f_ID\\[n\\] for a fix that calculates per grid cell values"
+        },
+        {
+          "names": [
+            "v_name"
+          ],
+          "description": "per-grid vector calculated by a grid-style variable with name"
+        },
+        {
+          "names": [
+            "uniform"
+          ],
+          "description": "perform a uniform decrement"
+        },
+        {
+          "names": [
+            "random"
+          ],
+          "description": "perform a random decrement"
+        },
+        {
+          "names": [
+            "maxrandom"
+          ],
+          "description": "maximum per grid cell decrement as an integer (only specified if source = random or uniform)",
+          "templateIndex": 4
+        },
+        {
+          "names": [
+            "fraction"
+          ],
+          "description": "minimum fractional distance along cell edge for triangle/line vertices (value > 0 and < 0.5)"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "mindist",
+          "description": "Keyword: mindist | multiple",
+          "values": []
+        }
+      ],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "fix",
+    "style": "adapt",
+    "syntax": {
+      "template": [
+        "Nfreq",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "adapt"
+          ],
+          "description": "style name of this fix command"
+        },
+        {
+          "names": [
+            "Nfreq"
+          ],
+          "description": "perform grid adaptation every this many steps",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "args"
+          ],
+          "description": "all remaining args are identical to those defined for the \"adapt_grid\"_adapt_grid.html command",
+          "templateIndex": 1
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "fix",
+    "style": "ambipolar",
+    "syntax": {
+      "template": [
+        "especies",
+        "ion1",
+        "ion2"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "ambipolar"
+          ],
+          "description": "style name of this fix command"
+        },
+        {
+          "names": [
+            "especies"
+          ],
+          "description": "species ID for ambipolar electrons",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "ion1",
+            "ion2",
+            "..."
+          ],
+          "description": "species IDs for one or more ambipolar ions",
+          "templateIndex": 1
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "fix",
+    "style": "ave/grid",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "Nevery",
+        "Nrepeat",
+        "Nfreq",
+        "value1",
+        "value2",
+        "keyword",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "ave/grid"
+          ],
+          "description": "style name of this fix command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which grid cells to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "Nevery"
+          ],
+          "description": "use input values every this many timesteps",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "Nrepeat"
+          ],
+          "description": "# of times to use input values for calculating averages",
+          "templateIndex": 2
+        },
+        {
+          "names": [
+            "Nfreq"
+          ],
+          "description": "calculate averages every this many timesteps",
+          "templateIndex": 3
+        },
+        {
+          "names": [
+            "value"
+          ],
+          "description": "c_ID, c_ID\\[N\\], f_ID, f_ID\\[N\\], v_name, g_name, g_name\\[N\\]"
+        },
+        {
+          "names": [
+            "c_ID"
+          ],
+          "description": "per-grid vector calculated by a compute with ID"
+        },
+        {
+          "names": [
+            "c_ID\\[N\\]"
+          ],
+          "description": "Nth column of per-grid array calculated by a compute with ID, N can include wildcard (see below)"
+        },
+        {
+          "names": [
+            "f_ID"
+          ],
+          "description": "per-grid vector calculated by a fix with ID"
+        },
+        {
+          "names": [
+            "f_ID\\[N\\]"
+          ],
+          "description": "Nth column of per-grid array calculated by a fix with ID, N can include wildcard (see below)"
+        },
+        {
+          "names": [
+            "v_name"
+          ],
+          "description": "per-grid vector calculated by a grid-style variable with name"
+        },
+        {
+          "names": [
+            "g_name"
+          ],
+          "description": "custom per-grid vector with name"
+        },
+        {
+          "names": [
+            "g_name\\[N\\]"
+          ],
+          "description": "Nth column of per-grid custom array with name, N can include wildcard (see below)"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "ave",
+          "description": "Keyword: ave"
+        }
+      ],
+      "styleVariants": [
+        {
+          "styles": [
+            "ave"
+          ],
+          "template": [
+            "one",
+            "or",
+            "running"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "one"
+              ],
+              "description": "output a new average value every Nfreq steps",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "running"
+              ],
+              "description": "accumulate average continuously",
+              "templateIndex": 2
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "family": "fix",
+    "style": "ave/histo",
+    "syntax": {
+      "template": [
+        "style",
+        "Nevery",
+        "Nrepeat",
+        "Nfreq",
+        "lo",
+        "hi",
+        "Nbin",
+        "value1",
+        "value2",
+        "keyword",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "style"
+          ],
+          "description": "{ave/histo} or {ave/histo/weight} = style name of this fix command",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "Nevery"
+          ],
+          "description": "use input values every this many timesteps",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "Nrepeat"
+          ],
+          "description": "# of times to use input values for calculating histogram",
+          "templateIndex": 2
+        },
+        {
+          "names": [
+            "Nfreq"
+          ],
+          "description": "calculate histogram every this many timesteps",
+          "templateIndex": 3
+        },
+        {
+          "names": [
+            "lo",
+            "hi"
+          ],
+          "description": "lo/hi bounds within which to histogram",
+          "templateIndex": 4
+        },
+        {
+          "names": [
+            "Nbin"
+          ],
+          "description": "# of histogram bins",
+          "templateIndex": 6
+        },
+        {
+          "names": [
+            "value"
+          ],
+          "description": "x, y, z, vx, vy, vz, fx, fy, fz, c_ID, c_ID\\[N\\], f_ID, f_ID\\[N\\], v_name"
+        },
+        {
+          "names": [
+            "x",
+            "y",
+            "z",
+            "vx",
+            "vy",
+            "vz"
+          ],
+          "description": "particle attribute (position, velocity component)"
+        },
+        {
+          "names": [
+            "c_ID"
+          ],
+          "description": "scalar or vector calculated by a compute with ID"
+        },
+        {
+          "names": [
+            "c_ID\\[I\\]"
+          ],
+          "description": "Ith component of vector or Ith column of array calculated by a compute with ID, I can include wildcard (see below)"
+        },
+        {
+          "names": [
+            "f_ID"
+          ],
+          "description": "scalar or vector calculated by a fix with ID"
+        },
+        {
+          "names": [
+            "f_ID\\[I\\]"
+          ],
+          "description": "Ith component of vector or Ith column of array calculated by a fix with ID, I can include wildcard (see below)"
+        },
+        {
+          "names": [
+            "v_name"
+          ],
+          "description": "value(s) calculated by an equal-style or particle-style or grid-style variable with name"
+        },
+        {
+          "names": [
+            "{mode} arg"
+          ],
+          "description": "{scalar} or {vector}"
+        },
+        {
+          "names": [
+            "scalar"
+          ],
+          "description": "all input values are scalars"
+        },
+        {
+          "names": [
+            "vector"
+          ],
+          "description": "all input values are vectors"
+        },
+        {
+          "names": [
+            "{file} arg"
+          ],
+          "description": "filename"
+        },
+        {
+          "names": [
+            "filename"
+          ],
+          "description": "name of file to output histogram(s) to"
+        },
+        {
+          "names": [
+            "{region} arg"
+          ],
+          "description": "region-ID for particle inclusion"
+        },
+        {
+          "names": [
+            "{mix} arg"
+          ],
+          "description": "mixture-ID for particle inclusion"
+        },
+        {
+          "names": [
+            "{group} arg"
+          ],
+          "description": "group-ID for grid cell inclusion"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "mode",
+          "description": "Keyword: mode | file | region | mix | group | ave | start | beyond | overwrite | title1 | title2 | title3"
+        }
+      ],
+      "styleVariants": [
+        {
+          "styles": [
+            "ave"
+          ],
+          "template": [
+            "{one}",
+            "or",
+            "{running}",
+            "or",
+            "{window}"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "one"
+              ],
+              "description": "output a new average value every Nfreq steps",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "running"
+              ],
+              "description": "output cumulative average of all previous Nfreq steps",
+              "templateIndex": 2
+            },
+            {
+              "names": [
+                "window M"
+              ],
+              "description": "output average of M most recent Nfreq steps"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "start"
+          ],
+          "template": [
+            "Nstart"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Nstart"
+              ],
+              "description": "start averaging on this timestep",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "{beyond} arg"
+              ],
+              "description": "{ignore} or {end} or {extra}"
+            },
+            {
+              "names": [
+                "ignore"
+              ],
+              "description": "ignore values outside histogram lo/hi bounds"
+            },
+            {
+              "names": [
+                "end"
+              ],
+              "description": "count values outside histogram lo/hi bounds in end bins"
+            },
+            {
+              "names": [
+                "extra"
+              ],
+              "description": "create 2 extra bins for value outside histogram lo/hi bounds"
+            },
+            {
+              "names": [
+                "{overwrite} arg"
+              ],
+              "description": "none = overwrite output file with only latest output"
+            },
+            {
+              "names": [
+                "{title1} arg"
+              ],
+              "description": "string"
+            },
+            {
+              "names": [
+                "string"
+              ],
+              "description": "text to print as 1st line of output file"
+            },
+            {
+              "names": [
+                "{title2} arg"
+              ],
+              "description": "string"
+            },
+            {
+              "names": [
+                "string"
+              ],
+              "description": "text to print as 2nd line of output file"
+            },
+            {
+              "names": [
+                "{title3} arg"
+              ],
+              "description": "string"
+            },
+            {
+              "names": [
+                "string"
+              ],
+              "description": "text to print as 3rd line of output file, only for vector mode"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "family": "fix",
+    "style": "ave/surf",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "Nevery",
+        "Nrepeat",
+        "Nfreq",
+        "value1",
+        "value2",
+        "keyword",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "ave/surf"
+          ],
+          "description": "style name of this fix command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which surface elements to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "Nevery"
+          ],
+          "description": "use input values every this many timesteps",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "Nrepeat"
+          ],
+          "description": "# of times to use input values for calculating averages",
+          "templateIndex": 2
+        },
+        {
+          "names": [
+            "Nfreq"
+          ],
+          "description": "calculate averages every this many timesteps",
+          "templateIndex": 3
+        },
+        {
+          "names": [
+            "value"
+          ],
+          "description": "c_ID, c_ID\\[N\\], f_ID, f_ID\\[N\\], v_name, s_name, s_name\\[N\\]"
+        },
+        {
+          "names": [
+            "c_ID"
+          ],
+          "description": "per-surf vector calculated by a compute with ID"
+        },
+        {
+          "names": [
+            "c_ID\\[N\\]"
+          ],
+          "description": "Nth column of per-surf array calculated by a compute with ID, N can include wildcard (see below)"
+        },
+        {
+          "names": [
+            "f_ID"
+          ],
+          "description": "per-surf vector calculated by a fix with ID"
+        },
+        {
+          "names": [
+            "f_ID\\[N\\]"
+          ],
+          "description": "Nth column of per-surf array calculated by a fix with ID, N can include wildcard (see below)"
+        },
+        {
+          "names": [
+            "v_name"
+          ],
+          "description": "per-surf vector calculated by a surf-style variable with name"
+        },
+        {
+          "names": [
+            "s_name"
+          ],
+          "description": "custom per-surf vector with name"
+        },
+        {
+          "names": [
+            "s_name\\[N\\]"
+          ],
+          "description": "Nth column of per-surf custom array with name, N can include wildcard (see below)"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "ave",
+          "description": "Keyword: ave"
+        }
+      ],
+      "styleVariants": [
+        {
+          "styles": [
+            "ave"
+          ],
+          "template": [
+            "one",
+            "or",
+            "running"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "one"
+              ],
+              "description": "output a new average value every Nfreq steps",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "running"
+              ],
+              "description": "accumulate average continuously",
+              "templateIndex": 2
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "family": "fix",
+    "style": "ave/time",
+    "syntax": {
+      "template": [
+        "Nevery",
+        "Nrepeat",
+        "Nfreq",
+        "value1",
+        "value2",
+        "keyword",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "ave/time"
+          ],
+          "description": "style name of this fix command"
+        },
+        {
+          "names": [
+            "Nevery"
+          ],
+          "description": "use input values every this many timesteps",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "Nrepeat"
+          ],
+          "description": "# of times to use input values for calculating averages",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "Nfreq"
+          ],
+          "description": "calculate averages every this many timesteps",
+          "templateIndex": 2
+        },
+        {
+          "names": [
+            "value"
+          ],
+          "description": "c_ID, c_ID\\[N\\], f_ID, f_ID\\[N\\], v_name"
+        },
+        {
+          "names": [
+            "c_ID"
+          ],
+          "description": "global scalar or vector or array calculated by a compute with ID"
+        },
+        {
+          "names": [
+            "c_ID\\[I\\]"
+          ],
+          "description": "Ith component of global vector or Ith column of global array calculated by a compute with ID, I can include wildcard (see below)"
+        },
+        {
+          "names": [
+            "f_ID"
+          ],
+          "description": "global scalar or vector or array calculated by a fix with ID"
+        },
+        {
+          "names": [
+            "f_ID\\[I\\]"
+          ],
+          "description": "Ith component of global vector or Ith column of global array calculated by a fix with ID, I can include wildcard (see below)"
+        },
+        {
+          "names": [
+            "v_name"
+          ],
+          "description": "global value calculated by an equal-style variable with name"
+        },
+        {
+          "names": [
+            "{mode} arg"
+          ],
+          "description": "{scalar} or {vector}"
+        },
+        {
+          "names": [
+            "scalar"
+          ],
+          "description": "all input values are global scalars"
+        },
+        {
+          "names": [
+            "vector"
+          ],
+          "description": "all input values are global vectors or global arrays"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "mode",
+          "description": "Keyword: mode | file | ave | start | off | title1 | title2 | title3"
+        }
+      ],
+      "styleVariants": [
+        {
+          "styles": [
+            "ave"
+          ],
+          "template": [
+            "{one}",
+            "or",
+            "{running}",
+            "or",
+            "{window",
+            "M}"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "one"
+              ],
+              "description": "output a new average value every Nfreq steps",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "running"
+              ],
+              "description": "output cummulative average of all previous Nfreq steps",
+              "templateIndex": 2
+            },
+            {
+              "names": [
+                "window M"
+              ],
+              "description": "output average of M most recent Nfreq steps"
+            }
+          ]
+        },
+        {
+          "styles": [
+            "start"
+          ],
+          "template": [
+            "Nstart"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Nstart"
+              ],
+              "description": "start averaging on this timestep",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "{off} arg"
+              ],
+              "description": "M = do not average this value"
+            },
+            {
+              "names": [
+                "M"
+              ],
+              "description": "value # from 1 to Nvalues"
+            },
+            {
+              "names": [
+                "{file} arg"
+              ],
+              "description": "filename"
+            },
+            {
+              "names": [
+                "filename"
+              ],
+              "description": "name of file to output time averages to"
+            },
+            {
+              "names": [
+                "{title1} arg"
+              ],
+              "description": "string"
+            },
+            {
+              "names": [
+                "string"
+              ],
+              "description": "text to print as 1st line of output file"
+            },
+            {
+              "names": [
+                "{title2} arg"
+              ],
+              "description": "string"
+            },
+            {
+              "names": [
+                "string"
+              ],
+              "description": "text to print as 2nd line of output file"
+            },
+            {
+              "names": [
+                "{title3} arg"
+              ],
+              "description": "string"
+            },
+            {
+              "names": [
+                "string"
+              ],
+              "description": "text to print as 3rd line of output file, only for vector mode"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "family": "fix",
+    "style": "balance",
+    "syntax": {
+      "template": [
+        "Nfreq",
+        "thresh",
+        "bstyle",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "balance"
+          ],
+          "description": "style name of this fix command"
+        },
+        {
+          "names": [
+            "Nfreq"
+          ],
+          "description": "perform dynamic load balancing every this many steps",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "thresh"
+          ],
+          "description": "rebalance if imbalance factor is above this threshhold",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "bstyle"
+          ],
+          "description": "{random} or {proc} or {rcb}",
+          "templateIndex": 2
+        },
+        {
+          "names": [
+            "dims"
+          ],
+          "description": "string with any of \"x\", \"y\", or \"z\" characters in it"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "axes",
+          "description": "Keyword: axes | flip",
+          "values": []
+        }
+      ],
+      "styleVariants": [
+        {
+          "styles": [
+            "random"
+          ],
+          "template": [
+            "none"
+          ],
+          "parameters": []
+        },
+        {
+          "styles": [
+            "proc"
+          ],
+          "template": [
+            "none"
+          ],
+          "parameters": []
+        },
+        {
+          "styles": [
+            "rcb"
+          ],
+          "template": [
+            "weight"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "weight"
+              ],
+              "description": "{cell} or {part} or {time}",
+              "templateIndex": 0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "family": "fix",
+    "style": "custom",
+    "syntax": {
+      "template": [
+        "Nfreq",
+        "style",
+        "action",
+        "args",
+        "action",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "custom"
+          ],
+          "description": "style name of this fix command"
+        },
+        {
+          "names": [
+            "Nfreq"
+          ],
+          "description": "reset custom values every this many steps",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "style"
+          ],
+          "description": "{particle} or {grid} or {surf}",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "action args"
+          ],
+          "description": "all remaining args are identical to those defined for the \"custom\"_custom.html command"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "fix",
+    "style": "dt/reset",
+    "syntax": {
+      "template": [
+        "Nfreq",
+        "step",
+        "weight",
+        "resetflag"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "dt/reset"
+          ],
+          "description": "style name of this fix command"
+        },
+        {
+          "names": [
+            "Nfreq"
+          ],
+          "description": "perform timestep calculation every this many steps",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "step"
+          ],
+          "description": "compute or fix column for per-grid cell timestep, prefaced by \"c_\" or \"f_\"",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "weight"
+          ],
+          "description": "weight (0.0 to 1.0) applied to average per-cell timestep when calculating global timestep",
+          "templateIndex": 2
+        },
+        {
+          "names": [
+            "resetflag"
+          ],
+          "description": "1 to overwrite global timestep with new timestep, 0 to just calculate new timestep",
+          "templateIndex": 3
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "fix",
+    "style": "emit/face",
+    "syntax": {
+      "template": [
+        "mix-ID",
+        "face1",
+        "face2",
+        "keyword",
+        "value(s)"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "emit/face"
+          ],
+          "description": "style name of this fix command"
+        },
+        {
+          "names": [
+            "mix-ID"
+          ],
+          "description": "ID of mixture to use when creating particles",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "face1",
+            "face2",
+            "..."
+          ],
+          "description": "one or more of {all} or {xlo} or {xhi} or {ylo} or {yhi} or {zlo} or {zhi}",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "name"
+          ],
+          "description": "name of equal-style variable which modulates inflow of particles"
+        },
+        {
+          "names": [
+            "{subsonic} values"
+          ],
+          "description": "Psub Tsub"
+        },
+        {
+          "names": [
+            "Psub"
+          ],
+          "description": "pressure setting at inflow boundary (pressure units)"
+        },
+        {
+          "names": [
+            "Tsub"
+          ],
+          "description": "temperature setting at inflow boundary, can be NULL (temperature units)"
+        },
+        {
+          "names": [
+            "{twopass} values"
+          ],
+          "description": "none"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "n",
+          "description": "Keyword: n | nevery | perspecies | region | modulate | subsonic | twopass",
+          "values": []
+        }
+      ],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "fix",
+    "style": "emit/face/file",
+    "syntax": {
+      "template": [
+        "mix-ID",
+        "face",
+        "filename",
+        "boundary-ID",
+        "keyword",
+        "value"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "emit/face/file"
+          ],
+          "description": "style name of this fix command"
+        },
+        {
+          "names": [
+            "mix-ID"
+          ],
+          "description": "ID of mixture to use when creating particles",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "face"
+          ],
+          "description": "{xlo} or {xhi} or {ylo} or {yhi} or {zlo} or {zhi}",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "filename"
+          ],
+          "description": "input data file with boundary values for the emission",
+          "templateIndex": 2
+        },
+        {
+          "names": [
+            "boundary-ID"
+          ],
+          "description": "section of data file to read",
+          "templateIndex": 3
+        }
+      ],
+      "keywords": [
+        {
+          "name": "frac",
+          "description": "Keyword: frac | nevery | perspecies | region",
+          "values": []
+        }
+      ],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "fix",
+    "style": "emit/surf",
+    "syntax": {
+      "template": [
+        "mix-ID",
+        "group-ID",
+        "keyword",
+        "value"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "emit/surf"
+          ],
+          "description": "style name of this fix command"
+        },
+        {
+          "names": [
+            "mix-ID"
+          ],
+          "description": "ID of mixture to use when creating particles",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "ID of surface group that emits particles",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "{subsonic} values"
+          ],
+          "description": "Psub Tsub"
+        },
+        {
+          "names": [
+            "Psub"
+          ],
+          "description": "pressure setting at inflow boundary (pressure units)"
+        },
+        {
+          "names": [
+            "Tsub"
+          ],
+          "description": "temperature setting at inflow boundary, can be NULL (temperature units)"
+        },
+        {
+          "names": [
+            "{custom} values"
+          ],
+          "description": "attribute s_name"
+        },
+        {
+          "names": [
+            "attribute"
+          ],
+          "description": "{density} or {temperature} or {vstream} or {speed} or {fractions}"
+        },
+        {
+          "names": [
+            "s_name"
+          ],
+          "description": "custom per-surf vector or array with name"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "n",
+          "description": "Keyword: n | normal | nevery | perspecies | region | subsonic | custom",
+          "values": []
+        }
+      ],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "fix",
+    "style": "field/grid",
+    "syntax": {
+      "template": [
+        "axvar",
+        "ayvar",
+        "azvar"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "field/grid"
+          ],
+          "description": "style name of this fix command"
+        },
+        {
+          "names": [
+            "axvar",
+            "ayvar",
+            "azvar"
+          ],
+          "description": "names of grid-style variables for acceleration components",
+          "templateIndex": 0
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "fix",
+    "style": "field/particle",
+    "syntax": {
+      "template": [
+        "axvar",
+        "ayvar",
+        "azvar"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "field/particle"
+          ],
+          "description": "style name of this fix command"
+        },
+        {
+          "names": [
+            "axvar",
+            "ayvar",
+            "azvar"
+          ],
+          "description": "names of particle-style variables for acceleration components",
+          "templateIndex": 0
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "fix",
+    "style": "grid/check",
+    "syntax": {
+      "template": [
+        "N",
+        "outflag",
+        "keyword",
+        "arg"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "grid/check"
+          ],
+          "description": "style name of this fix command"
+        },
+        {
+          "names": [
+            "N"
+          ],
+          "description": "check every N timesteps",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "outflag"
+          ],
+          "description": "{error} or {warn} or {silent}",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "outside arg"
+          ],
+          "description": "{yes} or {no}"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "outside",
+          "description": "Keyword: outside"
+        }
+      ],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "fix",
+    "style": "halt",
+    "syntax": {
+      "template": [
+        "N",
+        "attribute",
+        "operator",
+        "avalue",
+        "keyword",
+        "value"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "halt"
+          ],
+          "description": "style name of this fix command"
+        },
+        {
+          "names": [
+            "N"
+          ],
+          "description": "check halt condition every N timesteps",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "attribute"
+          ],
+          "description": "{tlimit} or v_name",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "tlimit"
+          ],
+          "description": "elapsed CPU time (in seconds)"
+        },
+        {
+          "names": [
+            "v_name"
+          ],
+          "description": "name of \"equal-style variable\"_variable.html"
+        },
+        {
+          "names": [
+            "operator"
+          ],
+          "description": "\"<\" or \"<=\" or \">\" or \">=\" or \"==\" or \"!=\" or \"|^\"",
+          "templateIndex": 2
+        },
+        {
+          "names": [
+            "avalue"
+          ],
+          "description": "numeric value to compare attribute to",
+          "templateIndex": 3
+        },
+        {
+          "names": [
+            "error value"
+          ],
+          "description": "{hard} or {soft} or {continue}"
+        },
+        {
+          "names": [
+            "message value"
+          ],
+          "description": "{yes} or {no}"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "error",
+          "description": "Keyword: error | message"
+        }
+      ],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "fix",
+    "style": "move/surf",
+    "syntax": {
+      "template": [
+        "groupID",
+        "Nevery",
+        "Nlarge",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "move/surf"
+          ],
+          "description": "style name of this fix command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which surface elements to move"
+        },
+        {
+          "names": [
+            "Nevery"
+          ],
+          "description": "move surfaces incrementally every this many steps",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "Nlarge"
+          ],
+          "description": "move surfaces the entire distance after this many timesteps",
+          "templateIndex": 2
+        },
+        {
+          "names": [
+            "args"
+          ],
+          "description": "all remaining args are identical to those defined for the \"move_surf\"_move_surf.html command starting with its \"style\" argument",
+          "templateIndex": 3
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "fix",
+    "style": "print",
+    "syntax": {
+      "template": [
+        "N",
+        "string",
+        "keyword",
+        "value"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "print"
+          ],
+          "description": "style name of this fix command"
+        },
+        {
+          "names": [
+            "N"
+          ],
+          "description": "print every N steps",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "string"
+          ],
+          "description": "text string to print with optional variable names",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "string"
+          ],
+          "description": "text to print as 1st line of output file"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "file",
+          "description": "Keyword: file | append | screen | title",
+          "values": []
+        }
+      ],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "fix",
+    "style": "surf/temp",
+    "syntax": {
+      "template": [
+        "surf-ID",
+        "Nevery",
+        "source",
+        "Tinit",
+        "emisurf",
+        "custom-name"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "surf/temp"
+          ],
+          "description": "style name of this fix command"
+        },
+        {
+          "names": [
+            "surf-ID"
+          ],
+          "description": "group ID for which surface elements to consider",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "Nevery"
+          ],
+          "description": "adjust surface temperature once every Nevery steps",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "source"
+          ],
+          "description": "computeID or fixID",
+          "templateIndex": 2
+        },
+        {
+          "names": [
+            "computeID"
+          ],
+          "description": "c_ID or c_ID\\[N\\] for a compute that calculates per surf values"
+        },
+        {
+          "names": [
+            "fixID"
+          ],
+          "description": "f_ID or f_ID\\[N\\] for a fix that calculates per surf values"
+        },
+        {
+          "names": [
+            "Tinit"
+          ],
+          "description": "initial temperature of surface (temperature units)",
+          "templateIndex": 3
+        },
+        {
+          "names": [
+            "emisurf"
+          ],
+          "description": "emissivity of the surface (unitless, 0 < emisurf <= 1)",
+          "templateIndex": 4
+        },
+        {
+          "names": [
+            "custom-name"
+          ],
+          "description": "name of a custom per-surf variable to create",
+          "templateIndex": 5
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "fix",
+    "style": "temp/global/rescale",
+    "syntax": {
+      "template": [
+        "N",
+        "Tstart",
+        "Tstop",
+        "fraction"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "temp/global/rescale"
+          ],
+          "description": "style name of this fix command"
+        },
+        {
+          "names": [
+            "N"
+          ],
+          "description": "thermostat every N timesteps",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "Tstart",
+            "Tstop"
+          ],
+          "description": "desired temperature at start/end of run (temperature units)",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "fraction"
+          ],
+          "description": "rescale to target temperature by this fraction",
+          "templateIndex": 3
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "fix",
+    "style": "temp/rescale",
+    "syntax": {
+      "template": [
+        "N",
+        "Tstart",
+        "Tstop",
+        "keyword",
+        "value"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "temp/rescale"
+          ],
+          "description": "style name of this fix command"
+        },
+        {
+          "names": [
+            "N"
+          ],
+          "description": "thermostat every N timesteps",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "Tstart",
+            "Tstop"
+          ],
+          "description": "desired temperature at start/end of run (temperature units)",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "ave values"
+          ],
+          "description": "{yes} or {no}"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "ave",
+          "description": "Keyword: ave"
+        }
+      ],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "fix",
+    "style": "vibmode",
+    "syntax": {
+      "template": [],
+      "parameters": [
+        {
+          "names": [
+            "vibmode"
+          ],
+          "description": "style name of this fix command"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "boundary",
+    "syntax": {
+      "template": [
+        "mix-ID",
+        "value1",
+        "value2"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "boundary"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "mix-ID"
+          ],
+          "description": "mixture ID to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "value"
+          ],
+          "description": "{n} or {nwt} or {nflux} or {mflux} or {press} or {shx} or {shy} or {shz} or {ke} or {erot} or {evib} or {etot}"
+        },
+        {
+          "names": [
+            "n"
+          ],
+          "description": "count of particles hitting boundary"
+        },
+        {
+          "names": [
+            "nwt"
+          ],
+          "description": "weighted count of particles hitting boundary"
+        },
+        {
+          "names": [
+            "nflux"
+          ],
+          "description": "flux of particles on boundary"
+        },
+        {
+          "names": [
+            "mflux"
+          ],
+          "description": "flux of mass on boundary"
+        },
+        {
+          "names": [
+            "press"
+          ],
+          "description": "magnitude of normal pressure on boundary"
+        },
+        {
+          "names": [
+            "shx",
+            "shy",
+            "shz"
+          ],
+          "description": "components of shear stress on boundary"
+        },
+        {
+          "names": [
+            "ke"
+          ],
+          "description": "flux of particle kinetic energy on boundary"
+        },
+        {
+          "names": [
+            "erot"
+          ],
+          "description": "flux of particle rotational energy on boundary"
+        },
+        {
+          "names": [
+            "evib"
+          ],
+          "description": "flux of particle vibrational energy on boundary"
+        },
+        {
+          "names": [
+            "etot"
+          ],
+          "description": "flux of particle total energy on boundary"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "count",
+    "syntax": {
+      "template": [
+        "id1",
+        "id2"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "count"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "id1",
+            "id2",
+            "..."
+          ],
+          "description": "species ID or mixture ID or mixture/group",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "species ID"
+          ],
+          "description": "ID used with the \"species\"_species.html command"
+        },
+        {
+          "names": [
+            "mixture ID"
+          ],
+          "description": "ID used with the \"mixture\"_mixture.html command, expands to all groups in mixture"
+        },
+        {
+          "names": [
+            "mixture/group"
+          ],
+          "description": "ID of mixture followed by name of a group within mixture"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "distsurf/grid",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "surf-ID",
+        "keyword",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "distsurf/grid"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which grid cells to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "surf-ID"
+          ],
+          "description": "group ID for which surface elements to consider",
+          "templateIndex": 1
+        }
+      ],
+      "keywords": [
+        {
+          "name": "dir",
+          "description": "Keyword: dir"
+        }
+      ],
+      "styleVariants": [
+        {
+          "styles": [
+            "dir"
+          ],
+          "template": [
+            "Sx",
+            "Sy",
+            "Sz"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "Sx",
+                "Sy",
+                "Sz"
+              ],
+              "description": "direction vector used to test surf elements",
+              "templateIndex": 0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "family": "compute",
+    "style": "dt/grid",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "tfraction",
+        "cfraction",
+        "tau",
+        "temperature",
+        "usq",
+        "vsq",
+        "wsq"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "dt/grid"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which grid cells to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "tfraction"
+          ],
+          "description": "fraction of grid cell transit time used to calculate timestep",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "cfraction"
+          ],
+          "description": "fraction of grid cell mean collision time used to calculate timestep",
+          "templateIndex": 2
+        },
+        {
+          "names": [
+            "tau"
+          ],
+          "description": "compute or fix column for mean collision time, prefaced by \"c_\" or \"f_\"",
+          "templateIndex": 3
+        },
+        {
+          "names": [
+            "temperature"
+          ],
+          "description": "compute or fix column for temperature, prefaced by \"c_\" or \"f_\"",
+          "templateIndex": 4
+        },
+        {
+          "names": [
+            "usq"
+          ],
+          "description": "compute or fix column for x component of velocity squared, prefaced by \"c_\" or \"f_\"",
+          "templateIndex": 5
+        },
+        {
+          "names": [
+            "vsq"
+          ],
+          "description": "compute or fix column for y component of velocity squared, prefaced by \"c_\" or \"f_\"",
+          "templateIndex": 6
+        },
+        {
+          "names": [
+            "wsq"
+          ],
+          "description": "compute or fix column for z component of velocity squared, prefaced by \"c_\" or \"f_\"",
+          "templateIndex": 7
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "eflux/grid",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "mix-ID",
+        "value1",
+        "value2"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "eflux/grid"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which grid cells to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "mix-ID"
+          ],
+          "description": "mixture ID to perform calculation on",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "values"
+          ],
+          "description": "{heatx} or {heaty} or {heatz}"
+        },
+        {
+          "names": [
+            "{heatx}",
+            "{heaty}",
+            "{heatz}"
+          ],
+          "description": "xyz components of energy flux density tensor"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "fft/grid",
+    "syntax": {
+      "template": [
+        "value1",
+        "value2",
+        "keyword",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "fft/grid"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "value"
+          ],
+          "description": "c_ID, c_ID\\[N\\], f_ID, f_ID\\[N\\], v_name"
+        },
+        {
+          "names": [
+            "c_ID"
+          ],
+          "description": "per-grid vector calculated by a compute with ID"
+        },
+        {
+          "names": [
+            "c_ID\\[I\\]"
+          ],
+          "description": "Ith column of per-grid array calculated by a compute with ID"
+        },
+        {
+          "names": [
+            "f_ID"
+          ],
+          "description": "per-grid vector calculated by a fix with ID"
+        },
+        {
+          "names": [
+            "f_ID\\[I\\]"
+          ],
+          "description": "Ith column of per-grid or array calculated by a fix with ID"
+        },
+        {
+          "names": [
+            "v_name"
+          ],
+          "description": "per-grid vector calculated by a grid-style variable with name"
+        },
+        {
+          "names": [
+            "{sum}"
+          ],
+          "description": "{yes} or {no} to sum all FFTs into a single output"
+        },
+        {
+          "names": [
+            "{scale}"
+          ],
+          "description": "sfactor = numeric value to scale results by"
+        },
+        {
+          "names": [
+            "{conjugate}"
+          ],
+          "description": "{yes} or {no} = perform complex conjugate multiply or not"
+        },
+        {
+          "names": [
+            "{kx}"
+          ],
+          "description": "{yes} or {no} = calculate x-component of wavelength or not"
+        },
+        {
+          "names": [
+            "{kx}"
+          ],
+          "description": "{yes} or {no} = calculate y-component of wavelength or not"
+        },
+        {
+          "names": [
+            "{kx}"
+          ],
+          "description": "{yes} or {no} = calculate z-component of wavelength or not"
+        },
+        {
+          "names": [
+            "{kmag}"
+          ],
+          "description": "{yes} or {no} = calculate wavelength magnitude or not"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "sum",
+          "description": "Keyword: sum | scale | conjugate | kmag"
+        }
+      ],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "gas/collision/grid",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "mix-ID"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "gas/collision/grid"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which grid cells to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "mix-ID"
+          ],
+          "description": "mixture ID to perform calculation on",
+          "templateIndex": 1
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "gas/collision/tally",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "mix-ID",
+        "value1",
+        "value2"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "gas/collision/tally"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which grid cells to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "mix-ID"
+          ],
+          "description": "mixture ID to perform calculation on",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "value"
+          ],
+          "description": "{id/cell} or {id1} or {id2} or {type1} or {type2} or {vx1/pre} or {vy1/pre} or {vz1/pre} or {vx2/pre} or {vy2/pre} or {vz2/pre} or {vx1/post} or {vy1/post} or {vz1/post} or {vx2/post} or {vy2/post} or {vz2/post}"
+        },
+        {
+          "names": [
+            "{id/cell}"
+          ],
+          "description": "grid cell ID"
+        },
+        {
+          "names": [
+            "{id1}",
+            "{id2}"
+          ],
+          "description": "particle IDs of two particles"
+        },
+        {
+          "names": [
+            "{type1}",
+            "{type2}"
+          ],
+          "description": "particle species of two particles"
+        },
+        {
+          "names": [
+            "{vx1/pre}",
+            "{vy1/pre}",
+            "{vz1/pre}"
+          ],
+          "description": "velocity components of first particle before collision"
+        },
+        {
+          "names": [
+            "{vx2/pre}",
+            "{vy2/pre}",
+            "{vz2/pre}"
+          ],
+          "description": "velocity components of second particle before collision"
+        },
+        {
+          "names": [
+            "{vx1/post}",
+            "{vy1/post}",
+            "{vz1/post}"
+          ],
+          "description": "velocity components of first particle after collision"
+        },
+        {
+          "names": [
+            "{vx2/post}",
+            "{vy2/post}",
+            "{vz2/post}"
+          ],
+          "description": "velocity components of second particle after collision"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "gas/reaction/grid",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "mix-ID",
+        "mode",
+        "value1",
+        "value2"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "gas/collision/grid"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which grid cells to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "mix-ID"
+          ],
+          "description": "mixture ID to perform calculation on",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "mode"
+          ],
+          "description": "{all} or {every} or {select}",
+          "templateIndex": 2
+        },
+        {
+          "names": [
+            "{all}"
+          ],
+          "description": "single count of all reactions in each grid cell"
+        },
+        {
+          "names": [
+            "{values}"
+          ],
+          "description": "none"
+        },
+        {
+          "names": [
+            "{every}"
+          ],
+          "description": "count of each defined reaction in each grid cell"
+        },
+        {
+          "names": [
+            "{values}"
+          ],
+          "description": "none"
+        },
+        {
+          "names": [
+            "{select}"
+          ],
+          "description": "count of selected reactions in each grid cell"
+        },
+        {
+          "names": [
+            "{values}"
+          ],
+          "description": "one or more numeric indices from 1 to M where M = # of defined reactions"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "gas/reaction/tally",
+    "syntax": {
+      "template": [
+        "reaction/tally",
+        "group-ID",
+        "mix-ID",
+        "value1",
+        "value2"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "reaction/tally"
+          ],
+          "description": "style name of this compute command",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which surface elements to perform calculation on",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "mix-ID"
+          ],
+          "description": "mixture ID to perform calculation on",
+          "templateIndex": 2
+        },
+        {
+          "names": [
+            "value"
+          ],
+          "description": "{id/pre} or {id/post} or {id/post2} or {type/pre} or {type/post} or {type/post2} or {id/surf} or {time} or {xc} or {yc} or {zc} or {vx/pre} or {vy/pre} or {vz/pre} or {vx/post} or {vy/post} or {vz/post} or {vx/post2} or {vy/post2} or {vz/post2}"
+        },
+        {
+          "names": [
+            "{reaction}"
+          ],
+          "description": "which reaction occurred (1 to N)"
+        },
+        {
+          "names": [
+            "{id/cell}"
+          ],
+          "description": "grid cell ID"
+        },
+        {
+          "names": [
+            "{id1/pre}"
+          ],
+          "description": "particle ID of first particle before reaction"
+        },
+        {
+          "names": [
+            "{id2/pre}"
+          ],
+          "description": "particle ID of second particle before reaction"
+        },
+        {
+          "names": [
+            "{id1/post}"
+          ],
+          "description": "particle ID of first particle after reaction"
+        },
+        {
+          "names": [
+            "{id2/post}"
+          ],
+          "description": "particle ID of second particle after reaction"
+        },
+        {
+          "names": [
+            "{id3/post}"
+          ],
+          "description": "particle ID of third particle after reaction"
+        },
+        {
+          "names": [
+            "{type1/pre}"
+          ],
+          "description": "particle species of first particle before reaction"
+        },
+        {
+          "names": [
+            "{type2/pre}"
+          ],
+          "description": "particle species of second particle before reaction"
+        },
+        {
+          "names": [
+            "{type1/post}"
+          ],
+          "description": "particle species of first particle before reaction"
+        },
+        {
+          "names": [
+            "{type2/post}"
+          ],
+          "description": "particle species of second particle before reaction"
+        },
+        {
+          "names": [
+            "{type3/post}"
+          ],
+          "description": "particle species of third particle before reaction"
+        },
+        {
+          "names": [
+            "{vx1/pre}",
+            "{vy1/pre}",
+            "{vz1/pre}"
+          ],
+          "description": "velocity components of first particle before reaction"
+        },
+        {
+          "names": [
+            "{vx2/pre}",
+            "{vy2/pre}",
+            "{vz2/pre}"
+          ],
+          "description": "velocity components of second particle before reaction"
+        },
+        {
+          "names": [
+            "{vx1/post}",
+            "{vy1/post}",
+            "{vz1/post}"
+          ],
+          "description": "velocity components of first particle after reaction"
+        },
+        {
+          "names": [
+            "{vx2/post}",
+            "{vy2/post}",
+            "{vz2/post}"
+          ],
+          "description": "velocity components of second particle after reaction"
+        },
+        {
+          "names": [
+            "{vx3/post}",
+            "{vy3/post}",
+            "{vz3/post}"
+          ],
+          "description": "velocity components of thrid particle after reaction"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "grid",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "mix-ID",
+        "value1",
+        "value2"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "grid"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which grid cells to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "mix-ID"
+          ],
+          "description": "mixture ID to perform calculation on",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "value"
+          ],
+          "description": "{n} or {nrho} or {nfrac} or {mass} or {massrho} or {massfrac} or {u} or {v} or {w} or {usq} or {vsq} or {wsq} of {ke} or {temp} or {erot} or {trot} or {evib} or {tvib} or {pxrho} or {pyrho} or {pzrho} or {kerho}"
+        },
+        {
+          "names": [
+            "{n}"
+          ],
+          "description": "particle count"
+        },
+        {
+          "names": [
+            "{nrho}"
+          ],
+          "description": "number density"
+        },
+        {
+          "names": [
+            "{nfrac}"
+          ],
+          "description": "number fraction"
+        },
+        {
+          "names": [
+            "{mass}"
+          ],
+          "description": "mass"
+        },
+        {
+          "names": [
+            "{massrho}"
+          ],
+          "description": "mass density"
+        },
+        {
+          "names": [
+            "{massfrac}"
+          ],
+          "description": "mass fraction"
+        },
+        {
+          "names": [
+            "{u}"
+          ],
+          "description": "x component of velocity"
+        },
+        {
+          "names": [
+            "{v}"
+          ],
+          "description": "y component of velocity"
+        },
+        {
+          "names": [
+            "{w}"
+          ],
+          "description": "z component of velocity"
+        },
+        {
+          "names": [
+            "{usq}"
+          ],
+          "description": "x component of velocity squared"
+        },
+        {
+          "names": [
+            "{vsq}"
+          ],
+          "description": "y component of velocity squared"
+        },
+        {
+          "names": [
+            "{wsq}"
+          ],
+          "description": "z component of velocity squared"
+        },
+        {
+          "names": [
+            "{ke}"
+          ],
+          "description": "kinetic energy"
+        },
+        {
+          "names": [
+            "{temp}"
+          ],
+          "description": "temperature"
+        },
+        {
+          "names": [
+            "{erot}"
+          ],
+          "description": "rotational energy"
+        },
+        {
+          "names": [
+            "{trot}"
+          ],
+          "description": "rotational temperature"
+        },
+        {
+          "names": [
+            "{evib}"
+          ],
+          "description": "vibrational energy"
+        },
+        {
+          "names": [
+            "{tvib}"
+          ],
+          "description": "vibrational temperature (classical definition)"
+        },
+        {
+          "names": [
+            "{pxrho}"
+          ],
+          "description": "x component of momentum density"
+        },
+        {
+          "names": [
+            "{pyrho}"
+          ],
+          "description": "y component of momentum density"
+        },
+        {
+          "names": [
+            "{pzrho}"
+          ],
+          "description": "z component of momentum density"
+        },
+        {
+          "names": [
+            "{kerho}"
+          ],
+          "description": "kinetic energy density"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "isurf/grid",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "mix-ID",
+        "value1",
+        "value2"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "isurf/grid"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which grid cells to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "mix-ID"
+          ],
+          "description": "mixture ID for particles to perform calculation on",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "value"
+          ],
+          "description": "{n} or {nwt} or {mflux} or {fx} or {fy} or {fz} or {press} or {px} or {py} or {pz} or {shx} or {shy} or {shz} or {ke}"
+        },
+        {
+          "names": [
+            "n"
+          ],
+          "description": "count of particles hitting surface elements in a grid cell"
+        },
+        {
+          "names": [
+            "nwt"
+          ],
+          "description": "weighted count of particles hitting surface elements in a grid cell"
+        },
+        {
+          "names": [
+            "mflux"
+          ],
+          "description": "flux of mass on surface elements in a grid cell"
+        },
+        {
+          "names": [
+            "fx",
+            "fy",
+            "fz"
+          ],
+          "description": "components of force on surface elements in a grid cell"
+        },
+        {
+          "names": [
+            "press"
+          ],
+          "description": "magnitude of normal pressure on surface elements in a grid cell"
+        },
+        {
+          "names": [
+            "px",
+            "py",
+            "pz"
+          ],
+          "description": "components of normal pressure on surface elements in a grid cell"
+        },
+        {
+          "names": [
+            "shx",
+            "shy",
+            "shz"
+          ],
+          "description": "components of shear stress on surface elements in a grid cell"
+        },
+        {
+          "names": [
+            "ke"
+          ],
+          "description": "flux of particle kinetic energy on surface elements in a grid cell"
+        },
+        {
+          "names": [
+            "erot"
+          ],
+          "description": "flux of particle rotational energy on surface elements in a grid cell"
+        },
+        {
+          "names": [
+            "evib"
+          ],
+          "description": "flux of particle vibrational energy on surface elements in a grid cell"
+        },
+        {
+          "names": [
+            "etot"
+          ],
+          "description": "flux of particle total energy on surface elements in a grid cell"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "ke/particle",
+    "syntax": {
+      "template": [],
+      "parameters": [
+        {
+          "names": [
+            "ke/particle"
+          ],
+          "description": "style name of this compute command"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "lambda/grid",
+    "syntax": {
+      "template": [
+        "nrho",
+        "temp",
+        "value1",
+        "value2"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "lambda/grid"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "nrho"
+          ],
+          "description": "compute or fix reference for per-grid number density, prefaced by \"c_\" or \"f_\"",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "temp"
+          ],
+          "description": "NULL or compute or fix reference for pre-grid temperature, prefaced by \"c_\" or \"f_\"",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "value"
+          ],
+          "description": "{lambda}, {tau}, {knall}, {knx}, {kny}, or {knz}"
+        },
+        {
+          "names": [
+            "{lambda}"
+          ],
+          "description": "calculate mean free path"
+        },
+        {
+          "names": [
+            "{tau}"
+          ],
+          "description": "calculate mean collision time"
+        },
+        {
+          "names": [
+            "{knall}"
+          ],
+          "description": "calculate Knudsen number based on cell size in all dimensions"
+        },
+        {
+          "names": [
+            "{knx}"
+          ],
+          "description": "calculate Knudsen number based on cell size in x dimension"
+        },
+        {
+          "names": [
+            "{kny}"
+          ],
+          "description": "calculate Knudsen number based on cell size in y dimension"
+        },
+        {
+          "names": [
+            "{knz}"
+          ],
+          "description": "calculate Knudsen number based on cell size in z dimension"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "pflux/grid",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "mix-ID",
+        "value1",
+        "value2"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "pflux/grid"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which grid cells to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "mix-ID"
+          ],
+          "description": "mixture ID to perform calculation on",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "values"
+          ],
+          "description": "{momxx} or {momyy} or {momzz} or {momxy} or {momyz} or {momxz}"
+        },
+        {
+          "names": [
+            "{momxx}",
+            "{momyy}",
+            "{momzz}"
+          ],
+          "description": "diagonal components of momentum flux density tensor"
+        },
+        {
+          "names": [
+            "{momxy}",
+            "{momyz}",
+            "{momxz}"
+          ],
+          "description": "off-diagonal components of momentum flux density tensor"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "property/grid",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "input1",
+        "input2"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "property/grid"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which grid cells to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "input"
+          ],
+          "description": "one or more grid attributes"
+        },
+        {
+          "names": [
+            "possible attributes"
+          ],
+          "description": "id, proc, xlo, ylo, zlo, xhi, yhi, zhi, xc, yc, zc"
+        },
+        {
+          "names": [
+            "id"
+          ],
+          "description": "integer form of grid cell ID"
+        },
+        {
+          "names": [
+            "proc"
+          ],
+          "description": "processor that owns grid cell"
+        },
+        {
+          "names": [
+            "xlo",
+            "ylo",
+            "zlo"
+          ],
+          "description": "coords of lower left corner of grid cell"
+        },
+        {
+          "names": [
+            "xhi",
+            "yhi",
+            "zhi"
+          ],
+          "description": "coords of lower left corner of grid cell"
+        },
+        {
+          "names": [
+            "xc",
+            "yc",
+            "zc"
+          ],
+          "description": "coords of center of grid cell"
+        },
+        {
+          "names": [
+            "vol"
+          ],
+          "description": "flow volume of grid cell (area in 2d)"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "property/surf",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "input1",
+        "input2"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "property/surf"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which surface elements to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "input"
+          ],
+          "description": "one or more surface element attributes"
+        },
+        {
+          "names": [
+            "possible attributes"
+          ],
+          "description": "id, v1x, v1y, v1z, v2x, v2y, v2z, v3x, v2y, v3z, xc, yc, zc, area, normx, normy, normz"
+        },
+        {
+          "names": [
+            "id"
+          ],
+          "description": "surface element ID"
+        },
+        {
+          "names": [
+            "v1x",
+            "v1y",
+            "v1z"
+          ],
+          "description": "coords of first line end point or triangle corner point"
+        },
+        {
+          "names": [
+            "v3x",
+            "v2y",
+            "v2z"
+          ],
+          "description": "coords of second line end point or triangle corner point"
+        },
+        {
+          "names": [
+            "v3x",
+            "v3y",
+            "v3z"
+          ],
+          "description": "coords of third triangle corner point"
+        },
+        {
+          "names": [
+            "xc",
+            "yc",
+            "zc"
+          ],
+          "description": "coords of center of line segment or triangle"
+        },
+        {
+          "names": [
+            "area"
+          ],
+          "description": "length of line segment or area of triangle"
+        },
+        {
+          "names": [
+            "normx",
+            "normy",
+            "normz"
+          ],
+          "description": "unit normal vector for line segment or triangle"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "react/boundary",
+    "syntax": {
+      "template": [
+        "reaction-ID",
+        "value1",
+        "value2"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "react/boundary"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "reaction-ID"
+          ],
+          "description": "surface reaction ID which defines surface reactions",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "value"
+          ],
+          "description": "{r:s1/s2/s3 ...} or {p:s1/s2/s3 ...}"
+        },
+        {
+          "names": [
+            "r: or p:"
+          ],
+          "description": "list of reactant species or product species"
+        },
+        {
+          "names": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "description": "one or more species IDs, separated by \"/\" character"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "react/surf",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "reaction-ID",
+        "value1",
+        "value2"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "react/surf"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which surface elements to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "reaction-ID"
+          ],
+          "description": "surface reaction ID which defines surface reactions",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "value"
+          ],
+          "description": "{r:s1/s2/s3 ...} or {p:s1/s2/s3 ...}"
+        },
+        {
+          "names": [
+            "r: or p:"
+          ],
+          "description": "list of reactant species or product species"
+        },
+        {
+          "names": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "description": "one or more species IDs, separated by \"/\" character"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "react/isurf/grid",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "reaction-ID",
+        "value1",
+        "value2"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "react/isurf/grid"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which grid cells to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "reaction-ID"
+          ],
+          "description": "ID of surface reaction model which defines surface reactions",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "value"
+          ],
+          "description": "{r:s1/s2/s3 ...} or {p:s1/s2/s3 ...}"
+        },
+        {
+          "names": [
+            "r: or p:"
+          ],
+          "description": "list of reactant species or product species"
+        },
+        {
+          "names": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "description": "one or more species IDs, separated by \"/\" character"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "reduce",
+    "syntax": {
+      "template": [
+        "mode",
+        "input1",
+        "input2",
+        "keyword",
+        "args"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "reduce"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "mode"
+          ],
+          "description": "{sum} or {min} or {max} or {ave} or {sumsq} or {avesq} or {sum-area} or {ave-area}",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "input"
+          ],
+          "description": "x, y, z, vx, vy, vz, ke, erot, evib, c_ID, c_ID\\[N\\], f_ID, f_ID\\[N\\], v_name, p_name, p_name\\[N\\], g_name, g_name\\[N\\], s_name, s_name\\[N\\]"
+        },
+        {
+          "names": [
+            "x",
+            "y",
+            "z",
+            "vx",
+            "vy",
+            "vz"
+          ],
+          "description": "particle position or velocity component"
+        },
+        {
+          "names": [
+            "ke",
+            "erot",
+            "evib"
+          ],
+          "description": "particle energy component"
+        },
+        {
+          "names": [
+            "c_ID"
+          ],
+          "description": "per-particle or per-grid vector calculated by a compute with ID"
+        },
+        {
+          "names": [
+            "c_ID\\[N\\]"
+          ],
+          "description": "Nth column of per-particle or per-grid array calculated by a compute with ID, N can include wildcard (see below)"
+        },
+        {
+          "names": [
+            "f_ID"
+          ],
+          "description": "per-particle or per-grid or per-surf vector calculated by a fix with ID"
+        },
+        {
+          "names": [
+            "f_ID\\[N\\]"
+          ],
+          "description": "Nth column of per-particle or per-grid or per-surf array calculated by a fix with ID, N can include wildcard (see below)"
+        },
+        {
+          "names": [
+            "v_name"
+          ],
+          "description": "per-particle or per-grid or per-surf vector calculated by a particle-style or grid-style or surf-style variable with name"
+        },
+        {
+          "names": [
+            "p_name"
+          ],
+          "description": "custom per-particle vector with name"
+        },
+        {
+          "names": [
+            "p_name\\[N\\]"
+          ],
+          "description": "Nth column of per-particle custom array with name, N can include wildcard (see below)"
+        },
+        {
+          "names": [
+            "g_name"
+          ],
+          "description": "custom per-grid vector with name"
+        },
+        {
+          "names": [
+            "g_name\\[N\\]"
+          ],
+          "description": "Nth column of per-grid custom array with name, N can include wildcard (see below)"
+        },
+        {
+          "names": [
+            "s_name"
+          ],
+          "description": "custom per-surf vector with name"
+        },
+        {
+          "names": [
+            "s_name\\[N\\]"
+          ],
+          "description": "Nth column of per-surf custom array with name, N can include wildcard (see below)"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "replace",
+          "description": "Keyword: replace | subset"
+        }
+      ],
+      "styleVariants": [
+        {
+          "styles": [
+            "replace"
+          ],
+          "template": [
+            "vec1",
+            "vec2"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "vec1"
+              ],
+              "description": "reduced value from this input vector will be replaced",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "vec2"
+              ],
+              "description": "replace it with vec1\\[N\\] where N is index of max/min value from vec2",
+              "templateIndex": 1
+            },
+            {
+              "names": [
+                "{subset} arg"
+              ],
+              "description": "subsetID"
+            },
+            {
+              "names": [
+                "subsetID"
+              ],
+              "description": "mixture-ID or grid group-ID or surface group-ID"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "family": "compute",
+    "style": "sonine/grid",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "mix-ID",
+        "keyword",
+        "values"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "sonine/grid"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which grid cells to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "mix-ID"
+          ],
+          "description": "mixture ID to perform calculation on",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "values"
+          ],
+          "description": "values for specific keyword",
+          "templateIndex": 3
+        }
+      ],
+      "keywords": [
+        {
+          "name": "a",
+          "description": "Keyword: a | b"
+        }
+      ],
+      "styleVariants": [
+        {
+          "styles": [
+            "a"
+          ],
+          "template": [
+            "dim",
+            "order",
+            "=",
+            "sonine",
+            "A",
+            "moment"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "dim"
+              ],
+              "description": "{x} or {y} or {z}",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "order"
+              ],
+              "description": "number from 1 to 5",
+              "templateIndex": 1
+            }
+          ]
+        },
+        {
+          "styles": [
+            "b"
+          ],
+          "template": [
+            "dim2",
+            "order",
+            "=",
+            "sonine",
+            "B",
+            "moment"
+          ],
+          "parameters": [
+            {
+              "names": [
+                "dim2"
+              ],
+              "description": "{xx} or {yy} or {zz} or {xy} or {yz} or {xz}",
+              "templateIndex": 0
+            },
+            {
+              "names": [
+                "order"
+              ],
+              "description": "number from 1 to 5",
+              "templateIndex": 1
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "family": "compute",
+    "style": "surf",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "mix-ID",
+        "value1",
+        "value2",
+        "keyword",
+        "setting"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "surf"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which surface elements to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "mix-ID"
+          ],
+          "description": "mixture ID for particles to perform calculation on",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "value"
+          ],
+          "description": "{n} or {nwt} or {nflux} or {nflux_incident} or {mflux} or {mflux_incident} or {fx} or {fy} or {fz} or {tx} or {ty} or {tz} or {press} or {px} or {py} or {pz} or {shx} or {shy} or {shz} or {ke}"
+        },
+        {
+          "names": [
+            "n"
+          ],
+          "description": "count of particles hitting surface element"
+        },
+        {
+          "names": [
+            "nwt"
+          ],
+          "description": "weighted count of particles hitting surface element"
+        },
+        {
+          "names": [
+            "nflux"
+          ],
+          "description": "net flux of particles through surface element"
+        },
+        {
+          "names": [
+            "nflux_incident"
+          ],
+          "description": "incident flux of particles on surface element"
+        },
+        {
+          "names": [
+            "mflux"
+          ],
+          "description": "net flux of mass through surface element"
+        },
+        {
+          "names": [
+            "mflux_incident"
+          ],
+          "description": "incident flux of mass on surface element"
+        },
+        {
+          "names": [
+            "fx",
+            "fy",
+            "fz"
+          ],
+          "description": "components of force on surface element"
+        },
+        {
+          "names": [
+            "tx",
+            "ty",
+            "tz"
+          ],
+          "description": "components of torque on body center-of-mass"
+        },
+        {
+          "names": [
+            "press"
+          ],
+          "description": "magnitude of normal pressure on surface element"
+        },
+        {
+          "names": [
+            "px",
+            "py",
+            "pz"
+          ],
+          "description": "components of normal pressure on surface element"
+        },
+        {
+          "names": [
+            "shx",
+            "shy",
+            "shz"
+          ],
+          "description": "components of shear stress on surface element"
+        },
+        {
+          "names": [
+            "ke"
+          ],
+          "description": "flux of particle kinetic energy on surface element"
+        },
+        {
+          "names": [
+            "erot"
+          ],
+          "description": "flux of particle rotational energy on surface element"
+        },
+        {
+          "names": [
+            "evib"
+          ],
+          "description": "flux of particle vibrational energy on surface element"
+        },
+        {
+          "names": [
+            "echem"
+          ],
+          "description": "flux of particle chemical catalytic energy on surface element"
+        },
+        {
+          "names": [
+            "etot"
+          ],
+          "description": "flux of particle total energy on surface element"
+        },
+        {
+          "names": [
+            "norm arg"
+          ],
+          "description": "{flux} or {flow} for dividing flux quantities by area or not"
+        },
+        {
+          "names": [
+            "com args"
+          ],
+          "description": "Cx Cy Cz = coords of center-of-mass of body for calculating torque"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "norm",
+          "description": "Keyword: norm | com"
+        }
+      ],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "surf/collision/tally",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "mix-ID",
+        "value1",
+        "value2"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "surf/collision/tally"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which surface elements to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "mix-ID"
+          ],
+          "description": "mixture ID to perform calculation on",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "value"
+          ],
+          "description": "{id/surf} or {id} or {type} or {time} or {xc} or {yc} or {zc} or {vx/pre} or {vy/pre} or {vz/pre} or {vx/post} or {vy/post} or {vz/post}"
+        },
+        {
+          "names": [
+            "{id/surf}"
+          ],
+          "description": "surface element ID"
+        },
+        {
+          "names": [
+            "{id}"
+          ],
+          "description": "particle ID"
+        },
+        {
+          "names": [
+            "{type}"
+          ],
+          "description": "particle species"
+        },
+        {
+          "names": [
+            "{time}"
+          ],
+          "description": "time of collision (within timestep, see below)"
+        },
+        {
+          "names": [
+            "{xc}",
+            "{yc}",
+            "{zc}"
+          ],
+          "description": "coordinates of collision point"
+        },
+        {
+          "names": [
+            "{vx/pre}",
+            "{vy/pre}",
+            "{vz/pre}"
+          ],
+          "description": "velocity components before collision"
+        },
+        {
+          "names": [
+            "{vx/post}",
+            "{vy/post}",
+            "{vz/post}"
+          ],
+          "description": "velocity components after collision"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "surf/reaction/tally",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "mix-ID",
+        "value1",
+        "value2"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "surf/reaction/tally"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which surface elements to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "mix-ID"
+          ],
+          "description": "mixture ID to perform calculation on",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "value"
+          ],
+          "description": "{reaction} or {id/surf} or {id/pre} or {id1/post} or {id2/post} or {type/pre} or {type1/post} or {type2/post} or {time} or {xc} or {yc} or {zc} or {vx/pre} or {vy/pre} or {vz/pre} or {vx1/post} or {vy1/post} or {vz1/post} or {vx2/post} or {vy2/post} or {vz2/post}"
+        },
+        {
+          "names": [
+            "{reaction}"
+          ],
+          "description": "which reaction occurred (1 to N)"
+        },
+        {
+          "names": [
+            "{id/surf}"
+          ],
+          "description": "surface element ID"
+        },
+        {
+          "names": [
+            "{id/pre}"
+          ],
+          "description": "particle ID before reaction"
+        },
+        {
+          "names": [
+            "{id1/post}"
+          ],
+          "description": "particle ID of first particle after reaction"
+        },
+        {
+          "names": [
+            "{id2/post}"
+          ],
+          "description": "particle ID of second particle after reaction"
+        },
+        {
+          "names": [
+            "{type/pre}"
+          ],
+          "description": "particle species before reaction"
+        },
+        {
+          "names": [
+            "{type1/post}"
+          ],
+          "description": "particle species of first particle after reaction"
+        },
+        {
+          "names": [
+            "{type2/post}"
+          ],
+          "description": "particle species of second particle after reaction"
+        },
+        {
+          "names": [
+            "{time}"
+          ],
+          "description": "time of collision (within timestep, see below)"
+        },
+        {
+          "names": [
+            "{xc}",
+            "{yc}",
+            "{zc}"
+          ],
+          "description": "coordinates of collision point"
+        },
+        {
+          "names": [
+            "{vx/pre}",
+            "{vy/pre}",
+            "{vz/pre}"
+          ],
+          "description": "velocity components before reaction"
+        },
+        {
+          "names": [
+            "{vx1/post}",
+            "{vy1/post}",
+            "{vz1/post}"
+          ],
+          "description": "velocity components of first particle after reaction"
+        },
+        {
+          "names": [
+            "{vx2/post}",
+            "{vy2/post}",
+            "{vz2/post}"
+          ],
+          "description": "velocity components of second particle after reaction"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "temp",
+    "syntax": {
+      "template": [],
+      "parameters": [
+        {
+          "names": [
+            "temp"
+          ],
+          "description": "style name of this compute command"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "thermal/grid",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "mix-ID",
+        "value1",
+        "value2"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "thermal/grid"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which grid cells to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "mix-ID"
+          ],
+          "description": "mixture ID to perform calculation on",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "value"
+          ],
+          "description": "{temp} or {press}"
+        },
+        {
+          "names": [
+            "{temp}"
+          ],
+          "description": "temperature"
+        },
+        {
+          "names": [
+            "{press}"
+          ],
+          "description": "pressure"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "compute",
+    "style": "tvib/grid",
+    "syntax": {
+      "template": [
+        "group-ID",
+        "mix-ID",
+        "keyword"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "tvib/grid"
+          ],
+          "description": "style name of this compute command"
+        },
+        {
+          "names": [
+            "group-ID"
+          ],
+          "description": "group ID for which grid cells to perform calculation on",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "mix-ID"
+          ],
+          "description": "mixture ID to perform calculation on",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "possible keywords"
+          ],
+          "description": "mode"
+        },
+        {
+          "names": [
+            "mode"
+          ],
+          "description": "output one temperature per vibrational mode"
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "surf_react",
+    "style": "adsorb",
+    "syntax": {
+      "template": [
+        "model",
+        "infile(s)",
+        "Nsync",
+        "type",
+        "temp",
+        "n_sites",
+        "adsp1",
+        "adsp2"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "ID"
+          ],
+          "description": "user-assigned name for the surface reaction model"
+        },
+        {
+          "names": [
+            "style"
+          ],
+          "description": "{adsorb}"
+        },
+        {
+          "names": [
+            "model"
+          ],
+          "description": "{gs} or {ps} or {gs/ps}",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "gs"
+          ],
+          "description": "gas-surface reactions"
+        },
+        {
+          "names": [
+            "ps"
+          ],
+          "description": "pure-surface reactions"
+        },
+        {
+          "names": [
+            "gs/ps"
+          ],
+          "description": "both gas-surface and pure-surface reactions"
+        },
+        {
+          "names": [
+            "infile(s)"
+          ],
+          "description": "file(s) with list of surface chemistry reactions",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "Nsync"
+          ],
+          "description": "perform PS reactions and sync across processors every this many timesteps",
+          "templateIndex": 2
+        },
+        {
+          "names": [
+            "type"
+          ],
+          "description": "{face} or {surf}",
+          "templateIndex": 3
+        },
+        {
+          "names": [
+            "face"
+          ],
+          "description": "domain boundary treated as a surface"
+        },
+        {
+          "names": [
+            "surf"
+          ],
+          "description": "surface elements = triangles in 3d, lines in 2d"
+        },
+        {
+          "names": [
+            "temp"
+          ],
+          "description": "temperature of the surface",
+          "templateIndex": 4
+        },
+        {
+          "names": [
+            "n_sites"
+          ],
+          "description": "# of available adsorption sites per unit area (3D) or length (2D)",
+          "templateIndex": 5
+        },
+        {
+          "names": [
+            "adsp1",
+            "adsp2",
+            "..."
+          ],
+          "description": "list of species that can adsorb on surface",
+          "templateIndex": 6
+        }
+      ],
+      "keywords": [],
+      "styleVariants": []
+    }
+  },
+  {
+    "family": "dump",
+    "style": "image",
+    "syntax": {
+      "template": [
+        "style",
+        "mix-ID",
+        "N",
+        "file",
+        "color",
+        "diameter",
+        "keyword",
+        "value"
+      ],
+      "parameters": [
+        {
+          "names": [
+            "ID"
+          ],
+          "description": "user-assigned name for the dump"
+        },
+        {
+          "names": [
+            "style"
+          ],
+          "description": "{image} or {movie} = style of dump command (other styles {particle} or {grid} or {surf} are discussed on the \"dump\"_dump.html doc page)",
+          "templateIndex": 0
+        },
+        {
+          "names": [
+            "mix-ID"
+          ],
+          "description": "mixture ID for which particles to include in image",
+          "templateIndex": 1
+        },
+        {
+          "names": [
+            "N"
+          ],
+          "description": "dump every this many timesteps",
+          "templateIndex": 2
+        },
+        {
+          "names": [
+            "file"
+          ],
+          "description": "name of file to write image to",
+          "templateIndex": 3
+        },
+        {
+          "names": [
+            "color"
+          ],
+          "description": "particle attribute that determines color of each particle",
+          "templateIndex": 4
+        },
+        {
+          "names": [
+            "diameter"
+          ],
+          "description": "particle attribute that determines size of each particle",
+          "templateIndex": 5
+        },
+        {
+          "names": [
+            "{particle}"
+          ],
+          "description": "yes/no = do or do not draw particles"
+        },
+        {
+          "names": [
+            "{grid} values"
+          ],
+          "description": "color"
+        },
+        {
+          "names": [
+            "color"
+          ],
+          "description": "{proc} or per-grid compute or fix"
+        },
+        {
+          "names": [
+            "{gridx} values"
+          ],
+          "description": "xcoord color"
+        },
+        {
+          "names": [
+            "xcoord"
+          ],
+          "description": "x value to draw yz plane of grid cells at"
+        },
+        {
+          "names": [
+            "color"
+          ],
+          "description": "{proc} or per-grid compute or fix"
+        },
+        {
+          "names": [
+            "{gridy} values"
+          ],
+          "description": "ycoord color"
+        },
+        {
+          "names": [
+            "ycoord"
+          ],
+          "description": "y value to draw xz plane of grid cells at"
+        },
+        {
+          "names": [
+            "color"
+          ],
+          "description": "{proc} or per-grid compute or fix"
+        },
+        {
+          "names": [
+            "{gridz} values"
+          ],
+          "description": "zcoord color"
+        },
+        {
+          "names": [
+            "zcoord"
+          ],
+          "description": "z value to draw xy plane of grid cells at"
+        },
+        {
+          "names": [
+            "color"
+          ],
+          "description": "{proc} or per-grid compute or fix"
+        },
+        {
+          "names": [
+            "{surf} values"
+          ],
+          "description": "color diam"
+        },
+        {
+          "names": [
+            "color"
+          ],
+          "description": "{one} or {proc} or per-surf compute or fix"
+        },
+        {
+          "names": [
+            "diam"
+          ],
+          "description": "diameter of 2d lines as fraction of shortest box length"
+        },
+        {
+          "names": [
+            "{size} values"
+          ],
+          "description": "width height = size of images"
+        },
+        {
+          "names": [
+            "width"
+          ],
+          "description": "width of image in # of pixels"
+        },
+        {
+          "names": [
+            "height"
+          ],
+          "description": "height of image in # of pixels"
+        },
+        {
+          "names": [
+            "{view} values"
+          ],
+          "description": "theta phi = view of simulation box"
+        },
+        {
+          "names": [
+            "theta"
+          ],
+          "description": "view angle from +z axis (degrees)"
+        },
+        {
+          "names": [
+            "phi"
+          ],
+          "description": "azimuthal view angle (degrees)"
+        },
+        {
+          "names": [
+            "{center} values"
+          ],
+          "description": "flag Cx Cy Cz = center point of image"
+        },
+        {
+          "names": [
+            "flag"
+          ],
+          "description": "\"s\" for static, \"d\" for dynamic"
+        },
+        {
+          "names": [
+            "Cx",
+            "Cy",
+            "Cz"
+          ],
+          "description": "center point of image as fraction of box dimension (0.5 = center of box)"
+        },
+        {
+          "names": [
+            "{up} values"
+          ],
+          "description": "Ux Uy Uz = direction that is \"up\" in image"
+        },
+        {
+          "names": [
+            "Ux",
+            "Uy",
+            "Uz"
+          ],
+          "description": "components of up vector"
+        },
+        {
+          "names": [
+            "zfactor"
+          ],
+          "description": "scale image size by factor > 1 to enlarge, factor < 1 to shrink"
+        },
+        {
+          "names": [
+            "pfactor"
+          ],
+          "description": "amount of perspective (0 = none, < 1 = some, > 1 = highly skewed)"
+        },
+        {
+          "names": [
+            "{box} values"
+          ],
+          "description": "yes/no diam = draw outline of simulation box"
+        },
+        {
+          "names": [
+            "yes/no"
+          ],
+          "description": "do or do not draw simulation box lines"
+        },
+        {
+          "names": [
+            "diam"
+          ],
+          "description": "diameter of box lines as fraction of shortest box length"
+        },
+        {
+          "names": [
+            "{gline} values"
+          ],
+          "description": "yes/no diam = draw outline of each grid cell"
+        },
+        {
+          "names": [
+            "yes/no"
+          ],
+          "description": "do or do not draw grid cell outlines"
+        },
+        {
+          "names": [
+            "diam"
+          ],
+          "description": "diameter of grid outlines as fraction of shortest box length"
+        },
+        {
+          "names": [
+            "{sline} values"
+          ],
+          "description": "yes/no diam = draw outline of each surface element"
+        },
+        {
+          "names": [
+            "yes/no"
+          ],
+          "description": "do or do not draw surf element outlines"
+        },
+        {
+          "names": [
+            "diam"
+          ],
+          "description": "diameter of surf element outlines as fraction of shortest box length"
+        },
+        {
+          "names": [
+            "{axes} values"
+          ],
+          "description": "yes/no length diam = draw xyz axes"
+        },
+        {
+          "names": [
+            "yes/no"
+          ],
+          "description": "do or do not draw xyz axes lines next to simulation box"
+        },
+        {
+          "names": [
+            "length"
+          ],
+          "description": "length of axes lines as fraction of respective box lengths"
+        },
+        {
+          "names": [
+            "diam"
+          ],
+          "description": "diameter of axes lines as fraction of shortest box length"
+        },
+        {
+          "names": [
+            "sfactor"
+          ],
+          "description": "shinyness of spheres and cylinders from 0.0 to 1.0"
+        },
+        {
+          "names": [
+            "yes/no"
+          ],
+          "description": "turn depth shading on/off"
+        },
+        {
+          "names": [
+            "seed"
+          ],
+          "description": "random # seed (positive integer)"
+        },
+        {
+          "names": [
+            "dfactor"
+          ],
+          "description": "strength of shading from 0.0 to 1.0"
+        }
+      ],
+      "keywords": [
+        {
+          "name": "particle",
+          "description": "Keyword: particle | pdiam | grid | gridx | gridy | gridz | surf | size | view | center | up | zoom | persp | box | gline | sline | axes | shiny | ssao",
+          "values": []
+        }
+      ],
+      "styleVariants": []
+    }
+  }
+]

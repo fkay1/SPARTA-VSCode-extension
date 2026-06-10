@@ -19,8 +19,10 @@ import {
 import { TextDocument } from 'vscode-languageserver-textdocument';
 
 import { getArgContext } from './file-args';
+import { getLineArgStateAt, getWordRangeAtPosition } from './completion-stages';
 import { lexDocument } from './lexer';
 import { parseDocument } from './parser';
+import { provideArgHover } from './providers/argHover';
 import {
   getPrefixStart,
   getWordAtPosition,
@@ -158,11 +160,15 @@ connection.onCompletion((params: CompletionParams): CompletionItem[] => {
   const prefix = getWordAtPosition(line, params.position.character) ?? '';
   const prefixStart = getPrefixStart(line, params.position.character);
 
+  const { logicalLines } = lexDocument(document.getText());
+  const { idRegistry } = parseDocument(logicalLines, false);
+
   const items = provideCompletions({
     linePrefix: line,
     prefix,
     prefixStart,
     character: params.position.character,
+    idRegistry,
   });
 
   const argCtx = getArgContext(line);
@@ -233,21 +239,39 @@ connection.onHover((params: TextDocumentPositionParams): Hover | null => {
 
   const line = document.getText({
     start: { line: params.position.line, character: 0 },
-    end: { line: params.position.line, character: 999 },
+    end: { line: params.position.line, character: Number.MAX_SAFE_INTEGER },
   });
 
-  const word = getWordAtPosition(line, params.position.character);
-  if (!word) {
+  const wordRange = getWordRangeAtPosition(line, params.position.character);
+  if (!wordRange) {
     return null;
   }
 
-  const hover = provideHover(word, docBaseUrl);
+  const argState = getLineArgStateAt(line, params.position.character);
+  if (argState && argState.argIndex >= 0) {
+    const argHover = provideArgHover(argState, wordRange.word);
+    if (argHover) {
+      return {
+        contents: argHover,
+        range: {
+          start: { line: params.position.line, character: wordRange.start },
+          end: { line: params.position.line, character: wordRange.end },
+        },
+      };
+    }
+  }
+
+  const hover = provideHover(wordRange.word, docBaseUrl);
   if (!hover) {
     return null;
   }
 
   return {
     contents: hover.contents,
+    range: {
+      start: { line: params.position.line, character: wordRange.start },
+      end: { line: params.position.line, character: wordRange.end },
+    },
   };
 });
 

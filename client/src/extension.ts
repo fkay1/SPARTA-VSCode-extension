@@ -27,6 +27,7 @@ export function activate(context: ExtensionContext): void {
     documentSelector: [
       { scheme: 'file', language: 'sparta' },
       { scheme: 'file', pattern: '**/in.*' },
+      { scheme: 'file', pattern: '**/*.in' },
     ],
     synchronize: {
       configurationSection: 'sparta',

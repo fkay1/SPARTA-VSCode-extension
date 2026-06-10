@@ -60,6 +60,13 @@ Produces a `.vsix` file installable via **Extensions: Install from VSIX**.
 | `sparta.workingDirectory` | Working directory for SPARTA runs |
 | `sparta.trace.server` | LSP trace level (`off`, `messages`, `verbose`) |
 
+## Planned
+
+- Document formatting (normalize whitespace / column alignment)
+- SPARTA run task integration
+- Sidecar file languages (`.species`, `.vss`, `.tce`, `.surf`)
+- Go to include, ID rename/references
+
 ## Project structure
 
 ```
@@ -68,7 +75,7 @@ vscode-sparta/
   server/           Language server (lexer, parser, providers)
   syntaxes/         TextMate grammar
   snippets/         User snippets
-  test/             Unit tests (planned)
+  test/             Unit tests and error fixtures
 ```
 
 ## License

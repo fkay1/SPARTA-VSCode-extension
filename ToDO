@@ -1,0 +1,5 @@
+dont show errors in log.sparta files
+keep colored commands, syntax, numbers even when a comment is behind it (boundary o o o #all walls open) -> is not color coded anymore
+treat commands in quotes where lines start with quotes as normal commands and also color them
+command click on command opens a viewer in vscode that leads to the html documentation
+option to turn off errors

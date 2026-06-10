@@ -7,6 +7,13 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import {
+  normalizeCommandSyntax,
+  normalizeStyleSyntax,
+  parseSyntaxBlock,
+  type CommandArgsSchema,
+  type StyleArgsSchema,
+} from '../server/src/parse-syntax';
 
 export interface CommandSchema {
   command: string;
@@ -279,6 +286,53 @@ function main(): void {
     path.join(OUT_DIR, 'styles-full.json'),
     JSON.stringify(styleSchemas, null, 2) + '\n'
   );
+
+  const commandArgs: CommandArgsSchema[] = commandSchemas
+    .filter((c) => c.syntax)
+    .map((c) => ({
+      command: c.command,
+      syntax: normalizeCommandSyntax(c.command, parseSyntaxBlock(c.syntax as string)),
+    }));
+
+  const styleArgs: StyleArgsSchema[] = [];
+  for (const [family, entries] of Object.entries(styleSchemas)) {
+    for (const entry of entries) {
+      const docPath = entry.docFile ? path.join(docDir, entry.docFile) : '';
+      if (!docPath || !fs.existsSync(docPath)) {
+        continue;
+      }
+      const syntaxBlock = extractBlock(fs.readFileSync(docPath, 'utf8'), '[Syntax:]');
+      if (!syntaxBlock) {
+        continue;
+      }
+      styleArgs.push({
+        family,
+        style: entry.style,
+        syntax: normalizeStyleSyntax(
+          family,
+          entry.style,
+          parseSyntaxBlock(syntaxBlock)
+        ),
+      });
+    }
+  }
+
+  fs.writeFileSync(
+    path.join(OUT_DIR, 'command-args.json'),
+    JSON.stringify(commandArgs, null, 2) + '\n'
+  );
+  fs.writeFileSync(
+    path.join(OUT_DIR, 'style-args.json'),
+    JSON.stringify(styleArgs, null, 2) + '\n'
+  );
+
+  const totalParams = commandArgs.reduce((n, c) => n + c.syntax.parameters.length, 0);
+  const totalKeywords = commandArgs.reduce((n, c) => n + c.syntax.keywords.length, 0);
+  const totalVariants = commandArgs.reduce((n, c) => n + c.syntax.styleVariants.length, 0);
+  console.log(
+    `  Command args: ${commandArgs.length} commands, ${totalParams} parameters, ${totalKeywords} keywords, ${totalVariants} style variants`
+  );
+  console.log(`  Style args: ${styleArgs.length} style docs with syntax`);
 
   console.log(`  Commands: ${commands.length} (${commandSchemas.filter((c) => c.syntax).length} with syntax)`);
   for (const [family, list] of Object.entries(stylesFlat)) {
